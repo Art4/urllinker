@@ -31,9 +31,6 @@ use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerTest extends TestCase
 {
-    /**
-     * @test UrlLinker implements UrlLinkerInterface
-     */
     public function testUrlLinkerImplementsUrlLinkerInterface(): void
     {
         $urlLinker = new UrlLinker();

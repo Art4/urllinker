@@ -60,9 +60,6 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
     }
 
-    /**
-     * @test UnexpectedValueException is thrown if custom htmlLinkCreator does not return string
-     */
     public function testThrowingUnexpectedValueExceptionIfCustomHtmlLinkCreatorDoesNotReturnString(): void
     {
         $urlLinker = new UrlLinker([
@@ -131,9 +128,6 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
     }
 
-    /**
-     * @test UnexpectedValueException is thrown if custom emailLinkCreator does not return string
-     */
     public function testThrowingUnexpectedValueExceptionIfCustomEmailLinkCreatorDoesNotReturnString(): void
     {
         $urlLinker = new UrlLinker([
