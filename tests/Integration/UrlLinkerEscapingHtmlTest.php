@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
@@ -38,6 +39,7 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
     /**
      * @dataProvider provideTextsWithFtpLinksWithoutHtml
      */
+    #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]
     public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
@@ -50,6 +52,7 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
     /**
      * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
      */
+    #[DataProvider('provideTextsWithUppercaseLinksWithoutHtml')]
     public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
@@ -64,6 +67,7 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
      *
      * @param string $text
      */
+    #[DataProvider('provideTextsNotContainingAnyUrls')]
     public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
         $this->assertSame($text, $this->urlLinker->linkUrlsAndEscapeHtml($text));
@@ -123,6 +127,7 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
      * @param string      $expectedLinked
      * @param string|null $message
      */
+    #[DataProvider('provideTextsWithLinksWithoutHtml')]
     public function testUrlsGetLinkedInText(string $text, string $expectedLinked, $message = null): void
     {
         $this->assertSame(
@@ -151,6 +156,7 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
      * @param string      $text
      * @param string      $expectedLinked
      */
+    #[DataProvider('provideTextsWithHtml')]
     public function testHtmlInText(string $text, string $expectedLinked): void
     {
         $this->urlLinker = new UrlLinker([

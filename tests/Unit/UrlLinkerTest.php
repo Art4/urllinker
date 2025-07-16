@@ -24,6 +24,7 @@ namespace Youthweb\UrlLinker\Tests\Unit;
 use ArrayIterator;
 use EmptyIterator;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Youthweb\UrlLinker\UrlLinker;
@@ -56,6 +57,7 @@ class UrlLinkerTest extends TestCase
      *
      * @param mixed $wrongCreator
      */
+    #[DataProvider('wrongCreatorProvider')]
     public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -82,6 +84,7 @@ class UrlLinkerTest extends TestCase
      *
      * @param mixed $wrongCreator
      */
+    #[DataProvider('wrongCreatorProvider')]
     public function testWrongEmailLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);

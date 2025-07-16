@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
@@ -38,6 +39,7 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     /**
      * @dataProvider provideTextsWithFtpLinksWithoutHtml
      */
+    #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]
     public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
@@ -50,6 +52,7 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     /**
      * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
      */
+    #[DataProvider('provideTextsWithUppercaseLinksWithoutHtml')]
     public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
@@ -61,10 +64,9 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsNotContainingAnyUrls
-     *
-     * @param string $text
      */
-    public function testTextNotContainingAnyUrlsRemainsTheSame($text): void
+    #[DataProvider('provideTextsNotContainingAnyUrls')]
+    public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
         $this->assertSame($text, $this->urlLinker->linkUrlsInTrustedHtml($text));
     }
@@ -95,6 +97,7 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
      * @param string      $expectedLinked
      * @param string|null $message
      */
+    #[DataProvider('provideTextsWithLinksWithoutHtml')]
     public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null): void
     {
         $this->assertSame(
@@ -120,6 +123,7 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     /**
      * @dataProvider provideTextsWithHtml
      */
+    #[DataProvider('provideTextsWithHtml')]
     public function testHtmlInText(string $text, string $expectedLinked): void
     {
         $this->urlLinker = new UrlLinker([

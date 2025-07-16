@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use UnexpectedValueException;
 use Youthweb\UrlLinker\UrlLinker;
 
@@ -153,6 +154,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider providerEscapingHtml
      */
+    #[DataProvider('providerEscapingHtml')]
     public function testEscapingHtml(string $text, string $expected): void
     {
         $urlLinker = new UrlLinker();
