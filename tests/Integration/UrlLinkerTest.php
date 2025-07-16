@@ -163,7 +163,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array<int,array<int,string>>
      */
-    public function providerEscapingHtml(): array
+    public static function providerEscapingHtml(): array
     {
         return [
             [

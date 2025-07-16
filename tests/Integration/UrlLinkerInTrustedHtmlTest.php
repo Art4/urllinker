@@ -134,7 +134,7 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
      *
      * @return array<int,array<int,string>>
      */
-    public function provideTextsWithHtml(): array
+    public static function provideTextsWithHtml(): array
     {
         return [
             [
@@ -151,15 +151,15 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
             ],
             [
                 'http://example.com?a=b&c=d',
-                $this->link('http://example.com?a=b&amp;c=d', 'example.com'),
+                static::link('http://example.com?a=b&amp;c=d', 'example.com'),
             ],
             [
                 'http://example.com?a=b&amp%3bc=d',
-                $this->link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
+                static::link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
             ],
             [
                 'http://example.com?a=b&amp;c=d',
-                $this->link('http://example.com?a=b', 'example.com') . '&amp;c=d',
+                static::link('http://example.com?a=b', 'example.com') . '&amp;c=d',
             ],
         ];
     }

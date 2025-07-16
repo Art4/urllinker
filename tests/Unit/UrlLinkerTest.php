@@ -43,8 +43,7 @@ class UrlLinkerTest extends TestCase
     public function testProvidingClosureAsHtmlLinkCreator(): void
     {
         new UrlLinker([
-            'htmlLinkCreator' => function (): void {
-            },
+            'htmlLinkCreator' => function (): void {},
         ]);
 
         // Workaround to test that NO Exception is thrown
@@ -70,8 +69,7 @@ class UrlLinkerTest extends TestCase
     public function testProvidingClosureAsEmailLinkCreator(): void
     {
         new UrlLinker([
-            'emailLinkCreator' => function (): void {
-            },
+            'emailLinkCreator' => function (): void {},
         ]);
 
         // Workaround to test that NO Exception is thrown
@@ -241,9 +239,9 @@ class UrlLinkerTest extends TestCase
     /**
      * @return array<string,mixed>
      */
-    public function wrongCreatorProvider(): array
+    public static function wrongCreatorProvider(): array
     {
-        return $this->getAllExcept(['closure']);
+        return static::getAllExcept(['closure']);
     }
 
     /**
@@ -256,11 +254,11 @@ class UrlLinkerTest extends TestCase
      *
      * @return array<string,mixed>
      */
-    private function getAllExcept(array ...$except)
+    private static function getAllExcept(array ...$except)
     {
         $except = array_flip(array_merge(...$except));
 
-        return array_diff_key($this->getAll(), $except);
+        return array_diff_key(static::getAll(), $except);
     }
 
     /**
@@ -270,73 +268,73 @@ class UrlLinkerTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private function getAll()
+    private static function getAll()
     {
         return [
             'null' => [
-                'input' => null,
+                null,
             ],
             'boolean false' => [
-                'input' => false,
+                false,
             ],
             'boolean true' => [
-                'input' => true,
+                true,
             ],
             'integer 0' => [
-                'input' => 0,
+                0,
             ],
             'negative integer' => [
-                'input' => -123,
+                -123,
             ],
             'positive integer' => [
-                'input' => 786687,
+                786687,
             ],
             'float 0.0' => [
-                'input' => 0.0,
+                0.0,
             ],
             'negative float' => [
-                'input' => 5.600e-3,
+                5.600e-3,
             ],
             'positive float' => [
-                'input' => 124.7,
+                124.7,
             ],
             'empty string' => [
-                'input' => '',
+                '',
             ],
             'numeric string' => [
-                'input' => '123',
+                '123',
             ],
             'textual string' => [
-                'input' => 'foobar',
+                'foobar',
             ],
             'textual string starting with numbers' => [
-                'input' => '123 My Street',
+                '123 My Street',
             ],
             'empty array' => [
-                'input' => [],
+                [],
             ],
             'array with values, no keys' => [
-                'input' => [1, 2, 3],
+                [1, 2, 3],
             ],
             'array with values, string keys' => [
-                'input' => ['a' => 1, 'b' => 2],
+                ['a' => 1, 'b' => 2],
             ],
             'callable as array with instanciated object' => [
-                'input' => [$this, '__construct'],
+                [__CLASS__, '__construct'],
             ],
             'closure' => [
-                'input' => function () {
+                function () {
                     return true;
                 },
             ],
             'plain object' => [
-                'input' => new stdClass(),
+                new stdClass(),
             ],
             'ArrayIterator object' => [
-                'input' => new ArrayIterator([1, 2, 3]),
+                new ArrayIterator([1, 2, 3]),
             ],
             'Iterator object, no array access' => [
-                'input' => new EmptyIterator(),
+                new EmptyIterator(),
             ],
         ];
     }
