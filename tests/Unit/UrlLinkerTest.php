@@ -25,11 +25,13 @@ use ArrayIterator;
 use EmptyIterator;
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Youthweb\UrlLinker\UrlLinker;
 
+#[CoversClass(UrlLinker::class)]
 class UrlLinkerTest extends TestCase
 {
     public function testUrlLinkerImplementsUrlLinkerInterface(): void

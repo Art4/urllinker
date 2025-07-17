@@ -21,9 +21,11 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Youthweb\UrlLinker\UrlLinker;
 
+#[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
 class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 {
     /**

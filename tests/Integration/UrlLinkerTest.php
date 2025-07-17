@@ -21,10 +21,12 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use UnexpectedValueException;
 use Youthweb\UrlLinker\UrlLinker;
 
+#[CoversClass(UrlLinker::class)]
 class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -21,9 +21,11 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Youthweb\UrlLinker\DomainStorage;
 
+#[CoversClass(DomainStorage::class)]
 class DomainStorageTest extends TestCase
 {
     public function testGetValidTlds(): void

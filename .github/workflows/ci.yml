@@ -50,7 +50,7 @@ jobs:
 
         include:
           ## Run code coverage on highest supported PHP version.
-          - php: '8.2'
+          - php: '8.4'
             coverage: true
 
     name: "PHPUnit on PHP ${{ matrix.php }}"
