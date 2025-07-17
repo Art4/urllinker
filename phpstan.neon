@@ -1,8 +1,8 @@
 parameters:
-	level: 8
+    level: 8
 
-	paths:
-		- src
-		- tests
+    paths:
+        - src
+        - tests
 
-	ignoreErrors:
+    ignoreErrors:
