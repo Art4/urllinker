@@ -168,8 +168,6 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * Transforms plain text into valid HTML, escaping special characters and
      * turning URLs into links.
-     *
-     * @param string $text
      */
     public function linkUrlsAndEscapeHtml(string $text): string
     {
@@ -188,15 +186,15 @@ final class UrlLinker implements UrlLinkerInterface
             [$url, $urlPosition] = $match[0];
 
             // Add the text leading up to the URL.
-            $html .= $this->escapeHtml(substr($text, $position, $urlPosition - $position));
+            $html .= $this->escapeHtml(substr($text, $position, intval($urlPosition - $position)));
 
-            $scheme      = $match[1][0];
-            $username    = $match[2][0];
-            $password    = $match[3][0];
-            $domain      = $match[4][0];
-            $afterDomain = $match[5][0]; // everything following the domain
-            $port        = $match[6][0];
-            $path        = $match[7][0];
+            $scheme      = $match[1][0] ?? '';
+            $username    = $match[2][0] ?? '';
+            $password    = $match[3][0] ?? '';
+            $domain      = $match[4][0] ?? '';
+            $afterDomain = $match[5][0] ?? ''; // everything following the domain
+            $port        = $match[6][0] ?? '';
+            $path        = $match[7][0] ?? '';
 
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = strtolower((string) strrchr($domain, '.'));
@@ -204,7 +202,7 @@ final class UrlLinker implements UrlLinkerInterface
             if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
-                if (! $scheme && $password) {
+                if (empty($scheme) && ! empty($password)) {
                     $html .= $this->escapeHtml($username);
 
                     // Continue text parsing at the ':' following the "username".
@@ -213,7 +211,7 @@ final class UrlLinker implements UrlLinkerInterface
                     continue;
                 }
 
-                if (! $scheme && $username && ! $password && ! $afterDomain) {
+                if (empty($scheme) && ! empty($username) && empty($password) && empty($afterDomain)) {
                     // Looks like an email address.
                     $emailLink = $this->emailLinkCreator->__invoke($url, $url);
 
