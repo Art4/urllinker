@@ -23,6 +23,7 @@ namespace Youthweb\UrlLinker\Tests\Unit;
 
 use ArrayIterator;
 use EmptyIterator;
+use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -40,13 +41,16 @@ class UrlLinkerTest extends TestCase
 
     public function testProvidingClosureAsHtmlLinkCreator(): void
     {
-        new UrlLinker([
-            'htmlLinkCreator' => function (): void {},
+        $urlLinker = new UrlLinker([
+            'htmlLinkCreator' => function (): void {
+                throw new Exception('it works');
+            },
         ]);
 
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(true);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('it works');
+
+        $urlLinker->linkUrlsAndEscapeHtml('http://example.com');
     }
 
     /**
@@ -67,13 +71,16 @@ class UrlLinkerTest extends TestCase
 
     public function testProvidingClosureAsEmailLinkCreator(): void
     {
-        new UrlLinker([
-            'emailLinkCreator' => function (): void {},
+        $urlLinker = new UrlLinker([
+            'emailLinkCreator' => function (): void {
+                throw new Exception('it works');
+            },
         ]);
 
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(true);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('it works');
+
+        $urlLinker->linkUrlsAndEscapeHtml('mail@example.com');
     }
 
     /**
@@ -94,54 +101,14 @@ class UrlLinkerTest extends TestCase
 
     public function testSettingValidTldsConfig(): void
     {
-        new UrlLinker([
+        $urlLinker = new UrlLinker([
             'validTlds' => ['.com' => true, '.org' => true],
         ]);
 
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
+        $this->assertSame(
+            'Replace <a href="http://example.com">example.com</a> but not http://example.net',
+            $urlLinker->linkUrlsAndEscapeHtml('Replace http://example.com but not http://example.net')
         );
-    }
-
-    /**
-     * Test that a closure can be set
-     */
-    public function testSettingHtmlLinkCreator(): void
-    {
-        // Simple htmlLinkCreator
-        $creator = function ($url, $content) {
-            return '<a href="' . $url . '">' . $content . '</a>';
-        };
-
-        $urlLinker = new UrlLinker([
-            'htmlLinkCreator' => $creator,
-        ]);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Test that a closure can be set
-     */
-    public function testSettingEmailLinkCreator(): void
-    {
-        // Simple emailLinkCreator
-        $creator = function ($email, $content) {
-            return '<a href="mailto:' . $email . '">' . $content . '</a>';
-        };
-
-        $urlLinker = new UrlLinker([
-            'emailLinkCreator' => $creator,
-        ]);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(true);
     }
 
     public function testNotAllowingFtpAddresses(): void
@@ -241,7 +208,7 @@ class UrlLinkerTest extends TestCase
      */
     public static function wrongCreatorProvider(): array
     {
-        return static::getAllExcept(['closure']);
+        return self::getAllExcept(['closure']);
     }
 
     /**
@@ -258,7 +225,7 @@ class UrlLinkerTest extends TestCase
     {
         $except = array_flip(array_merge(...$except));
 
-        return array_diff_key(static::getAll(), $except);
+        return array_diff_key(self::getAll(), $except);
     }
 
     /**
