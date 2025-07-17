@@ -38,6 +38,7 @@
 	},
 	"scripts": {
 		"codestyle": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
+		"coverage": "vendor/bin/phpunit --coverage-html=\"build/code-coverage\"",
 		"phpstan": "vendor/bin/phpstan analyze --configuration phpstan.neon",
 		"phpunit": "vendor/bin/phpunit",
 		"test": [
