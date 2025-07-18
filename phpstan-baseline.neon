@@ -1,6 +1,0 @@
-parameters:
-	ignoreErrors:
-		-
-			message: "#^Negated boolean expression is always true\\.$#"
-			count: 1
-			path: src/UrlLinker.php

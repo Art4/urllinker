@@ -1524,17 +1524,17 @@ ZW';
     /**
      * Associative array mapping valid TLDs to the value true.
      *
-     * @var array<string,bool>
+     * @var array<string,bool>|null
      */
-    private static $validTlds;
+    private static $validTlds = null;
 
     /**
      * @return array<string,bool>
      */
     public static function getValidTlds(): array
     {
-        if (! static::$validTlds) {
-            $validTlds = explode("\n", static::$rawValidTlds);
+        if (is_null(self::$validTlds)) {
+            $validTlds = explode("\n", self::$rawValidTlds);
 
             $clean = function ($value) {
                 return '.' . trim(strtolower($value));
@@ -1542,9 +1542,9 @@ ZW';
 
             $validTlds = array_map($clean, $validTlds);
 
-            static::$validTlds = array_fill_keys($validTlds, true);
+            self::$validTlds = array_fill_keys($validTlds, true);
         }
 
-        return static::$validTlds;
+        return self::$validTlds;
     }
 }

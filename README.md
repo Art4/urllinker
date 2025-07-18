@@ -1,10 +1,10 @@
 # UrlLinker
 
-[![Latest Version](https://img.shields.io/github/release/youthweb/urllinker.svg)](https://github.com/youthweb/urllinker/releases)
+[![Latest Version](https://img.shields.io/github/release/Art4/urllinker.svg)](https://github.com/Art4/urllinker/releases)
 [![Software License](https://img.shields.io/badge/license-GPL3-brightgreen.svg)](LICENSE.md)
-[![Build Status](https://github.com/youthweb/urllinker/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/youthweb/urllinker/actions)
-[![codecov](https://codecov.io/gh/youthweb/urllinker/branch/main/graph/badge.svg?token=0ygzSgvUfU)](https://codecov.io/gh/youthweb/urllinker)
-[![Total Downloads](https://img.shields.io/packagist/dt/youthweb/urllinker.svg)](https://packagist.org/packages/youthweb/urllinker)
+[![Build Status](https://github.com/Art4/urllinker/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Art4/urllinker/actions)
+[![codecov](https://codecov.io/gh/Art4/urllinker/branch/main/graph/badge.svg?token=0ygzSgvUfU)](https://codecov.io/gh/Art4/urllinker)
+[![Total Downloads](https://img.shields.io/packagist/dt/Art4/urllinker.svg)](https://packagist.org/packages/Art4/urllinker)
 
 UrlLinker converts any web addresses in plain text into HTML hyperlinks.
 

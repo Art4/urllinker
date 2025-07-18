@@ -23,16 +23,17 @@ namespace Youthweb\UrlLinker\Tests\Unit;
 
 use ArrayIterator;
 use EmptyIterator;
+use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Youthweb\UrlLinker\UrlLinker;
 
+#[CoversClass(UrlLinker::class)]
 class UrlLinkerTest extends TestCase
 {
-    /**
-     * @test UrlLinker implements UrlLinkerInterface
-     */
     public function testUrlLinkerImplementsUrlLinkerInterface(): void
     {
         $urlLinker = new UrlLinker();
@@ -42,14 +43,16 @@ class UrlLinkerTest extends TestCase
 
     public function testProvidingClosureAsHtmlLinkCreator(): void
     {
-        new UrlLinker([
+        $urlLinker = new UrlLinker([
             'htmlLinkCreator' => function (): void {
+                throw new Exception('it works');
             },
         ]);
 
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(true);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('it works');
+
+        $urlLinker->linkUrlsAndEscapeHtml('http://example.com');
     }
 
     /**
@@ -57,6 +60,7 @@ class UrlLinkerTest extends TestCase
      *
      * @param mixed $wrongCreator
      */
+    #[DataProvider('wrongCreatorProvider')]
     public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -69,14 +73,16 @@ class UrlLinkerTest extends TestCase
 
     public function testProvidingClosureAsEmailLinkCreator(): void
     {
-        new UrlLinker([
+        $urlLinker = new UrlLinker([
             'emailLinkCreator' => function (): void {
+                throw new Exception('it works');
             },
         ]);
 
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(true);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('it works');
+
+        $urlLinker->linkUrlsAndEscapeHtml('mail@example.com');
     }
 
     /**
@@ -84,6 +90,7 @@ class UrlLinkerTest extends TestCase
      *
      * @param mixed $wrongCreator
      */
+    #[DataProvider('wrongCreatorProvider')]
     public function testWrongEmailLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -96,54 +103,14 @@ class UrlLinkerTest extends TestCase
 
     public function testSettingValidTldsConfig(): void
     {
-        new UrlLinker([
+        $urlLinker = new UrlLinker([
             'validTlds' => ['.com' => true, '.org' => true],
         ]);
 
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
+        $this->assertSame(
+            'Replace <a href="http://example.com">example.com</a> but not http://example.net',
+            $urlLinker->linkUrlsAndEscapeHtml('Replace http://example.com but not http://example.net')
         );
-    }
-
-    /**
-     * Test that a closure can be set
-     */
-    public function testSettingHtmlLinkCreator(): void
-    {
-        // Simple htmlLinkCreator
-        $creator = function ($url, $content) {
-            return '<a href="' . $url . '">' . $content . '</a>';
-        };
-
-        $urlLinker = new UrlLinker([
-            'htmlLinkCreator' => $creator,
-        ]);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Test that a closure can be set
-     */
-    public function testSettingEmailLinkCreator(): void
-    {
-        // Simple emailLinkCreator
-        $creator = function ($email, $content) {
-            return '<a href="mailto:' . $email . '">' . $content . '</a>';
-        };
-
-        $urlLinker = new UrlLinker([
-            'emailLinkCreator' => $creator,
-        ]);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(true);
     }
 
     public function testNotAllowingFtpAddresses(): void
@@ -241,9 +208,9 @@ class UrlLinkerTest extends TestCase
     /**
      * @return array<string,mixed>
      */
-    public function wrongCreatorProvider(): array
+    public static function wrongCreatorProvider(): array
     {
-        return $this->getAllExcept(['closure']);
+        return self::getAllExcept(['closure']);
     }
 
     /**
@@ -256,11 +223,11 @@ class UrlLinkerTest extends TestCase
      *
      * @return array<string,mixed>
      */
-    private function getAllExcept(array ...$except)
+    private static function getAllExcept(array ...$except)
     {
         $except = array_flip(array_merge(...$except));
 
-        return array_diff_key($this->getAll(), $except);
+        return array_diff_key(self::getAll(), $except);
     }
 
     /**
@@ -270,73 +237,73 @@ class UrlLinkerTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private function getAll()
+    private static function getAll()
     {
         return [
             'null' => [
-                'input' => null,
+                null,
             ],
             'boolean false' => [
-                'input' => false,
+                false,
             ],
             'boolean true' => [
-                'input' => true,
+                true,
             ],
             'integer 0' => [
-                'input' => 0,
+                0,
             ],
             'negative integer' => [
-                'input' => -123,
+                -123,
             ],
             'positive integer' => [
-                'input' => 786687,
+                786687,
             ],
             'float 0.0' => [
-                'input' => 0.0,
+                0.0,
             ],
             'negative float' => [
-                'input' => 5.600e-3,
+                5.600e-3,
             ],
             'positive float' => [
-                'input' => 124.7,
+                124.7,
             ],
             'empty string' => [
-                'input' => '',
+                '',
             ],
             'numeric string' => [
-                'input' => '123',
+                '123',
             ],
             'textual string' => [
-                'input' => 'foobar',
+                'foobar',
             ],
             'textual string starting with numbers' => [
-                'input' => '123 My Street',
+                '123 My Street',
             ],
             'empty array' => [
-                'input' => [],
+                [],
             ],
             'array with values, no keys' => [
-                'input' => [1, 2, 3],
+                [1, 2, 3],
             ],
             'array with values, string keys' => [
-                'input' => ['a' => 1, 'b' => 2],
+                ['a' => 1, 'b' => 2],
             ],
             'callable as array with instanciated object' => [
-                'input' => [$this, '__construct'],
+                [__CLASS__, '__construct'],
             ],
             'closure' => [
-                'input' => function () {
+                function () {
                     return true;
                 },
             ],
             'plain object' => [
-                'input' => new stdClass(),
+                new stdClass(),
             ],
             'ArrayIterator object' => [
-                'input' => new ArrayIterator([1, 2, 3]),
+                new ArrayIterator([1, 2, 3]),
             ],
             'Iterator object, no array access' => [
-                'input' => new EmptyIterator(),
+                new EmptyIterator(),
             ],
         ];
     }

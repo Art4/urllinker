@@ -5,9 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/youthweb/urllinker/compare/2.0.0...main)
+## [Unreleased](https://github.com/Art4/urllinker/compare/2.0.0...main)
 
-## [2.0.0](https://github.com/youthweb/urllinker/compare/1.5.1...2.0.0) - 2022-12-14
+### Added
+
+- Add support and tests for PHP 8.4 and 8.5
+
+### Changed
+
+- Update to PHPStan v2 and PHPUnit v12
+- Update code style to latest PER-CS
+- Improve code coverage reporting
+
+## [2.0.0](https://github.com/Art4/urllinker/compare/1.5.1...2.0.0) - 2022-12-14
 
 ### Changed
 
@@ -32,7 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getValidTlds()` was removed
 - **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setValidTlds()` was removed
 
-## [1.5.1](https://github.com/youthweb/urllinker/compare/1.5.0...1.5.1) - 2022-12-09
+## [1.5.1](https://github.com/Art4/urllinker/compare/1.5.0...1.5.1) - 2022-12-09
 
 ### Added
 
@@ -44,7 +54,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Providing a `htmlLinkCreator` Closure, that does not return a `string` is deprecated, let your `Closure` always return a `string` instead.
 - Providing a `emailLinkCreator` Closure, that does not return a `string` is deprecated, let your `Closure` always return a `string` instead.
 
-## [1.5.0](https://github.com/youthweb/urllinker/compare/1.4.0...1.5.0) - 2022-12-07
+## [1.5.0](https://github.com/Art4/urllinker/compare/1.4.0...1.5.0) - 2022-12-07
 
 ### Added
 
@@ -66,7 +76,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Implementing `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsAndEscapeHtml()` without return type `string` is deprecated, add `string` as return type in your implementation instead.
 - Implementing `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsInTrustedHtml()` without return type `string` is deprecated, add `string` as return type in your implementation instead.
 
-## [1.4.0](https://github.com/youthweb/urllinker/compare/1.3.0...1.4.0) - 2021-03-05
+## [1.4.0](https://github.com/Art4/urllinker/compare/1.3.0...1.4.0) - 2021-03-05
 
 ### Added
 
@@ -77,7 +87,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Update the IANA TLD list
 - Drop support for PHP 7.2 and 7.3
 
-## [1.3.0](https://github.com/youthweb/urllinker/compare/1.2.0...1.3.0) - 2019-10-10
+## [1.3.0](https://github.com/Art4/urllinker/compare/1.2.0...1.3.0) - 2019-10-10
 
 ### Added
 
@@ -89,7 +99,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Drop support for PHP 5.6, 7.0 and 7.1
 - Change Code Style to PSR-2
 
-## [1.2.0](https://github.com/youthweb/urllinker/compare/1.1.0...1.2.0) - 2017-08-24
+## [1.2.0](https://github.com/Art4/urllinker/compare/1.1.0...1.2.0) - 2017-08-24
 
 ### Changed
 
@@ -103,7 +113,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added a missing `use` for `InvalidArgumentException`
 - Don't use deprecated methods internally
 
-## [1.1.0](https://github.com/youthweb/urllinker/compare/1.0.0...1.1.0) - 2017-04-10
+## [1.1.0](https://github.com/Art4/urllinker/compare/1.0.0...1.1.0) - 2017-04-10
 
 ### Added
 
@@ -123,7 +133,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Deprecated `Youthweb\UrlLinker\UrlLinker::setValidTlds()`
 - Deprecated `Youthweb\UrlLinker\UrlLinker::getValidTlds()`
 
-## [1.0.0](https://github.com/youthweb/urllinker/compare/a173dfe2f6ff5a4423612b423323e94b5d2f58e2...1.0.0) - 2016-09-05
+## [1.0.0](https://github.com/Art4/urllinker/compare/a173dfe2f6ff5a4423612b423323e94b5d2f58e2...1.0.0) - 2016-09-05
 
 ### Added
 

@@ -21,9 +21,12 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use UnexpectedValueException;
 use Youthweb\UrlLinker\UrlLinker;
 
+#[CoversClass(UrlLinker::class)]
 class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -59,9 +62,6 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
     }
 
-    /**
-     * @test UnexpectedValueException is thrown if custom htmlLinkCreator does not return string
-     */
     public function testThrowingUnexpectedValueExceptionIfCustomHtmlLinkCreatorDoesNotReturnString(): void
     {
         $urlLinker = new UrlLinker([
@@ -130,9 +130,6 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
     }
 
-    /**
-     * @test UnexpectedValueException is thrown if custom emailLinkCreator does not return string
-     */
     public function testThrowingUnexpectedValueExceptionIfCustomEmailLinkCreatorDoesNotReturnString(): void
     {
         $urlLinker = new UrlLinker([
@@ -153,6 +150,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider providerEscapingHtml
      */
+    #[DataProvider('providerEscapingHtml')]
     public function testEscapingHtml(string $text, string $expected): void
     {
         $urlLinker = new UrlLinker();
@@ -163,7 +161,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array<int,array<int,string>>
      */
-    public function providerEscapingHtml(): array
+    public static function providerEscapingHtml(): array
     {
         return [
             [
