@@ -4,7 +4,7 @@
 [![Software License](https://img.shields.io/badge/license-GPL3-brightgreen.svg)](LICENSE.md)
 [![Build Status](https://github.com/Art4/urllinker/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Art4/urllinker/actions)
 [![codecov](https://codecov.io/gh/Art4/urllinker/branch/main/graph/badge.svg?token=0ygzSgvUfU)](https://codecov.io/gh/Art4/urllinker)
-[![Total Downloads](https://img.shields.io/packagist/dt/Art4/urllinker.svg)](https://packagist.org/packages/Art4/urllinker)
+[![Total Downloads](https://img.shields.io/packagist/dt/youthweb/urllinker.svg)](https://packagist.org/packages/youthweb/urllinker)
 
 UrlLinker converts any web addresses in plain text into HTML hyperlinks.
 
@@ -17,6 +17,8 @@ Via Composer
 ```bash
 $ composer require youthweb/urllinker
 ```
+
+> Note: On 2025-07-17 the repository was moved from `youthweb/urllinker` to `Art4/urllinker`, but the packagist name was kept for convenience.
 
 ## Usage
 
