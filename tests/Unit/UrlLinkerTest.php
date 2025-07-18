@@ -38,7 +38,7 @@ class UrlLinkerTest extends TestCase
     {
         $urlLinker = new UrlLinker();
 
-        $this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', $urlLinker);
+        $this->assertInstanceOf(\Youthweb\UrlLinker\UrlLinkerInterface::class, $urlLinker);
     }
 
     public function testProvidingClosureAsHtmlLinkCreator(): void
@@ -289,12 +289,10 @@ class UrlLinkerTest extends TestCase
                 ['a' => 1, 'b' => 2],
             ],
             'callable as array with instanciated object' => [
-                [__CLASS__, '__construct'],
+                [self::class, '__construct'],
             ],
             'closure' => [
-                function () {
-                    return true;
-                },
+                fn() => true,
             ],
             'plain object' => [
                 new stdClass(),

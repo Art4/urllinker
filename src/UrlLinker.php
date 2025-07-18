@@ -80,7 +80,7 @@ final class UrlLinker implements UrlLinkerInterface
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
                                 'boolean',
-                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                                get_debug_type($value)
                             ));
                         }
                     } else {
@@ -100,7 +100,7 @@ final class UrlLinker implements UrlLinkerInterface
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
                                 'boolean',
-                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                                get_debug_type($value)
                             ));
                         }
                     } else {
@@ -120,7 +120,7 @@ final class UrlLinker implements UrlLinkerInterface
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
                                 Closure::class,
-                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                                get_debug_type($value)
                             ));
                         }
                     } else {
@@ -140,7 +140,7 @@ final class UrlLinker implements UrlLinkerInterface
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
                                 Closure::class,
-                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                                get_debug_type($value)
                             ));
                         }
                     } else {
@@ -172,7 +172,7 @@ final class UrlLinker implements UrlLinkerInterface
     public function linkUrlsAndEscapeHtml(string $text): string
     {
         // We can abort if there is no . in $text
-        if (strpos($text, '.') === false) {
+        if (!str_contains($text, '.')) {
             return $this->escapeHtml($text);
         }
 

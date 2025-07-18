@@ -1536,9 +1536,7 @@ ZW';
         if (is_null(self::$validTlds)) {
             $validTlds = explode("\n", self::$rawValidTlds);
 
-            $clean = function ($value) {
-                return '.' . trim(strtolower($value));
-            };
+            $clean = (fn($value) => '.' . trim(strtolower((string) $value)));
 
             $validTlds = array_map($clean, $validTlds);
 
