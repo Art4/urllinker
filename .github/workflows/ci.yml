@@ -77,7 +77,7 @@ jobs:
 
       - name: Run tests with coverage-clover
         if: ${{ matrix.tool == 'code-coverage' }}
-        run: composer run phpunit -- --coverage-clover .phpunit.cache/clover.xml
+        run: composer run phpunit -- --coverage-clover ./clover.xml
 
       - name: Upload coverage reports to Codecov
         if: ${{ matrix.tool == 'code-coverage' }}
