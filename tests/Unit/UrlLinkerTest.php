@@ -292,7 +292,7 @@ class UrlLinkerTest extends TestCase
                 [self::class, '__construct'],
             ],
             'closure' => [
-                fn() => true,
+                fn(): bool => true,
             ],
             'plain object' => [
                 new stdClass(),

@@ -9,9 +9,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PER-CS' => true,
         '@PER-CS:risky' => true,
-        '@PHP74Migration' => true,
-        '@PHP74Migration:risky' => true,
-        'use_arrow_functions' => false,
+        '@PHP80Migration' => true,
+        '@PHP80Migration:risky' => true,
         '@PHPUnit100Migration:risky' => true,
     ])
     ->setFinder($finder)

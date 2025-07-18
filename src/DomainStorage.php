@@ -1526,7 +1526,7 @@ ZW';
      *
      * @var array<string,bool>|null
      */
-    private static $validTlds = null;
+    private static $validTlds;
 
     /**
      * @return array<string,bool>
@@ -1536,7 +1536,7 @@ ZW';
         if (is_null(self::$validTlds)) {
             $validTlds = explode("\n", self::$rawValidTlds);
 
-            $clean = (fn($value) => '.' . trim(strtolower((string) $value)));
+            $clean = (fn($value): string => '.' . trim(strtolower((string) $value)));
 
             $validTlds = array_map($clean, $validTlds);
 
