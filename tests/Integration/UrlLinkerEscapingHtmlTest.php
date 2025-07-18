@@ -26,6 +26,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Youthweb\UrlLinker\UrlLinker;
 
 #[CoversMethod(UrlLinker::class, 'escapeHtml')]
+#[CoversMethod(UrlLinker::class, 'linkUrlsAndEscapeHtml')]
 class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 {
     /**
