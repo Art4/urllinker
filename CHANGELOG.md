@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Drop support for PHP 7.4 and 8.0
 - Update to PHPStan v2 and PHPUnit v12
 - Update code style to latest PER-CS
 - Improve code coverage reporting
