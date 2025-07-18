@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/Art4/urllinker/compare/2.0.0...main)
 
+### Added
+
+- Add support and tests for PHP 8.4 and 8.5
+
+### Changed
+
+- Update to PHPStan v2 and PHPUnit v12
+- Update code style to latest PER-CS
+- Improve code coverage reporting
+
 ## [2.0.0](https://github.com/Art4/urllinker/compare/1.5.1...2.0.0) - 2022-12-14
 
 ### Changed
