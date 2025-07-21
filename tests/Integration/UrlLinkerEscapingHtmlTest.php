@@ -61,7 +61,7 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
     #[DataProvider('provideTextsNotContainingAnyUrls')]
     public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
-        $this->assertSame($text, new UrlLinker()->linkUrlsAndEscapeHtml($text));
+        $this->assertSame($text, (new UrlLinker())->linkUrlsAndEscapeHtml($text));
     }
 
     public function testExample(): void
@@ -108,7 +108,7 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
             <a href="http://møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي">møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي</a>.
             EOD;
 
-        $this->assertSame($expected, new UrlLinker()->linkUrlsAndEscapeHtml($text));
+        $this->assertSame($expected, (new UrlLinker())->linkUrlsAndEscapeHtml($text));
     }
 
     /**

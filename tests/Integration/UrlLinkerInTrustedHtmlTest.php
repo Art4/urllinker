@@ -60,7 +60,7 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     #[DataProvider('provideTextsNotContainingAnyUrls')]
     public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
-        $this->assertSame($text, new UrlLinker()->linkUrlsInTrustedHtml($text));
+        $this->assertSame($text, (new UrlLinker())->linkUrlsInTrustedHtml($text));
     }
 
     public function testExample(): void
@@ -79,7 +79,7 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
             <p title='10>20'>Tricky markup...</p>
             EOD;
 
-        $this->assertSame($expected, new UrlLinker()->linkUrlsInTrustedHtml($html));
+        $this->assertSame($expected, (new UrlLinker())->linkUrlsInTrustedHtml($html));
     }
 
     /**
