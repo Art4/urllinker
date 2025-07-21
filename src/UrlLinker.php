@@ -198,7 +198,7 @@ final class UrlLinker implements UrlLinkerInterface
             if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
-                if (empty($scheme) && ! empty($password)) {
+                if ($scheme === '' && $password !== '') {
                     $html .= $this->escapeHtml($username);
 
                     // Continue text parsing at the ':' following the "username".
@@ -207,7 +207,7 @@ final class UrlLinker implements UrlLinkerInterface
                     continue;
                 }
 
-                if (empty($scheme) && ! empty($username) && empty($password) && empty($afterDomain)) {
+                if ($scheme === '' && $username !== '' && $password === '' && $afterDomain === '') {
                     // Looks like an email address.
                     $emailLink = $this->emailLinkCreator->__invoke($url, $url);
 
