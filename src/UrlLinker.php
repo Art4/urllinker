@@ -152,11 +152,7 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'validTlds':
-                    if (array_key_exists($key, $options)) {
-                        $value = (array) $options[$key];
-                    } else {
-                        $value = DomainStorage::getValidTlds();
-                    }
+                    $value = array_key_exists($key, $options) ? (array) $options[$key] : DomainStorage::getValidTlds();
 
                     $this->validTlds = $value;
 
@@ -262,8 +258,6 @@ final class UrlLinker implements UrlLinkerInterface
      *
      * Beware: Never render HTML from untrusted sources. Rendering HTML provided by
      * a malicious user can lead to system compromise through cross-site scripting.
-     *
-     * @param string $html
      */
     public function linkUrlsInTrustedHtml(string $html): string
     {
@@ -310,9 +304,6 @@ final class UrlLinker implements UrlLinkerInterface
         return $result;
     }
 
-    /**
-     * @return string
-     */
     private function buildRegex(): string
     {
         /**

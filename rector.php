@@ -2,15 +2,23 @@
 
 declare(strict_types=1);
 
-use Rector\Config\RectorConfig;
-
-return RectorConfig::configure()
+return \Rector\Config\RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
     // uncomment to reach your current PHP version
     ->withPhpSets()
-    ->withTypeCoverageLevel(10)
-    ->withDeadCodeLevel(10)
-    ->withCodeQualityLevel(10);
+    ->withTypeCoverageLevel(20)
+    ->withDeadCodeLevel(20)
+    ->withCodeQualityLevel(20)
+    // ->withPreparedSets(
+    //     deadCode: true,
+    //     codeQuality: true,
+    //     codingStyle: true,
+    //     typeDeclarations: true,
+    // )
+    // ->withSkip([
+    //     \Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector::class,
+    // ])
+;

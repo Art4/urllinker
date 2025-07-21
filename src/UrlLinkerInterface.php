@@ -23,17 +23,7 @@ namespace Youthweb\UrlLinker;
 
 interface UrlLinkerInterface
 {
-    /**
-     * @param string $text
-     *
-     * @return string
-     */
     public function linkUrlsAndEscapeHtml(string $text): string;
 
-    /**
-     * @param string $html
-     *
-     * @return string
-     */
     public function linkUrlsInTrustedHtml(string $html): string;
 }

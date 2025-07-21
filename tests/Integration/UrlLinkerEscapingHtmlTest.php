@@ -67,8 +67,6 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsNotContainingAnyUrls
-     *
-     * @param string $text
      */
     #[DataProvider('provideTextsNotContainingAnyUrls')]
     public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
@@ -126,8 +124,6 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
     /**
      * @dataProvider provideTextsWithLinksWithoutHtml
      *
-     * @param string      $text
-     * @param string      $expectedLinked
      * @param string|null $message
      */
     #[DataProvider('provideTextsWithLinksWithoutHtml')]
@@ -155,9 +151,6 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithHtml
-     *
-     * @param string      $text
-     * @param string      $expectedLinked
      */
     #[DataProvider('provideTextsWithHtml')]
     public function testHtmlInText(string $text, string $expectedLinked): void

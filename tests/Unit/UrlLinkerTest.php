@@ -237,7 +237,7 @@ class UrlLinkerTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private static function getAll()
+    private static function getAll(): array
     {
         return [
             'null' => [
