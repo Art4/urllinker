@@ -18,7 +18,7 @@ Via Composer
 $ composer require youthweb/urllinker
 ```
 
-> Note: On 2025-07-17 the repository was moved from `youthweb/urllinker` to `Art4/urllinker`, but the packagist name was kept for convenience.
+> Note: On 2025-07-17 the repository was moved from https://github.com/youthweb/urllinker to https://github.com/Art4/urllinker, but the packagist name was kept for convenience.
 
 ## Usage
 
