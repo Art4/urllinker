@@ -223,8 +223,8 @@ final class UrlLinker implements UrlLinkerInterface
                     $html .= $emailLink;
                 } else {
                     // Prepend http:// if no scheme is specified
-                    $completeUrl = $scheme !== '' ? $url : "http://$url";
-                    $linkText = "$domain$port$path";
+                    $completeUrl = $scheme !== '' ? $url : 'http://' . $url;
+                    $linkText = $domain . $port . $path;
 
                     $htmlLink = $this->htmlLinkCreator->__invoke($completeUrl, $linkText);
 
@@ -323,11 +323,11 @@ final class UrlLinker implements UrlLinkerInterface
         $rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
         $rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
         $rexPassword   = $rexUsername; // allow the same characters as in the username
-        $rexUrl        = "($rexScheme)?(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
+        $rexUrl        = "({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})";
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
         $rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
-        $rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
+        $rexUrlLinker = "{\\b{$rexUrl}(?={$rexTrailPunct}*({$rexNonUrl}|$))}";
 
         if ($this->allowUpperCaseUrlSchemes) {
             $rexUrlLinker .= 'i';
@@ -356,7 +356,7 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private function createEmailLink(string $url, string $content): string
     {
-        $link = $this->createHtmlLink("mailto:$url", $content);
+        $link = $this->createHtmlLink('mailto:' . $url, $content);
 
         // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
         return str_replace('@', '&#64;', $link);
@@ -367,6 +367,7 @@ final class UrlLinker implements UrlLinkerInterface
         $flags = ENT_COMPAT | ENT_HTML401;
         $encoding = ini_get('default_charset');
         $encoding = $encoding !== false ? $encoding : null;
+
         $double_encode = false; // Do not double encode
 
         return htmlspecialchars($string, $flags, $encoding, $double_encode);
