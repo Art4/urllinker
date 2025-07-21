@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
- * Copyright (C) 2016-2022  Youthweb e.V. <info@youthweb.net>
+ * Copyright (C) 2016-2025  Artur Weigandt  <https://wlabs.de/kontakt>
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
