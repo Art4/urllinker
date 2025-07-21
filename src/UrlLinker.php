@@ -323,17 +323,25 @@ final class UrlLinker implements UrlLinkerInterface
         $rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
         $rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
         $rexPassword   = $rexUsername; // allow the same characters as in the username
-        $rexUrl        = "({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})";
+
+        $rexUrl = <<<PCRE
+            ({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})
+            PCRE
+        ;
+
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
         $rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
-        $rexUrlLinker = "{\\b{$rexUrl}(?={$rexTrailPunct}*({$rexNonUrl}|$))}";
+        $pcre = <<<PCRE
+            {\\b{$rexUrl}(?={$rexTrailPunct}*({$rexNonUrl}|$))}
+            PCRE
+        ;
 
         if ($this->allowUpperCaseUrlSchemes) {
-            $rexUrlLinker .= 'i';
+            $pcre .= 'i';
         }
 
-        return $rexUrlLinker;
+        return $pcre;
     }
 
     /**
