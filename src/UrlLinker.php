@@ -80,7 +80,7 @@ final class UrlLinker implements UrlLinkerInterface
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
                                 'boolean',
-                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                                get_debug_type($value)
                             ));
                         }
                     } else {
@@ -100,7 +100,7 @@ final class UrlLinker implements UrlLinkerInterface
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
                                 'boolean',
-                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                                get_debug_type($value)
                             ));
                         }
                     } else {
@@ -115,12 +115,12 @@ final class UrlLinker implements UrlLinkerInterface
                     if (array_key_exists($key, $options)) {
                         $value = $options[$key];
 
-                        if (! is_object($value) or ! $value instanceof Closure) {
+                        if (! is_object($value) || ! $value instanceof Closure) {
                             throw new InvalidArgumentException(sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
                                 Closure::class,
-                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                                get_debug_type($value)
                             ));
                         }
                     } else {
@@ -135,12 +135,12 @@ final class UrlLinker implements UrlLinkerInterface
                     if (array_key_exists($key, $options)) {
                         $value = $options[$key];
 
-                        if (! is_object($value) or ! $value instanceof Closure) {
+                        if (! is_object($value) || ! $value instanceof Closure) {
                             throw new InvalidArgumentException(sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
                                 Closure::class,
-                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                                get_debug_type($value)
                             ));
                         }
                     } else {
@@ -152,11 +152,7 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'validTlds':
-                    if (array_key_exists($key, $options)) {
-                        $value = (array) $options[$key];
-                    } else {
-                        $value = DomainStorage::getValidTlds();
-                    }
+                    $value = array_key_exists($key, $options) ? (array) $options[$key] : DomainStorage::getValidTlds();
 
                     $this->validTlds = $value;
 
@@ -172,7 +168,7 @@ final class UrlLinker implements UrlLinkerInterface
     public function linkUrlsAndEscapeHtml(string $text): string
     {
         // We can abort if there is no . in $text
-        if (strpos($text, '.') === false) {
+        if (!str_contains($text, '.')) {
             return $this->escapeHtml($text);
         }
 
@@ -199,10 +195,10 @@ final class UrlLinker implements UrlLinkerInterface
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = strtolower((string) strrchr($domain, '.'));
 
-            if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
+            if (preg_match('{^\.\d{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
-                if (empty($scheme) && ! empty($password)) {
+                if ($scheme === '' && $password !== '') {
                     $html .= $this->escapeHtml($username);
 
                     // Continue text parsing at the ':' following the "username".
@@ -211,7 +207,7 @@ final class UrlLinker implements UrlLinkerInterface
                     continue;
                 }
 
-                if (empty($scheme) && ! empty($username) && empty($password) && empty($afterDomain)) {
+                if ($scheme === '' && $username !== '' && $password === '' && $afterDomain === '') {
                     // Looks like an email address.
                     $emailLink = $this->emailLinkCreator->__invoke($url, $url);
 
@@ -227,8 +223,8 @@ final class UrlLinker implements UrlLinkerInterface
                     $html .= $emailLink;
                 } else {
                     // Prepend http:// if no scheme is specified
-                    $completeUrl = $scheme ? $url : "http://$url";
-                    $linkText = "$domain$port$path";
+                    $completeUrl = $scheme !== '' ? $url : 'http://' . $url;
+                    $linkText = $domain . $port . $path;
 
                     $htmlLink = $this->htmlLinkCreator->__invoke($completeUrl, $linkText);
 
@@ -262,8 +258,6 @@ final class UrlLinker implements UrlLinkerInterface
      *
      * Beware: Never render HTML from untrusted sources. Rendering HTML provided by
      * a malicious user can lead to system compromise through cross-site scripting.
-     *
-     * @param string $html
      */
     public function linkUrlsInTrustedHtml(string $html): string
     {
@@ -310,9 +304,6 @@ final class UrlLinker implements UrlLinkerInterface
         return $result;
     }
 
-    /**
-     * @return string
-     */
     private function buildRegex(): string
     {
         /**
@@ -325,18 +316,18 @@ final class UrlLinker implements UrlLinkerInterface
         }
 
         $rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
-        $rexIp         = '(?:[1-9][0-9]{0,2}\.|0\.){3}(?:[1-9][0-9]{0,2}|0)';
+        $rexIp         = '(?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)';
         $rexPort       = '(:[0-9]{1,5})?';
         $rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
         $rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
         $rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
         $rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
         $rexPassword   = $rexUsername; // allow the same characters as in the username
-        $rexUrl        = "($rexScheme)?(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
+        $rexUrl        = "({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})";
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
         $rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
-        $rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
+        $rexUrlLinker = "{\\b{$rexUrl}(?={$rexTrailPunct}*({$rexNonUrl}|$))}";
 
         if ($this->allowUpperCaseUrlSchemes) {
             $rexUrlLinker .= 'i';
@@ -365,7 +356,7 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private function createEmailLink(string $url, string $content): string
     {
-        $link = $this->createHtmlLink("mailto:$url", $content);
+        $link = $this->createHtmlLink('mailto:' . $url, $content);
 
         // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
         return str_replace('@', '&#64;', $link);
@@ -376,6 +367,7 @@ final class UrlLinker implements UrlLinkerInterface
         $flags = ENT_COMPAT | ENT_HTML401;
         $encoding = ini_get('default_charset');
         $encoding = $encoding !== false ? $encoding : null;
+
         $double_encode = false; // Do not double encode
 
         return htmlspecialchars($string, $flags, $encoding, $double_encode);

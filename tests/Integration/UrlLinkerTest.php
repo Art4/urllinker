@@ -48,9 +48,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     public function testCustomHtmlLinkCreator(): void
     {
         // Simple htmlLinkCreator
-        $creator = function ($url, $content) {
-            return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
-        };
+        $creator = (fn($url, $content): string => '<a href="' . $url . '" target="_blank">' . $content . '</a>');
 
         $urlLinker = new UrlLinker([
             'htmlLinkCreator' => $creator,
@@ -66,9 +64,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     {
         $urlLinker = new UrlLinker([
             // wrong htmlLinkCreator
-            'htmlLinkCreator' => function ($url, $content) {
-                return null;
-            },
+            'htmlLinkCreator' => fn($url, $content) => null,
         ]);
 
         $this->expectException(UnexpectedValueException::class);
@@ -96,9 +92,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     public function testCustomEmailLinkCreator(): void
     {
         // Simple EmailLinkCreator
-        $creator = function ($email, $content) {
-            return '<a href="' . $email . '" class="email">' . $content . '</a>';
-        };
+        $creator = (fn($email, $content): string => '<a href="' . $email . '" class="email">' . $content . '</a>');
 
         $urlLinker = new UrlLinker([
             'emailLinkCreator' => $creator,
@@ -116,9 +110,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     public function testDisableEmailLinkCreator(): void
     {
         // This EmailLinkCreator returns simply the email
-        $creator = function ($email, $content) {
-            return $email;
-        };
+        $creator = (fn($email, $content) => $email);
 
         $urlLinker = new UrlLinker([
             'emailLinkCreator' => $creator,
@@ -134,9 +126,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     {
         $urlLinker = new UrlLinker([
             // wrong emailLinkCreator
-            'emailLinkCreator' => function ($email, $content) {
-                return null;
-            },
+            'emailLinkCreator' => fn($email, $content) => null,
         ]);
 
         $this->expectException(UnexpectedValueException::class);

@@ -33,10 +33,8 @@ final class DomainStorage
      * Last updated: 2022-12-06
      *
      * # Version 2022120600, Last Updated Tue Dec  6 07:07:02 2022 UTC
-     *
-     * @var string
      */
-    private static $rawValidTlds = 'AAA
+    private static string $rawValidTlds = 'AAA
 AARP
 ABARTH
 ABB
@@ -1526,7 +1524,7 @@ ZW';
      *
      * @var array<string,bool>|null
      */
-    private static $validTlds = null;
+    private static $validTlds;
 
     /**
      * @return array<string,bool>
@@ -1536,9 +1534,7 @@ ZW';
         if (is_null(self::$validTlds)) {
             $validTlds = explode("\n", self::$rawValidTlds);
 
-            $clean = function ($value) {
-                return '.' . trim(strtolower($value));
-            };
+            $clean = (fn($value): string => '.' . trim(strtolower((string) $value)));
 
             $validTlds = array_map($clean, $validTlds);
 

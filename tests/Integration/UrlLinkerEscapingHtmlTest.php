@@ -30,26 +30,16 @@ use Youthweb\UrlLinker\UrlLinker;
 class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 {
     /**
-     * @var UrlLinker
-     */
-    private $urlLinker;
-
-    protected function setUp(): void
-    {
-        $this->urlLinker = new UrlLinker();
-    }
-
-    /**
      * @dataProvider provideTextsWithFtpLinksWithoutHtml
      */
     #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]
     public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
-        $this->urlLinker = new UrlLinker([
+        $urlLinker = new UrlLinker([
             'allowFtpAddresses' => true,
         ]);
 
-        $this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
+        $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
     /**
@@ -58,22 +48,20 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
     #[DataProvider('provideTextsWithUppercaseLinksWithoutHtml')]
     public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
-        $this->urlLinker = new UrlLinker([
+        $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
         ]);
 
-        $this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
+        $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
     /**
      * @dataProvider provideTextsNotContainingAnyUrls
-     *
-     * @param string $text
      */
     #[DataProvider('provideTextsNotContainingAnyUrls')]
     public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
-        $this->assertSame($text, $this->urlLinker->linkUrlsAndEscapeHtml($text));
+        $this->assertSame($text, (new UrlLinker())->linkUrlsAndEscapeHtml($text));
     }
 
     public function testExample(): void
@@ -120,53 +108,51 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
             <a href="http://møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي">møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي</a>.
             EOD;
 
-        $this->assertSame($expected, $this->urlLinker->linkUrlsAndEscapeHtml($text));
+        $this->assertSame($expected, (new UrlLinker())->linkUrlsAndEscapeHtml($text));
     }
 
     /**
      * @dataProvider provideTextsWithLinksWithoutHtml
-     *
-     * @param string      $text
-     * @param string      $expectedLinked
-     * @param string|null $message
      */
     #[DataProvider('provideTextsWithLinksWithoutHtml')]
-    public function testUrlsGetLinkedInText(string $text, string $expectedLinked, $message = null): void
+    public function testUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
+    {
+        $this->runLinkUrlsAndEscapeHtmlTests(new UrlLinker(), $text, $expectedLinked, $message);
+    }
+
+    private function runLinkUrlsAndEscapeHtmlTests(UrlLinker $urlLinker, string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->assertSame(
             $expectedLinked,
-            $this->urlLinker->linkUrlsAndEscapeHtml($text),
+            $urlLinker->linkUrlsAndEscapeHtml($text),
             'Simple case: ' . $message
         );
 
         $this->assertSame(
             sprintf('foo %s bar', $expectedLinked),
-            $this->urlLinker->linkUrlsAndEscapeHtml(sprintf('foo %s bar', $text)),
+            $urlLinker->linkUrlsAndEscapeHtml(sprintf('foo %s bar', $text)),
             'Text around: ' . $message
         );
 
         // html should get encoded
         $this->assertSame(
             sprintf('&lt;div class=&quot;test&quot;&gt; %s &lt;/div&gt;', $expectedLinked),
-            $this->urlLinker->linkUrlsAndEscapeHtml(sprintf('<div class="test"> %s </div>', $text)),
+            $urlLinker->linkUrlsAndEscapeHtml(sprintf('<div class="test"> %s </div>', $text)),
             'Html around: ' . $message
         );
     }
 
     /**
      * @dataProvider provideTextsWithHtml
-     *
-     * @param string      $text
-     * @param string      $expectedLinked
      */
     #[DataProvider('provideTextsWithHtml')]
     public function testHtmlInText(string $text, string $expectedLinked): void
     {
-        $this->urlLinker = new UrlLinker([
+        $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
         ]);
 
-        $this->testUrlsGetLinkedInText($text, $expectedLinked);
+        $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked);
     }
 
     /**

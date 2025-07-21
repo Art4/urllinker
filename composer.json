@@ -16,12 +16,13 @@
 		}
 	],
 	"require": {
-		"php": "^7.4 || ^8.0"
+		"php": "^8.1"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.84",
+		"phpstan/phpstan": "^2.0",
 		"phpunit/phpunit": "^9.6 || ^11.0 || ^12.0",
-		"phpstan/phpstan": "^2.0"
+		"rector/rector": "^2.1"
 	},
 	"autoload": {
 		"psr-4": {
@@ -41,6 +42,11 @@
 		"coverage": "vendor/bin/phpunit --coverage-html=\"build/code-coverage\"",
 		"phpstan": "vendor/bin/phpstan analyze --configuration phpstan.neon",
 		"phpunit": "vendor/bin/phpunit",
+		"rector": "vendor/bin/rector process --dry-run",
+		"refactor": [
+			"vendor/bin/rector process",
+			"@codestyle"
+		],
 		"test": [
 			"@phpunit",
 			"@phpstan",

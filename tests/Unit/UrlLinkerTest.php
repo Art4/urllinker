@@ -30,6 +30,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Youthweb\UrlLinker\UrlLinker;
+use Youthweb\UrlLinker\UrlLinkerInterface;
 
 #[CoversClass(UrlLinker::class)]
 class UrlLinkerTest extends TestCase
@@ -38,7 +39,7 @@ class UrlLinkerTest extends TestCase
     {
         $urlLinker = new UrlLinker();
 
-        $this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', $urlLinker);
+        $this->assertInstanceOf(UrlLinkerInterface::class, $urlLinker);
     }
 
     public function testProvidingClosureAsHtmlLinkCreator(): void
@@ -223,7 +224,7 @@ class UrlLinkerTest extends TestCase
      *
      * @return array<string,mixed>
      */
-    private static function getAllExcept(array ...$except)
+    private static function getAllExcept(array ...$except): array
     {
         $except = array_flip(array_merge(...$except));
 
@@ -237,7 +238,7 @@ class UrlLinkerTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private static function getAll()
+    private static function getAll(): array
     {
         return [
             'null' => [
@@ -289,12 +290,10 @@ class UrlLinkerTest extends TestCase
                 ['a' => 1, 'b' => 2],
             ],
             'callable as array with instanciated object' => [
-                [__CLASS__, '__construct'],
+                [self::class, '__construct'],
             ],
             'closure' => [
-                function () {
-                    return true;
-                },
+                fn(): bool => true,
             ],
             'plain object' => [
                 new stdClass(),

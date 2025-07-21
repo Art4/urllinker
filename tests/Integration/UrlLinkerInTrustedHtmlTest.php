@@ -29,26 +29,16 @@ use Youthweb\UrlLinker\UrlLinker;
 class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 {
     /**
-     * @var UrlLinker
-     */
-    private $urlLinker;
-
-    protected function setUp(): void
-    {
-        $this->urlLinker = new UrlLinker();
-    }
-
-    /**
      * @dataProvider provideTextsWithFtpLinksWithoutHtml
      */
     #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]
     public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
-        $this->urlLinker = new UrlLinker([
+        $urlLinker = new UrlLinker([
             'allowFtpAddresses' => true,
         ]);
 
-        $this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
+        $this->runLinkUrlsInTrustedHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
     /**
@@ -57,11 +47,11 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     #[DataProvider('provideTextsWithUppercaseLinksWithoutHtml')]
     public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
-        $this->urlLinker = new UrlLinker([
+        $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
         ]);
 
-        $this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
+        $this->runLinkUrlsInTrustedHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
     /**
@@ -70,7 +60,7 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     #[DataProvider('provideTextsNotContainingAnyUrls')]
     public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
-        $this->assertSame($text, $this->urlLinker->linkUrlsInTrustedHtml($text));
+        $this->assertSame($text, (new UrlLinker())->linkUrlsInTrustedHtml($text));
     }
 
     public function testExample(): void
@@ -89,35 +79,36 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
             <p title='10>20'>Tricky markup...</p>
             EOD;
 
-        $this->assertSame($expected, $this->urlLinker->linkUrlsInTrustedHtml($html));
+        $this->assertSame($expected, (new UrlLinker())->linkUrlsInTrustedHtml($html));
     }
 
     /**
      * @dataProvider provideTextsWithLinksWithoutHtml
-     *
-     * @param string      $text
-     * @param string      $expectedLinked
-     * @param string|null $message
      */
     #[DataProvider('provideTextsWithLinksWithoutHtml')]
-    public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null): void
+    public function testUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
+    {
+        $this->runLinkUrlsInTrustedHtmlTests(new UrlLinker(), $text, $expectedLinked, $message);
+    }
+
+    private function runLinkUrlsInTrustedHtmlTests(UrlLinker $urlLinker, string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->assertSame(
             $expectedLinked,
-            $this->urlLinker->linkUrlsInTrustedHtml($text),
+            $urlLinker->linkUrlsInTrustedHtml($text),
             'Simple case: ' . $message
         );
 
         $this->assertSame(
             sprintf('foo %s bar', $expectedLinked),
-            $this->urlLinker->linkUrlsInTrustedHtml(sprintf('foo %s bar', $text)),
+            $urlLinker->linkUrlsInTrustedHtml(sprintf('foo %s bar', $text)),
             'Text around: ' . $message
         );
 
         // html should NOT get encoded
         $this->assertSame(
             sprintf('<div class="test">%s</div>', $expectedLinked),
-            $this->urlLinker->linkUrlsInTrustedHtml(sprintf('<div class="test">%s</div>', $text)),
+            $urlLinker->linkUrlsInTrustedHtml(sprintf('<div class="test">%s</div>', $text)),
             'Html around: ' . $message
         );
     }
@@ -128,11 +119,11 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     #[DataProvider('provideTextsWithHtml')]
     public function testHtmlInText(string $text, string $expectedLinked): void
     {
-        $this->urlLinker = new UrlLinker([
+        $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
         ]);
 
-        $this->testUrlsGetLinkedInText($text, $expectedLinked);
+        $this->runLinkUrlsInTrustedHtmlTests($urlLinker, $text, $expectedLinked);
     }
 
     /**
