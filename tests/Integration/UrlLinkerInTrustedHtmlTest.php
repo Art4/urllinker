@@ -28,10 +28,7 @@ use Youthweb\UrlLinker\UrlLinker;
 #[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
 class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 {
-    /**
-     * @var UrlLinker
-     */
-    private $urlLinker;
+    private UrlLinker $urlLinker;
 
     protected function setUp(): void
     {
@@ -94,13 +91,9 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithLinksWithoutHtml
-     *
-     * @param string      $text
-     * @param string      $expectedLinked
-     * @param string|null $message
      */
     #[DataProvider('provideTextsWithLinksWithoutHtml')]
-    public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null): void
+    public function testUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->assertSame(
             $expectedLinked,

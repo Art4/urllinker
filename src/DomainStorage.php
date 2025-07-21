@@ -33,10 +33,8 @@ final class DomainStorage
      * Last updated: 2022-12-06
      *
      * # Version 2022120600, Last Updated Tue Dec  6 07:07:02 2022 UTC
-     *
-     * @var string
      */
-    private static $rawValidTlds = 'AAA
+    private static string $rawValidTlds = 'AAA
 AARP
 ABARTH
 ABB

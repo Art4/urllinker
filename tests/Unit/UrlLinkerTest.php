@@ -223,7 +223,7 @@ class UrlLinkerTest extends TestCase
      *
      * @return array<string,mixed>
      */
-    private static function getAllExcept(array ...$except)
+    private static function getAllExcept(array ...$except): array
     {
         $except = array_flip(array_merge(...$except));
 

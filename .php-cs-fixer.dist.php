@@ -12,6 +12,7 @@ return (new PhpCsFixer\Config())
         '@PHP80Migration' => true,
         '@PHP80Migration:risky' => true,
         '@PHPUnit100Migration:risky' => true,
+        'fully_qualified_strict_types' => true,
     ])
     ->setFinder($finder)
 ;

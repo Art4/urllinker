@@ -115,7 +115,7 @@ final class UrlLinker implements UrlLinkerInterface
                     if (array_key_exists($key, $options)) {
                         $value = $options[$key];
 
-                        if (! is_object($value) or ! $value instanceof Closure) {
+                        if (! is_object($value) || ! $value instanceof Closure) {
                             throw new InvalidArgumentException(sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
@@ -135,7 +135,7 @@ final class UrlLinker implements UrlLinkerInterface
                     if (array_key_exists($key, $options)) {
                         $value = $options[$key];
 
-                        if (! is_object($value) or ! $value instanceof Closure) {
+                        if (! is_object($value) || ! $value instanceof Closure) {
                             throw new InvalidArgumentException(sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $key,
@@ -195,7 +195,7 @@ final class UrlLinker implements UrlLinkerInterface
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = strtolower((string) strrchr($domain, '.'));
 
-            if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
+            if (preg_match('{^\.\d{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
                 if ($scheme === '' && $password !== '') {
@@ -223,7 +223,7 @@ final class UrlLinker implements UrlLinkerInterface
                     $html .= $emailLink;
                 } else {
                     // Prepend http:// if no scheme is specified
-                    $completeUrl = $scheme ? $url : "http://$url";
+                    $completeUrl = $scheme !== '' ? $url : "http://$url";
                     $linkText = "$domain$port$path";
 
                     $htmlLink = $this->htmlLinkCreator->__invoke($completeUrl, $linkText);
@@ -316,7 +316,7 @@ final class UrlLinker implements UrlLinkerInterface
         }
 
         $rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
-        $rexIp         = '(?:[1-9][0-9]{0,2}\.|0\.){3}(?:[1-9][0-9]{0,2}|0)';
+        $rexIp         = '(?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)';
         $rexPort       = '(:[0-9]{1,5})?';
         $rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
         $rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';

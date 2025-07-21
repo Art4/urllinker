@@ -29,10 +29,7 @@ use Youthweb\UrlLinker\UrlLinker;
 #[CoversMethod(UrlLinker::class, 'linkUrlsAndEscapeHtml')]
 class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 {
-    /**
-     * @var UrlLinker
-     */
-    private $urlLinker;
+    private UrlLinker $urlLinker;
 
     protected function setUp(): void
     {
@@ -123,11 +120,9 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithLinksWithoutHtml
-     *
-     * @param string|null $message
      */
     #[DataProvider('provideTextsWithLinksWithoutHtml')]
-    public function testUrlsGetLinkedInText(string $text, string $expectedLinked, $message = null): void
+    public function testUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->assertSame(
             $expectedLinked,
