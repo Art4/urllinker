@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Update the IANA TLD list with version `2025072000`
 - Drop support for PHP 7.4 and 8.0
 - Update to PHPStan v2 and PHPUnit v12
 - Update code style to latest PER-CS
@@ -64,7 +65,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- Update the IANA TLD list
+- Update the IANA TLD list with version `2022120600`
 - Change code style to follow PER
 - Move CI tests from Travis-CI to Github Actions
 
@@ -85,7 +86,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- Update the IANA TLD list
+- Update the IANA TLD list with version `2021030400`
 - Drop support for PHP 7.2 and 7.3
 
 ## [1.3.0](https://github.com/Art4/urllinker/compare/1.2.0...1.3.0) - 2019-10-10
