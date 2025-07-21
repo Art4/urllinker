@@ -30,6 +30,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Youthweb\UrlLinker\UrlLinker;
+use Youthweb\UrlLinker\UrlLinkerInterface;
 
 #[CoversClass(UrlLinker::class)]
 class UrlLinkerTest extends TestCase
@@ -38,7 +39,7 @@ class UrlLinkerTest extends TestCase
     {
         $urlLinker = new UrlLinker();
 
-        $this->assertInstanceOf(\Youthweb\UrlLinker\UrlLinkerInterface::class, $urlLinker);
+        $this->assertInstanceOf(UrlLinkerInterface::class, $urlLinker);
     }
 
     public function testProvidingClosureAsHtmlLinkCreator(): void
