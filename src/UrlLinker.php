@@ -334,12 +334,12 @@ final class UrlLinker implements UrlLinkerInterface
                     (?P<username>{$rexUsername})
                     (?P<password>:{$rexPassword})?
                 @)?
-                (?P<host>{$rexDomain}|{$rexIp})
+                (?P<host>(?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|(?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0))
                 (
-                    {$rexPort}
-                    {$rexPath}
-                    {$rexQuery}
-                    {$rexFragment}
+                    (?P<port>:[0-9]{1,5})?
+                    (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
+                    (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                    (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
                 )
                 (?={$rexTrailPunct}*
                     ({$rexNonUrl}|$)
