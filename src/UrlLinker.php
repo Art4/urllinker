@@ -319,22 +319,22 @@ final class UrlLinker implements UrlLinkerInterface
         $rexPassword   = $rexUsername; // allow the same characters as in the username
         $rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
         $rexIp         = '(?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)';
-        $rexPort       = '(:[0-9]{1,5})?';
-        $rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
-        $rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-        $rexFragment   = '(\#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
+        $rexPort       = '(?P<port>:[0-9]{1,5})?';
+        $rexPath       = '(?P<path>/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
+        $rexQuery      = '(?P<query>\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
+        $rexFragment   = '(?P<fragment>\#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
         $rexNonUrl	 = "[^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
         $pcre = <<<PCRE
             #\\b
-                ({$rexScheme})?
+                (?P<scheme>{$rexScheme})?
                 (?:
-                    ({$rexUsername})
-                    (:{$rexPassword})?
+                    (?P<username>{$rexUsername})
+                    (?P<password>:{$rexPassword})?
                 @)?
-                ({$rexDomain}|{$rexIp})
+                (?P<host>{$rexDomain}|{$rexIp})
                 ({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})
                 (?={$rexTrailPunct}*
                     ({$rexNonUrl}|$)
