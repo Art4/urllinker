@@ -315,24 +315,20 @@ final class UrlLinker implements UrlLinkerInterface
             $rexScheme .= '|ftp://';
         }
 
-        $rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
-        $rexPassword   = $rexUsername; // allow the same characters as in the username
-        $rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
-        $rexIp         = '(?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)';
-        $rexPort       = '(?P<port>:[0-9]{1,5})?';
-        $rexPath       = '(?P<path>/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
-        $rexQuery      = '(?P<query>\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-        $rexFragment   = '(?P<fragment>\#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
         $rexNonUrl	 = "[^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
+        /**
+         * Notes:
+         *
+         * - password: allow the same characters as in the username
+         */
         $pcre = <<<PCRE
             #\\b
                 (?P<scheme>{$rexScheme})?
                 (?:
-                    (?P<username>{$rexUsername})
-                    (?P<password>:{$rexPassword})?
+                    (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
+                    (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
                 @)?
                 (?P<host>
                     (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
