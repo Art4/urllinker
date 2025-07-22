@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 use Youthweb\UrlLinker\UrlLinker;
 
 #[CoversClass(UrlLinker::class)]
-class BUildRegexTest extends TestCase
+class BuildRegexTest extends TestCase
 {
     /**
      * @dataProvider optionsRegexProvider

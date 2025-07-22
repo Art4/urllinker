@@ -315,25 +315,20 @@ final class UrlLinker implements UrlLinkerInterface
             $rexScheme .= '|ftp://';
         }
 
+        $rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
+        $rexPassword   = $rexUsername; // allow the same characters as in the username
         $rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
         $rexIp         = '(?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)';
         $rexPort       = '(:[0-9]{1,5})?';
         $rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
         $rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
         $rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-        $rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
-        $rexPassword   = $rexUsername; // allow the same characters as in the username
-
-        $rexUrl = <<<PCRE
-            ({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})
-            PCRE
-        ;
 
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
         $rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
         $pcre = <<<PCRE
-            {\\b{$rexUrl}(?={$rexTrailPunct}*({$rexNonUrl}|$))}
+            {\\b({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})(?={$rexTrailPunct}*({$rexNonUrl}|$))}
             PCRE
         ;
 
