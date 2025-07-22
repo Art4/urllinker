@@ -184,13 +184,13 @@ final class UrlLinker implements UrlLinkerInterface
             // Add the text leading up to the URL.
             $html .= $this->escapeHtml(substr($text, $position, intval($urlPosition - $position)));
 
-            $scheme      = $match[1][0] ?? '';
-            $username    = $match[2][0] ?? '';
-            $password    = $match[3][0] ?? '';
-            $domain      = $match[4][0] ?? '';
-            $afterDomain = $match[5][0] ?? ''; // everything following the domain
-            $port        = $match[6][0] ?? '';
-            $path        = $match[7][0] ?? '';
+            $scheme      = $match['scheme'][0] ?? '';
+            $username    = $match['username'][0] ?? '';
+            $password    = $match['password'][0] ?? '';
+            $domain      = $match['host'][0] ?? '';
+            $afterDomain = $match['hostsuffix'][0] ?? ''; // everything following the domain
+            $port        = $match['port'][0] ?? '';
+            $path        = $match['path'][0] ?? '';
 
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = strtolower((string) strrchr($domain, '.'));
@@ -308,6 +308,10 @@ final class UrlLinker implements UrlLinkerInterface
     {
         /**
          * Regular expression bits used by linkUrlsAndEscapeHtml() to match URLs.
+         *
+         * - password: allow the same characters as in the username
+         * - trailpunct: valid URL characters which are not part of the URL if they appear at the very end
+         * - nonurl: characters that should never appear in a URL
          */
         $rexScheme = 'https?://';
 
@@ -318,11 +322,6 @@ final class UrlLinker implements UrlLinkerInterface
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
         $rexNonUrl	 = "[^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
-        /**
-         * Notes:
-         *
-         * - password: allow the same characters as in the username
-         */
         $pcre = <<<PCRE
             #\\b
                 (?P<scheme>{$rexScheme})?
@@ -334,7 +333,7 @@ final class UrlLinker implements UrlLinkerInterface
                     (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
                     (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
                 )
-                (
+                (?P<hostsuffix>
                     (?P<port>:[0-9]{1,5})?
                     (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
                     (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
