@@ -335,7 +335,12 @@ final class UrlLinker implements UrlLinkerInterface
                     (?P<password>:{$rexPassword})?
                 @)?
                 (?P<host>{$rexDomain}|{$rexIp})
-                ({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})
+                (
+                    {$rexPort}
+                    {$rexPath}
+                    {$rexQuery}
+                    {$rexFragment}
+                )
                 (?={$rexTrailPunct}*
                     ({$rexNonUrl}|$)
                 )
