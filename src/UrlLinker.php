@@ -322,13 +322,15 @@ final class UrlLinker implements UrlLinkerInterface
         $rexPort       = '(:[0-9]{1,5})?';
         $rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
         $rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-        $rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
+        $rexFragment   = '(\#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
-        $rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
+        $rexNonUrl	 = "[^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
         $pcre = <<<PCRE
-            {\\b({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})(?={$rexTrailPunct}*({$rexNonUrl}|$))}
+            #\\b
+            ({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})(?={$rexTrailPunct}*({$rexNonUrl}|$))
+            #x
             PCRE
         ;
 
