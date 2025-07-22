@@ -23,7 +23,17 @@ namespace Youthweb\UrlLinker;
 
 interface UrlLinkerInterface
 {
+    /**
+     * Transforms plain text into valid HTML, escaping special characters and
+     * turning URLs into links.
+     */
     public function linkUrlsAndEscapeHtml(string $text): string;
 
+    /**
+     * Turns URLs into links in a piece of valid HTML/XHTML.
+     *
+     * Beware: Never render HTML from untrusted sources. Rendering HTML provided by
+     * a malicious user can lead to system compromise through cross-site scripting.
+     */
     public function linkUrlsInTrustedHtml(string $html): string;
 }

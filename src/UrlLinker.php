@@ -55,8 +55,6 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * Set the configuration
      *
-     * @since v1.1.0
-     *
      * @param array<string,mixed> $options Configuation array
      */
     public function __construct(array $options = [])
@@ -161,10 +159,6 @@ final class UrlLinker implements UrlLinkerInterface
         }
     }
 
-    /**
-     * Transforms plain text into valid HTML, escaping special characters and
-     * turning URLs into links.
-     */
     public function linkUrlsAndEscapeHtml(string $text): string
     {
         // We can abort if there is no . in $text
@@ -253,12 +247,6 @@ final class UrlLinker implements UrlLinkerInterface
         return $html;
     }
 
-    /**
-     * Turns URLs into links in a piece of valid HTML/XHTML.
-     *
-     * Beware: Never render HTML from untrusted sources. Rendering HTML provided by
-     * a malicious user can lead to system compromise through cross-site scripting.
-     */
     public function linkUrlsInTrustedHtml(string $html): string
     {
         $reMarkup = '{</?([a-z]+)([^"\'>]|"[^"]*"|\'[^\']*\')*>|&#?[a-zA-Z0-9]+;|$}';
