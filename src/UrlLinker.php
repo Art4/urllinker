@@ -329,7 +329,16 @@ final class UrlLinker implements UrlLinkerInterface
 
         $pcre = <<<PCRE
             #\\b
-            ({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})(?={$rexTrailPunct}*({$rexNonUrl}|$))
+                ({$rexScheme})?
+                (?:
+                    ({$rexUsername})
+                    (:{$rexPassword})?
+                @)?
+                ({$rexDomain}|{$rexIp})
+                ({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})
+                (?={$rexTrailPunct}*
+                    ({$rexNonUrl}|$)
+                )
             #x
             PCRE
         ;
