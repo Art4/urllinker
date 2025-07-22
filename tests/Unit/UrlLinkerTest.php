@@ -58,11 +58,9 @@ class UrlLinkerTest extends TestCase
 
     /**
      * @dataProvider wrongCreatorProvider
-     *
-     * @param mixed $wrongCreator
      */
     #[DataProvider('wrongCreatorProvider')]
-    public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
+    public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "');
@@ -88,11 +86,9 @@ class UrlLinkerTest extends TestCase
 
     /**
      * @dataProvider wrongCreatorProvider
-     *
-     * @param mixed $wrongCreator
      */
     #[DataProvider('wrongCreatorProvider')]
-    public function testWrongEmailLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
+    public function testWrongEmailLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "emailLinkCreator" must be of type "Closure", "');

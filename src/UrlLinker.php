@@ -184,13 +184,13 @@ final class UrlLinker implements UrlLinkerInterface
             // Add the text leading up to the URL.
             $html .= $this->escapeHtml(substr($text, $position, intval($urlPosition - $position)));
 
-            $scheme      = $match[1][0] ?? '';
-            $username    = $match[2][0] ?? '';
-            $password    = $match[3][0] ?? '';
-            $domain      = $match[4][0] ?? '';
-            $afterDomain = $match[5][0] ?? ''; // everything following the domain
-            $port        = $match[6][0] ?? '';
-            $path        = $match[7][0] ?? '';
+            $scheme      = $match['scheme'][0] ?? '';
+            $username    = $match['username'][0] ?? '';
+            $password    = $match['password'][0] ?? '';
+            $domain      = $match['host'][0] ?? '';
+            $afterDomain = $match['hostsuffix'][0] ?? ''; // everything following the domain
+            $port        = $match['port'][0] ?? '';
+            $path        = $match['path'][0] ?? '';
 
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = strtolower((string) strrchr($domain, '.'));
@@ -308,6 +308,10 @@ final class UrlLinker implements UrlLinkerInterface
     {
         /**
          * Regular expression bits used by linkUrlsAndEscapeHtml() to match URLs.
+         *
+         * - password: allow the same characters as in the username
+         * - trailpunct: valid URL characters which are not part of the URL if they appear at the very end
+         * - nonurl: characters that should never appear in a URL
          */
         $rexScheme = 'https?://';
 
@@ -315,25 +319,38 @@ final class UrlLinker implements UrlLinkerInterface
             $rexScheme .= '|ftp://';
         }
 
-        $rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
-        $rexIp         = '(?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)';
-        $rexPort       = '(:[0-9]{1,5})?';
-        $rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
-        $rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-        $rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-        $rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
-        $rexPassword   = $rexUsername; // allow the same characters as in the username
-        $rexUrl        = "({$rexScheme})?(?:({$rexUsername})(:{$rexPassword})?@)?({$rexDomain}|{$rexIp})({$rexPort}{$rexPath}{$rexQuery}{$rexFragment})";
         $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
-        $rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
+        $rexNonUrl	 = "[^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
-        $rexUrlLinker = "{\\b{$rexUrl}(?={$rexTrailPunct}*({$rexNonUrl}|$))}";
+        $pcre = <<<PCRE
+            #\\b
+                (?P<scheme>{$rexScheme})?
+                (?:
+                    (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
+                    (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
+                @)?
+                (?P<host>
+                    (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
+                    (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
+                )
+                (?P<hostsuffix>
+                    (?P<port>:[0-9]{1,5})?
+                    (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
+                    (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                    (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                )
+                (?={$rexTrailPunct}*
+                    ({$rexNonUrl}|$)
+                )
+            #x
+            PCRE
+        ;
 
         if ($this->allowUpperCaseUrlSchemes) {
-            $rexUrlLinker .= 'i';
+            $pcre .= 'i';
         }
 
-        return $rexUrlLinker;
+        return $pcre;
     }
 
     /**
