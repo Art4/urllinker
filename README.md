@@ -119,7 +119,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 Unit tests are written using [PHPUnit](https://phpunit.de). PHP runs inside Docker — Docker is required.
 
 ```bash
-$ make test
+$ make qa
 ```
 
 See [docs/dev-environment.md](docs/dev-environment.md) for the full development environment reference, including running tests on other PHP versions.

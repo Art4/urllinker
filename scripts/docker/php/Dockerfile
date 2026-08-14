@@ -1,4 +1,4 @@
-FROM php:8.1-cli
+FROM php:8.2-cli
 
 COPY scripts/docker/php/install-tools.sh /usr/local/bin/urllinker-install-tools.sh
 RUN sh /usr/local/bin/urllinker-install-tools.sh

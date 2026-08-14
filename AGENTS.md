@@ -14,13 +14,11 @@ Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/do
 
 ## Development environment
 
-PHP runs **only** inside the Docker dev container — never invoke `php`, `composer`, or `vendor/bin/*` on the host. Docker is required for `make test`. Use the Makefile:
+PHP runs **only** inside the Docker dev container — never invoke `php`, `composer`, or `vendor/bin/*` on the host. Docker is required for `make qa`. Use the Makefile:
 
-- `make test` — full check (phpunit + phpstan + codestyle); installs dependencies on first run
+- `make qa` — full check (phpunit + phpstan + codestyle); installs dependencies on first run
 - `make install` / `make composer ARGS="install"` — install Composer dependencies
 - `make phpunit` / `make phpstan` / `make codestyle` / `make rector` / `make coverage`
 - `make shell` — interactive shell inside the container
-- `make test-all` — run the full check on every supported PHP version
-- Set `PHP_VERSION=8.x` to use a different PHP version (default `8.4`)
 
-See `docs/dev-environment.md` for the full reference.
+The dev container runs the lowest supported PHP version whose dev tooling can run the full check (PHP 8.2); the cross-version matrix (8.1–8.6) runs in GitHub Actions. See `docs/dev-environment.md` for the full reference.

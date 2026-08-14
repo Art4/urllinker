@@ -47,7 +47,7 @@
 			"vendor/bin/rector process",
 			"@codestyle"
 		],
-		"test": [
+		"qa": [
 			"@phpunit",
 			"@phpstan",
 			"@codestyle --dry-run --diff"
