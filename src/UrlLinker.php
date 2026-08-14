@@ -201,7 +201,10 @@ final class UrlLinker implements UrlLinkerInterface
                     continue;
                 }
 
-                if ($scheme === '' && $username !== '' && $password === '' && $afterDomain === '') {
+                $schemeIsEmpty = $scheme === '';
+                $passwordIsEmpty = $password === '';
+
+                if ($schemeIsEmpty && $username !== '' && $passwordIsEmpty && $afterDomain === '') {
                     // Looks like an email address.
                     $emailLink = $this->emailLinkCreator->__invoke($url, $url);
 
@@ -258,7 +261,10 @@ final class UrlLinker implements UrlLinkerInterface
         // Iterate over every piece of markup in the HTML.
         while (true) {
             $match = [];
-            preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position);
+
+            if (preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
+                break;
+            }
 
             [$markup, $markupPosition] = $match[0];
 
@@ -278,7 +284,7 @@ final class UrlLinker implements UrlLinkerInterface
             }
 
             // Check if markup is an anchor tag ('<a>', '</a>').
-            if ($markup[0] !== '&' && $match[1][0] === 'a') {
+            if ($markup[0] !== '&' && isset($match[1]) && $match[1][0] === 'a') {
                 $insideAnchorTag = ($markup[1] !== '/');
             }
 
