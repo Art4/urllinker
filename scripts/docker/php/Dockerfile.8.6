@@ -1,0 +1,7 @@
+# PHP 8.6 is unreleased (stable due 2026-11-19); flip FROM to php:8.6-cli then.
+FROM php:8.6.0beta1-cli
+
+COPY scripts/docker/php/install-tools.sh /usr/local/bin/urllinker-install-tools.sh
+RUN sh /usr/local/bin/urllinker-install-tools.sh
+
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer

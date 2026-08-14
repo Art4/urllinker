@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/Art4/urllinker/compare/2.1.0...main)
 
-Nothing yet.
+### Added
+
+- Run the development environment inside Docker (`make test`, see `docs/dev-environment.md`)
+- Document the development environment for agents in `AGENTS.md`
 
 ## [2.1.0](https://github.com/Art4/urllinker/compare/2.0.0...2.1.0) - 2025-07-22
 

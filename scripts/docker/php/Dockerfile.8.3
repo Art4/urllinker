@@ -1,0 +1,6 @@
+FROM php:8.3-cli
+
+COPY scripts/docker/php/install-tools.sh /usr/local/bin/urllinker-install-tools.sh
+RUN sh /usr/local/bin/urllinker-install-tools.sh
+
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
