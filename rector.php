@@ -17,5 +17,10 @@ return \Rector\Config\RectorConfig::configure()
         earlyReturn: true,
         instanceOf: true,
         naming: true,
+        phpunitCodeQuality: true,
+        phpunitNarrowAsserts: true,
+    )
+    ->withComposerBased(
+        phpunit: true,
     )
 ;

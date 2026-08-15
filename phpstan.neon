@@ -6,3 +6,14 @@ parameters:
         - tests
 
     ignoreErrors:
+        # PHPUnit's documented call style calls the static assert methods
+        # via $this->assert*(), which strict-rules flags as dynamic calls.
+        -
+            identifier: staticMethod.dynamicCall
+            path: tests/*
+
+        # testUrlLinkerImplementsUrlLinkerInterface() intentionally locks the
+        # class/interface contract; PHPStan can statically prove it already.
+        -
+            identifier: method.alreadyNarrowedType
+            path: tests/Unit/UrlLinkerTest.php

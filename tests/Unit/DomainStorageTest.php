@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 use Youthweb\UrlLinker\DomainStorage;
 
 #[CoversClass(DomainStorage::class)]
-class DomainStorageTest extends TestCase
+final class DomainStorageTest extends TestCase
 {
     public function testGetValidTlds(): void
     {

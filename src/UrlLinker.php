@@ -195,7 +195,7 @@ final class UrlLinker implements UrlLinkerInterface
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = strtolower((string) strrchr($domain, '.'));
 
-            if (preg_match('{^\.\d{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
+            if (preg_match('{^\.\d{1,3}$}', $tld) === 1 || isset($this->validTlds[$tld])) {
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
                 if ($scheme === '' && $password !== '') {

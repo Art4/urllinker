@@ -33,7 +33,7 @@ use Youthweb\UrlLinker\UrlLinker;
 use Youthweb\UrlLinker\UrlLinkerInterface;
 
 #[CoversClass(UrlLinker::class)]
-class UrlLinkerTest extends TestCase
+final class UrlLinkerTest extends TestCase
 {
     public function testUrlLinkerImplementsUrlLinkerInterface(): void
     {
@@ -45,7 +45,7 @@ class UrlLinkerTest extends TestCase
     public function testProvidingClosureAsHtmlLinkCreator(): void
     {
         $urlLinker = new UrlLinker([
-            'htmlLinkCreator' => function (): void {
+            'htmlLinkCreator' => function (): never {
                 throw new Exception('it works');
             },
         ]);
@@ -56,9 +56,6 @@ class UrlLinkerTest extends TestCase
         $urlLinker->linkUrlsAndEscapeHtml('http://example.com');
     }
 
-    /**
-     * @dataProvider wrongCreatorProvider
-     */
     #[DataProvider('wrongCreatorProvider')]
     public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
     {
@@ -73,7 +70,7 @@ class UrlLinkerTest extends TestCase
     public function testProvidingClosureAsEmailLinkCreator(): void
     {
         $urlLinker = new UrlLinker([
-            'emailLinkCreator' => function (): void {
+            'emailLinkCreator' => function (): never {
                 throw new Exception('it works');
             },
         ]);
@@ -84,9 +81,6 @@ class UrlLinkerTest extends TestCase
         $urlLinker->linkUrlsAndEscapeHtml('mail@example.com');
     }
 
-    /**
-     * @dataProvider wrongCreatorProvider
-     */
     #[DataProvider('wrongCreatorProvider')]
     public function testWrongEmailLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
     {

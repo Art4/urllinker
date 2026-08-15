@@ -27,11 +27,9 @@ use PHPUnit\Framework\TestCase;
 use Youthweb\UrlLinker\UrlLinker;
 
 #[CoversClass(UrlLinker::class)]
-class BuildRegexTest extends TestCase
+final class BuildRegexTest extends TestCase
 {
     /**
-     * @dataProvider optionsRegexProvider
-     *
      * @param array<string,mixed> $options
      */
     #[DataProvider('optionsRegexProvider')]
@@ -45,111 +43,109 @@ class BuildRegexTest extends TestCase
     }
 
     /**
-     * @return array<string,mixed>
+     * @return \Iterator<string, mixed>
      */
-    public static function optionsRegexProvider(): array
+    public static function optionsRegexProvider(): \Iterator
     {
-        return [
-            'empty options' => [
-                'options' => [],
-                'expected' => <<<PRCE
-                    #\b
-                        (?P<scheme>https?://)?
-                        (?:
-                            (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
-                            (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
-                        @)?
-                        (?P<host>
-                            (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
-                            (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
-                        )
-                        (?P<hostsuffix>
-                            (?P<port>:[0-9]{1,5})?
-                            (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
-                            (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                            (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                        )
-                        (?=[)'?.!,;:]*
-                            ([^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]|$)
-                        )
-                    #x
-                    PRCE,
-            ],
-            'with ftp support' => [
-                'options' => ['allowFtpAddresses' => true],
-                'expected' => <<<PRCE
-                    #\b
-                        (?P<scheme>https?://|ftp://)?
-                        (?:
-                            (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
-                            (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
-                        @)?
-                        (?P<host>
-                            (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
-                            (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
-                        )
-                        (?P<hostsuffix>
-                            (?P<port>:[0-9]{1,5})?
-                            (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
-                            (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                            (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                        )
-                        (?=[)'?.!,;:]*
-                            ([^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]|$)
-                        )
-                    #x
-                    PRCE,
-            ],
-            'with uppercase support' => [
-                'options' => ['allowUpperCaseUrlSchemes' => true],
-                'expected' => <<<PRCE
-                    #\b
-                        (?P<scheme>https?://)?
-                        (?:
-                            (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
-                            (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
-                        @)?
-                        (?P<host>
-                            (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
-                            (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
-                        )
-                        (?P<hostsuffix>
-                            (?P<port>:[0-9]{1,5})?
-                            (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
-                            (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                            (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                        )
-                        (?=[)'?.!,;:]*
-                            ([^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]|$)
-                        )
-                    #xi
-                    PRCE,
-            ],
-            'full options' => [
-                'options' => ['allowFtpAddresses' => true, 'allowUpperCaseUrlSchemes' => true],
-                'expected' => <<<PRCE
-                    #\b
-                        (?P<scheme>https?://|ftp://)?
-                        (?:
-                            (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
-                            (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
-                        @)?
-                        (?P<host>
-                            (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
-                            (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
-                        )
-                        (?P<hostsuffix>
-                            (?P<port>:[0-9]{1,5})?
-                            (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
-                            (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                            (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                        )
-                        (?=[)'?.!,;:]*
-                            ([^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]|$)
-                        )
-                    #xi
-                    PRCE,
-            ],
+        yield 'empty options' => [
+            'options' => [],
+            'expected' => <<<PRCE
+                #\b
+                    (?P<scheme>https?://)?
+                    (?:
+                        (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
+                        (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
+                    @)?
+                    (?P<host>
+                        (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
+                        (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
+                    )
+                    (?P<hostsuffix>
+                        (?P<port>:[0-9]{1,5})?
+                        (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
+                        (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                        (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                    )
+                    (?=[)'?.!,;:]*
+                        ([^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]|$)
+                    )
+                #x
+                PRCE,
+        ];
+        yield 'with ftp support' => [
+            'options' => ['allowFtpAddresses' => true],
+            'expected' => <<<PRCE
+                #\b
+                    (?P<scheme>https?://|ftp://)?
+                    (?:
+                        (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
+                        (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
+                    @)?
+                    (?P<host>
+                        (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
+                        (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
+                    )
+                    (?P<hostsuffix>
+                        (?P<port>:[0-9]{1,5})?
+                        (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
+                        (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                        (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                    )
+                    (?=[)'?.!,;:]*
+                        ([^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]|$)
+                    )
+                #x
+                PRCE,
+        ];
+        yield 'with uppercase support' => [
+            'options' => ['allowUpperCaseUrlSchemes' => true],
+            'expected' => <<<PRCE
+                #\b
+                    (?P<scheme>https?://)?
+                    (?:
+                        (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
+                        (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
+                    @)?
+                    (?P<host>
+                        (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
+                        (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
+                    )
+                    (?P<hostsuffix>
+                        (?P<port>:[0-9]{1,5})?
+                        (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
+                        (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                        (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                    )
+                    (?=[)'?.!,;:]*
+                        ([^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]|$)
+                    )
+                #xi
+                PRCE,
+        ];
+        yield 'full options' => [
+            'options' => ['allowFtpAddresses' => true, 'allowUpperCaseUrlSchemes' => true],
+            'expected' => <<<PRCE
+                #\b
+                    (?P<scheme>https?://|ftp://)?
+                    (?:
+                        (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
+                        (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
+                    @)?
+                    (?P<host>
+                        (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
+                        (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
+                    )
+                    (?P<hostsuffix>
+                        (?P<port>:[0-9]{1,5})?
+                        (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
+                        (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                        (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
+                    )
+                    (?=[)'?.!,;:]*
+                        ([^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]|$)
+                    )
+                #xi
+                PRCE,
         ];
     }
 }
