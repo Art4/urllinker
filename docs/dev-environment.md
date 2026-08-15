@@ -39,7 +39,7 @@ make qa
 
 ## PHP version
 
-The dev container runs PHP `8.2`. The test suite uses PHPUnit 10+ attributes, so PHP `8.1` — which resolves to PHPUnit `9.6` — cannot run the full check locally; `8.2` is the lowest supported version whose resolved toolchain (PHPUnit 11) passes `make qa`. The cross-version matrix (`8.1`–`8.6`) is run by GitHub Actions in `ci.yml`; running other versions locally is not supported. Dropping end-of-life PHP versions and adding PHP 8.6 to the CI matrix is tracked in [issue #29](https://github.com/Art4/urllinker/issues/29).
+The dev container runs PHP `8.2`, the lowest supported version. The cross-version matrix (`8.2`–`8.6`) is run by GitHub Actions in `ci.yml`; running other versions locally is not supported. PHP `8.6` is not yet released (stable due 2026-11-19); the matrix runs it as a canary using the nightly `8.6-dev` build to catch breaking changes early.
 
 ## How it works
 
