@@ -196,6 +196,16 @@ final class UrlLinkerTest extends TestCase
         ]);
     }
 
+    public function testProvidingCutUrlsAtEntitiesNotAsBooleanThrowsInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "cutUrlsAtEntities" must be of type "boolean", "string" given.');
+
+        new UrlLinker([
+            'cutUrlsAtEntities' => 'true',
+        ]);
+    }
+
     /**
      * @return array<string,mixed>
      */

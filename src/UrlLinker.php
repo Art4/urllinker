@@ -38,6 +38,13 @@ final class UrlLinker implements UrlLinkerInterface
     private bool $allowUpperCaseUrlSchemes = false;
 
     /**
+     * Character references in trusted HTML cut URLs in the legacy way, default false.
+     * With the default (false), character references that decode to a character that may
+     * appear in a URL stay part of the URL; references to characters that may not are markup.
+     */
+    private bool $cutUrlsAtEntities = false;
+
+    /**
      * Closure to modify the way the urls will be linked
      */
     private Closure $htmlLinkCreator;
@@ -62,6 +69,7 @@ final class UrlLinker implements UrlLinkerInterface
         $allowedOptions = [
             'allowFtpAddresses',
             'allowUpperCaseUrlSchemes',
+            'cutUrlsAtEntities',
             'htmlLinkCreator',
             'emailLinkCreator',
             'validTlds',
@@ -106,6 +114,26 @@ final class UrlLinker implements UrlLinkerInterface
                     }
 
                     $this->allowUpperCaseUrlSchemes = $value;
+
+                    break;
+
+                case 'cutUrlsAtEntities':
+                    if (\array_key_exists($allowedOption, $options)) {
+                        $value = $options[$allowedOption];
+
+                        if (! \is_bool($value)) {
+                            throw new InvalidArgumentException(\sprintf(
+                                'Option "%s" must be of type "%s", "%s" given.',
+                                $allowedOption,
+                                'boolean',
+                                \get_debug_type($value)
+                            ));
+                        }
+                    } else {
+                        $value = false;
+                    }
+
+                    $this->cutUrlsAtEntities = $value;
 
                     break;
 
@@ -167,6 +195,18 @@ final class UrlLinker implements UrlLinkerInterface
 
     public function linkUrlsAndEscapeHtml(string $text): string
     {
+        return $this->linkUrlsInPlainText($text, false);
+    }
+
+    /**
+     * Link URLs inside plain text.
+     *
+     * @param bool $decodeCharacterReferences Decode character references inside matched
+     *                                        URLs before creating the link; false for
+     *                                        `linkUrlsAndEscapeHtml()`, true for trusted HTML
+     */
+    private function linkUrlsInPlainText(string $text, bool $decodeCharacterReferences): string
+    {
         // We can abort if there is no . in $text
         if (!\str_contains($text, '.')) {
             return $this->escapeHtml($text);
@@ -184,6 +224,8 @@ final class UrlLinker implements UrlLinkerInterface
             // Add the text leading up to the URL.
             $html .= $this->escapeHtml(\substr($text, $position, \intval($urlPosition - $position)));
 
+            $urlLength = \strlen($url);
+
             $scheme      = $match['scheme'][0] ?? '';
             $username    = $match['username'][0] ?? '';
             $password    = $match['password'][0] ?? '';
@@ -191,6 +233,18 @@ final class UrlLinker implements UrlLinkerInterface
             $afterDomain = $match['hostsuffix'][0] ?? ''; // everything following the domain
             $port        = $match['port'][0] ?? '';
             $path        = $match['path'][0] ?? '';
+
+            if ($decodeCharacterReferences) {
+                // A character reference inside a URL stands for the character it names;
+                // the link creators receive the decoded URL.
+                $scheme   = $this->decodeCharacterReferences($scheme);
+                $username = $this->decodeCharacterReferences($username);
+                $password = $this->decodeCharacterReferences($password);
+                $domain   = $this->decodeCharacterReferences($domain);
+                $port     = $this->decodeCharacterReferences($port);
+                $path     = $this->decodeCharacterReferences($path);
+                $url      = $this->decodeCharacterReferences($url);
+            }
 
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = \strtolower((string) \strrchr($domain, '.'));
@@ -202,7 +256,7 @@ final class UrlLinker implements UrlLinkerInterface
                     $html .= $this->escapeHtml($username);
 
                     // Continue text parsing at the ':' following the "username".
-                    $position = $urlPosition + \strlen($username);
+                    $position = $urlPosition + \strlen($match['username'][0] ?? '');
 
                     continue;
                 }
@@ -247,7 +301,7 @@ final class UrlLinker implements UrlLinkerInterface
             }
 
             // Continue text parsing from after the URL.
-            $position = $urlPosition + \strlen($url);
+            $position = $urlPosition + $urlLength;
         }
 
         // Add the remainder of the text.
@@ -266,20 +320,40 @@ final class UrlLinker implements UrlLinkerInterface
 
         // Iterate over every piece of markup in the HTML.
         while (true) {
-            $match = [];
+            $textStart = $position;
 
-            if (\preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
+            // Find the next markup that is not part of a URL: a tag, a character
+            // reference to a character that cannot appear in a URL, or the end.
+            while (true) {
+                $match = [];
+
+                if (\preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
+                    $position = \strlen($html);
+                    $markup = '';
+                    $markupPosition = \strlen($html);
+
+                    break;
+                }
+
+                [$markup, $markupPosition] = $match[0];
+
+                // A character reference to a character that may appear in a URL
+                // belongs to the text and never splits a URL.
+                if (! $this->cutUrlsAtEntities && $markup !== '' && $markup[0] === '&' && ! $this->decodesToNonUrlCharacter($markup)) {
+                    $position = $markupPosition + \strlen($markup);
+
+                    continue;
+                }
+
                 break;
             }
 
-            [$markup, $markupPosition] = $match[0];
-
             // Process text leading up to the markup.
-            $text = \substr($html, $position, $markupPosition - $position);
+            $text = \substr($html, $textStart, $markupPosition - $textStart);
 
             // Link URLs unless we're inside an anchor tag.
             if (! $insideAnchorTag) {
-                $text = $this->linkUrlsAndEscapeHtml($text);
+                $text = $this->linkUrlsInPlainText($text, ! $this->cutUrlsAtEntities);
             }
 
             $result .= $text;
@@ -382,11 +456,27 @@ final class UrlLinker implements UrlLinkerInterface
     private function escapeHtml(string $string): string
     {
         $flags = ENT_COMPAT | ENT_HTML401;
-        $encoding = \ini_get('default_charset');
-        $encoding = $encoding !== false ? $encoding : null;
-
         $double_encode = false; // Do not double encode
 
-        return \htmlspecialchars($string, $flags, $encoding, $double_encode);
+        return \htmlspecialchars($string, $flags, $this->getEncoding(), $double_encode);
+    }
+
+    private function getEncoding(): ?string
+    {
+        $encoding = \ini_get('default_charset');
+
+        return $encoding !== false ? $encoding : null;
+    }
+
+    private function decodeCharacterReferences(string $string): string
+    {
+        return \html_entity_decode($string, ENT_QUOTES | ENT_HTML401, $this->getEncoding());
+    }
+
+    private function decodesToNonUrlCharacter(string $characterReference): bool
+    {
+        $decoded = $this->decodeCharacterReferences($characterReference);
+
+        return $decoded !== '' && \preg_match('{^[\x00-\x20\p{Zs}"<>]+$}u', $decoded) === 1;
     }
 }

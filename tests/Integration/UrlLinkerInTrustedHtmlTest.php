@@ -140,7 +140,43 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
         ];
         yield [
             'http://example.com?a=b&amp;c=d',
-            self::link('http://example.com?a=b', 'example.com') . '&amp;c=d',
+            self::link('http://example.com?a=b&amp;c=d', 'example.com'),
+            'The character reference &amp; is part of the URL',
         ];
+        yield [
+            'http://example.com?a=b&#38;c=d',
+            self::link('http://example.com?a=b&amp;c=d', 'example.com'),
+            'The decimal character reference &#38; stands for the & in the URL',
+        ];
+        yield [
+            'http://example.com?a=b&#x26;c=d',
+            self::link('http://example.com?a=b&amp;c=d', 'example.com'),
+            'The hexadecimal character reference &#x26; stands for the & in the URL',
+        ];
+        yield [
+            '&lt;example.com&gt;',
+            '&lt;' . self::link('http://example.com', 'example.com') . '&gt;',
+            'Character references to &lt; and &gt; flank the URL and are not part of it',
+        ];
+        yield [
+            '&lt;http://example.com&gt;',
+            '&lt;' . self::link('http://example.com', 'example.com') . '&gt;',
+        ];
+    }
+
+    public function testLegacyCutUrlsAtEntitiesOptionReproducesOldBehavior(): void
+    {
+        $urlLinker = new UrlLinker(['cutUrlsAtEntities' => true]);
+
+        $cases = [
+            'http://example.com?a=b&amp;c=d' => self::link('http://example.com?a=b', 'example.com') . '&amp;c=d',
+            'http://example.com?a=b&#38;c=d' => self::link('http://example.com?a=b', 'example.com') . '&#38;c=d',
+            '&lt;example.com&gt;' => '&lt;' . self::link('http://example.com', 'example.com') . '&gt;',
+            'foo &amp; example.com' => 'foo &amp; ' . self::link('http://example.com', 'example.com'),
+        ];
+
+        foreach ($cases as $text => $expected) {
+            $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
+        }
     }
 }

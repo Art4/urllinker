@@ -42,6 +42,11 @@ $config = [
     // Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
     'allowUpperCaseUrlSchemes' => true,
 
+    // Only relevant for `linkUrlsInTrustedHtml()`: cut URLs at character references
+    // standing for URL characters (e.g. `&amp;`), enabling the legacy behavior.
+    // Kept as a migration aid; planned to be deprecated and removed.
+    'cutUrlsAtEntities' => true,
+
     // Add a Closure to modify the way the urls will be linked:
     'htmlLinkCreator' => function(string $url, string $content): string
     {
@@ -108,9 +113,12 @@ $urlLinker = new Art4\UrlLinker\UrlLinker($config);
 - Addresses are recognized correctly in normal sentence contexts. For instance,
   in "Visit stackoverflow.com.", the final period is not part of the URL.
 - User input is properly sanitized to prevent [cross-site scripting](http://en.wikipedia.org/wiki/Cross-site_scripting) (XSS),
-  and ampersands in URLs are [correctly escaped](http://www.htmlhelp.com/tools/validator/problems.html#amp) as `&amp;` (this does not
-  apply to the `linkUrlsInTrustedHtml()` function, which assumes its input to
-  be valid HTML).
+  and ampersands in URLs are [correctly escaped](http://www.htmlhelp.com/tools/validator/problems.html#amp) as `&amp;`.
+- In `linkUrlsInTrustedHtml()`, character references are respected instead of escaped:
+  a reference to a character that may appear in a URL (e.g. `&amp;` for `&`) is treated
+  as part of the URL and kept as `&amp;` in the `href` attribute, while references to
+  characters that may not (e.g. `&lt;`, `&gt;`) flank URLs as markup. The option
+  `cutUrlsAtEntities` restores the legacy behavior of splitting URLs at references.
 
 ## Changelog
 
