@@ -17,3 +17,10 @@ parameters:
         -
             identifier: method.alreadyNarrowedType
             path: tests/Unit/UrlLinkerTest.php
+
+        # LegacyNamespaceTest intentionally locks the alias contract: it proves
+        # the legacy Youthweb\UrlLinker names still resolve to the canonical
+        # classes. PHPStan can statically prove the types already.
+        -
+            identifier: method.alreadyNarrowedType
+            path: tests/Integration/LegacyNamespaceTest.php

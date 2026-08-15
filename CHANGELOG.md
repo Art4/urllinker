@@ -12,11 +12,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Run the development environment inside Docker (`make qa`, see `docs/dev-environment.md`)
 - Document the development environment for agents in `AGENTS.md`
 - Add PHP 8.6 to the CI matrix as a canary for breaking changes
+- Add the namespace `Art4\UrlLinker` for all public classes
 
 ### Changed
 
 - Rename the Composer script `test` to `qa`
+- Move the canonical namespace from `Youthweb\UrlLinker` to `Art4\UrlLinker` (the legacy namespace keeps working via aliases; `get_class()`/`serialize()` on legacy-constructed instances now report the canonical `Art4\UrlLinker\...` names)
 - Drop support for PHP 8.1
+
+### Deprecated
+
+- Using the legacy namespace `Youthweb\UrlLinker` is deprecated, use `Art4\UrlLinker` instead
 
 ## [2.1.0](https://github.com/Art4/urllinker/compare/2.0.0...2.1.0) - 2025-07-22
 

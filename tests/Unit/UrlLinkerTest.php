@@ -19,7 +19,7 @@ declare(strict_types=1);
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Youthweb\UrlLinker\Tests\Unit;
+namespace Art4\UrlLinker\Tests\Unit;
 
 use ArrayIterator;
 use EmptyIterator;
@@ -29,8 +29,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Youthweb\UrlLinker\UrlLinker;
-use Youthweb\UrlLinker\UrlLinkerInterface;
+use Art4\UrlLinker\UrlLinker;
+use Art4\UrlLinker\UrlLinkerInterface;
 
 #[CoversClass(UrlLinker::class)]
 final class UrlLinkerTest extends TestCase
