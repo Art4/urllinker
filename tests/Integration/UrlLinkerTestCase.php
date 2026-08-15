@@ -150,8 +150,8 @@ abstract class UrlLinkerTestCase extends TestCase
 
             // more than one link
             [
-                sprintf('%s foo bar %s', 'e1.com/t1', 'e2.com/t2'),
-                sprintf(
+                \sprintf('%s foo bar %s', 'e1.com/t1', 'e2.com/t2'),
+                \sprintf(
                     '%s foo bar %s',
                     static::link('http://e1.com/t1', 'e1.com/t1'),
                     static::link('http://e2.com/t2', 'e2.com/t2')
@@ -167,7 +167,7 @@ abstract class UrlLinkerTestCase extends TestCase
             // german umlaute, @see https://bitbucket.org/kwi/urllinker/issues/13/special-characters-like-seems-break-it-up
             [
                 'visiüble www.pc.fi hidden ö hidden a.bc visibleä',
-                sprintf(
+                \sprintf(
                     'visiüble %s hidden ö hidden a.bc visibleä',
                     static::link('http://www.pc.fi', 'www.pc.fi')
                 ),
@@ -187,6 +187,6 @@ abstract class UrlLinkerTestCase extends TestCase
      */
     protected static function link(string $href, string $content): string
     {
-        return sprintf('<a href="%s">%s</a>', $href, $content);
+        return \sprintf('<a href="%s">%s</a>', $href, $content);
     }
 }

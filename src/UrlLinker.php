@@ -70,15 +70,15 @@ final class UrlLinker implements UrlLinkerInterface
         foreach ($allowedOptions as $allowedOption) {
             switch ($allowedOption) {
                 case 'allowFtpAddresses':
-                    if (array_key_exists($allowedOption, $options)) {
+                    if (\array_key_exists($allowedOption, $options)) {
                         $value = $options[$allowedOption];
 
-                        if (! is_bool($value)) {
-                            throw new InvalidArgumentException(sprintf(
+                        if (! \is_bool($value)) {
+                            throw new InvalidArgumentException(\sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $allowedOption,
                                 'boolean',
-                                get_debug_type($value)
+                                \get_debug_type($value)
                             ));
                         }
                     } else {
@@ -90,15 +90,15 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'allowUpperCaseUrlSchemes':
-                    if (array_key_exists($allowedOption, $options)) {
+                    if (\array_key_exists($allowedOption, $options)) {
                         $value = $options[$allowedOption];
 
-                        if (! is_bool($value)) {
-                            throw new InvalidArgumentException(sprintf(
+                        if (! \is_bool($value)) {
+                            throw new InvalidArgumentException(\sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $allowedOption,
                                 'boolean',
-                                get_debug_type($value)
+                                \get_debug_type($value)
                             ));
                         }
                     } else {
@@ -110,15 +110,15 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'htmlLinkCreator':
-                    if (array_key_exists($allowedOption, $options)) {
+                    if (\array_key_exists($allowedOption, $options)) {
                         $value = $options[$allowedOption];
 
-                        if (! is_object($value) || ! $value instanceof Closure) {
-                            throw new InvalidArgumentException(sprintf(
+                        if (! \is_object($value) || ! $value instanceof Closure) {
+                            throw new InvalidArgumentException(\sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $allowedOption,
                                 Closure::class,
-                                get_debug_type($value)
+                                \get_debug_type($value)
                             ));
                         }
                     } else {
@@ -130,15 +130,15 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'emailLinkCreator':
-                    if (array_key_exists($allowedOption, $options)) {
+                    if (\array_key_exists($allowedOption, $options)) {
                         $value = $options[$allowedOption];
 
-                        if (! is_object($value) || ! $value instanceof Closure) {
-                            throw new InvalidArgumentException(sprintf(
+                        if (! \is_object($value) || ! $value instanceof Closure) {
+                            throw new InvalidArgumentException(\sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
                                 $allowedOption,
                                 Closure::class,
-                                get_debug_type($value)
+                                \get_debug_type($value)
                             ));
                         }
                     } else {
@@ -150,7 +150,7 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'validTlds':
-                    $value = array_key_exists($allowedOption, $options) ? (array) $options[$allowedOption] : DomainStorage::getValidTlds();
+                    $value = \array_key_exists($allowedOption, $options) ? (array) $options[$allowedOption] : DomainStorage::getValidTlds();
 
                     $validTlds = [];
 
@@ -168,7 +168,7 @@ final class UrlLinker implements UrlLinkerInterface
     public function linkUrlsAndEscapeHtml(string $text): string
     {
         // We can abort if there is no . in $text
-        if (!str_contains($text, '.')) {
+        if (!\str_contains($text, '.')) {
             return $this->escapeHtml($text);
         }
 
@@ -178,11 +178,11 @@ final class UrlLinker implements UrlLinkerInterface
 
         $match = [];
 
-        while (preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position)) {
+        while (\preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position)) {
             [$url, $urlPosition] = $match[0];
 
             // Add the text leading up to the URL.
-            $html .= $this->escapeHtml(substr($text, $position, intval($urlPosition - $position)));
+            $html .= $this->escapeHtml(\substr($text, $position, \intval($urlPosition - $position)));
 
             $scheme      = $match['scheme'][0] ?? '';
             $username    = $match['username'][0] ?? '';
@@ -193,16 +193,16 @@ final class UrlLinker implements UrlLinkerInterface
             $path        = $match['path'][0] ?? '';
 
             // Check that the TLD is valid or that $domain is an IP address.
-            $tld = strtolower((string) strrchr($domain, '.'));
+            $tld = \strtolower((string) \strrchr($domain, '.'));
 
-            if (preg_match('{^\.\d{1,3}$}', $tld) === 1 || isset($this->validTlds[$tld])) {
+            if (\preg_match('{^\.\d{1,3}$}', $tld) === 1 || isset($this->validTlds[$tld])) {
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
                 if ($scheme === '' && $password !== '') {
                     $html .= $this->escapeHtml($username);
 
                     // Continue text parsing at the ':' following the "username".
-                    $position = $urlPosition + strlen($username);
+                    $position = $urlPosition + \strlen($username);
 
                     continue;
                 }
@@ -214,11 +214,11 @@ final class UrlLinker implements UrlLinkerInterface
                     // Looks like an email address.
                     $emailLink = $this->emailLinkCreator->__invoke($url, $url);
 
-                    if (! is_string($emailLink)) {
-                        throw new UnexpectedValueException(sprintf(
+                    if (! \is_string($emailLink)) {
+                        throw new UnexpectedValueException(\sprintf(
                             'Return value of Closure for "%s" must return value of type "string", "%s" given.',
                             'emailLinkCreator',
-                            gettype($emailLink)
+                            \gettype($emailLink)
                         ));
                     }
 
@@ -231,11 +231,11 @@ final class UrlLinker implements UrlLinkerInterface
 
                     $htmlLink = $this->htmlLinkCreator->__invoke($completeUrl, $linkText);
 
-                    if (! is_string($htmlLink)) {
-                        throw new UnexpectedValueException(sprintf(
+                    if (! \is_string($htmlLink)) {
+                        throw new UnexpectedValueException(\sprintf(
                             'Return value of Closure for "%s" must return value of type "string", "%s" given.',
                             'htmlLinkCreator',
-                            gettype($htmlLink)
+                            \gettype($htmlLink)
                         ));
                     }
 
@@ -247,11 +247,11 @@ final class UrlLinker implements UrlLinkerInterface
             }
 
             // Continue text parsing from after the URL.
-            $position = $urlPosition + strlen($url);
+            $position = $urlPosition + \strlen($url);
         }
 
         // Add the remainder of the text.
-        $html .= $this->escapeHtml(substr($text, $position));
+        $html .= $this->escapeHtml(\substr($text, $position));
 
         return $html;
     }
@@ -268,14 +268,14 @@ final class UrlLinker implements UrlLinkerInterface
         while (true) {
             $match = [];
 
-            if (preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
+            if (\preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
                 break;
             }
 
             [$markup, $markupPosition] = $match[0];
 
             // Process text leading up to the markup.
-            $text = substr($html, $position, $markupPosition - $position);
+            $text = \substr($html, $position, $markupPosition - $position);
 
             // Link URLs unless we're inside an anchor tag.
             if (! $insideAnchorTag) {
@@ -298,7 +298,7 @@ final class UrlLinker implements UrlLinkerInterface
             $result .= $markup;
 
             // Continue after the markup.
-            $position = $markupPosition + strlen($markup);
+            $position = $markupPosition + \strlen($markup);
         }
 
         return $result;
@@ -358,14 +358,14 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private function createHtmlLink(string $url, string $content): string
     {
-        $link = sprintf(
+        $link = \sprintf(
             '<a href="%s">%s</a>',
             $this->escapeHtml($url),
             $this->escapeHtml($content)
         );
 
         // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
-        return str_replace('@', '&#64;', $link);
+        return \str_replace('@', '&#64;', $link);
     }
 
     /**
@@ -376,17 +376,17 @@ final class UrlLinker implements UrlLinkerInterface
         $link = $this->createHtmlLink('mailto:' . $url, $content);
 
         // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
-        return str_replace('@', '&#64;', $link);
+        return \str_replace('@', '&#64;', $link);
     }
 
     private function escapeHtml(string $string): string
     {
         $flags = ENT_COMPAT | ENT_HTML401;
-        $encoding = ini_get('default_charset');
+        $encoding = \ini_get('default_charset');
         $encoding = $encoding !== false ? $encoding : null;
 
         $double_encode = false; // Do not double encode
 
-        return htmlspecialchars($string, $flags, $encoding, $double_encode);
+        return \htmlspecialchars($string, $flags, $encoding, $double_encode);
     }
 }

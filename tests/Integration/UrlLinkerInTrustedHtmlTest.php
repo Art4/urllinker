@@ -21,9 +21,9 @@ declare(strict_types=1);
 
 namespace Art4\UrlLinker\Tests\Integration;
 
+use Art4\UrlLinker\UrlLinker;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Art4\UrlLinker\UrlLinker;
 
 #[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
 final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
@@ -88,15 +88,15 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
         );
 
         $this->assertSame(
-            sprintf('foo %s bar', $expectedLinked),
-            $urlLinker->linkUrlsInTrustedHtml(sprintf('foo %s bar', $text)),
+            \sprintf('foo %s bar', $expectedLinked),
+            $urlLinker->linkUrlsInTrustedHtml(\sprintf('foo %s bar', $text)),
             'Text around: ' . $message
         );
 
         // html should NOT get encoded
         $this->assertSame(
-            sprintf('<div class="test">%s</div>', $expectedLinked),
-            $urlLinker->linkUrlsInTrustedHtml(sprintf('<div class="test">%s</div>', $text)),
+            \sprintf('<div class="test">%s</div>', $expectedLinked),
+            $urlLinker->linkUrlsInTrustedHtml(\sprintf('<div class="test">%s</div>', $text)),
             'Html around: ' . $message
         );
     }

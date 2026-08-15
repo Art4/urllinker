@@ -21,10 +21,10 @@ declare(strict_types=1);
 
 namespace Art4\UrlLinker\Tests\Unit\UrlLinker;
 
+use Art4\UrlLinker\UrlLinker;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Art4\UrlLinker\UrlLinker;
 
 #[CoversClass(UrlLinker::class)]
 final class BuildRegexTest extends TestCase

@@ -21,9 +21,9 @@ declare(strict_types=1);
 
 namespace Art4\UrlLinker\Tests\Unit;
 
+use Art4\UrlLinker\DomainStorage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Art4\UrlLinker\DomainStorage;
 
 #[CoversClass(DomainStorage::class)]
 final class DomainStorageTest extends TestCase
@@ -40,6 +40,6 @@ final class DomainStorageTest extends TestCase
 
         $this->assertCount(1440, $tlds);
 
-        $this->assertSame(['.aaa' => true], array_slice($tlds, 0, 1));
+        $this->assertSame(['.aaa' => true], \array_slice($tlds, 0, 1));
     }
 }

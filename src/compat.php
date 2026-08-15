@@ -27,6 +27,6 @@ declare(strict_types=1);
  * See docs/adr/0002-namespace-from-youthweb-to-art4.md for the rationale.
  */
 
-class_alias(Art4\UrlLinker\UrlLinker::class, Youthweb\UrlLinker\UrlLinker::class);
-class_alias(Art4\UrlLinker\UrlLinkerInterface::class, Youthweb\UrlLinker\UrlLinkerInterface::class);
-class_alias(Art4\UrlLinker\DomainStorage::class, Youthweb\UrlLinker\DomainStorage::class);
+\class_alias(Art4\UrlLinker\UrlLinker::class, Youthweb\UrlLinker\UrlLinker::class);
+\class_alias(Art4\UrlLinker\UrlLinkerInterface::class, Youthweb\UrlLinker\UrlLinkerInterface::class);
+\class_alias(Art4\UrlLinker\DomainStorage::class, Youthweb\UrlLinker\DomainStorage::class);
