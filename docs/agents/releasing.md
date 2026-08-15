@@ -8,6 +8,8 @@ Both a developer and an agent can follow this procedure. Each step ends with a c
 
 The developer decides a release is warranted, and `main` is in the state they intend to release (pending feature branches and their version impact are their call). If the `[Unreleased]` section of `CHANGELOG.md` contains only "Nothing yet.", the answer is *nothing to release* — stop.
 
+The milestone of the upcoming version must be **empty before release** (see `docs/agents/milestones.md`): it is the releaser's responsibility to move open issues and PRs on that milestone into the next milestone. An agent preparing a release must notify the human if the milestone is not empty and must never move those items itself.
+
 ## Steps
 
 **1. Propose the version** [agent proposes, developer confirms]

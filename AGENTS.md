@@ -8,6 +8,10 @@ Issues live in this repo's GitHub Issues, operated via the `gh` CLI. See `docs/a
 
 Default labels: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
 
+### Milestones
+
+Every open issue and PR belongs to a milestone. See `docs/agents/milestones.md`.
+
 ### Domain docs
 
 Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
