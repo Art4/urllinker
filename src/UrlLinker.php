@@ -67,16 +67,16 @@ final class UrlLinker implements UrlLinkerInterface
             'validTlds',
         ];
 
-        foreach ($allowedOptions as $key) {
-            switch ($key) {
+        foreach ($allowedOptions as $allowedOption) {
+            switch ($allowedOption) {
                 case 'allowFtpAddresses':
-                    if (array_key_exists($key, $options)) {
-                        $value = $options[$key];
+                    if (array_key_exists($allowedOption, $options)) {
+                        $value = $options[$allowedOption];
 
                         if (! is_bool($value)) {
                             throw new InvalidArgumentException(sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
-                                $key,
+                                $allowedOption,
                                 'boolean',
                                 get_debug_type($value)
                             ));
@@ -90,13 +90,13 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'allowUpperCaseUrlSchemes':
-                    if (array_key_exists($key, $options)) {
-                        $value = $options[$key];
+                    if (array_key_exists($allowedOption, $options)) {
+                        $value = $options[$allowedOption];
 
                         if (! is_bool($value)) {
                             throw new InvalidArgumentException(sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
-                                $key,
+                                $allowedOption,
                                 'boolean',
                                 get_debug_type($value)
                             ));
@@ -110,19 +110,19 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'htmlLinkCreator':
-                    if (array_key_exists($key, $options)) {
-                        $value = $options[$key];
+                    if (array_key_exists($allowedOption, $options)) {
+                        $value = $options[$allowedOption];
 
                         if (! is_object($value) || ! $value instanceof Closure) {
                             throw new InvalidArgumentException(sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
-                                $key,
+                                $allowedOption,
                                 Closure::class,
                                 get_debug_type($value)
                             ));
                         }
                     } else {
-                        $value = Closure::fromCallable([$this, 'createHtmlLink']);
+                        $value = $this->createHtmlLink(...);
                     }
 
                     $this->htmlLinkCreator = $value;
@@ -130,19 +130,19 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'emailLinkCreator':
-                    if (array_key_exists($key, $options)) {
-                        $value = $options[$key];
+                    if (array_key_exists($allowedOption, $options)) {
+                        $value = $options[$allowedOption];
 
                         if (! is_object($value) || ! $value instanceof Closure) {
                             throw new InvalidArgumentException(sprintf(
                                 'Option "%s" must be of type "%s", "%s" given.',
-                                $key,
+                                $allowedOption,
                                 Closure::class,
                                 get_debug_type($value)
                             ));
                         }
                     } else {
-                        $value = Closure::fromCallable([$this, 'createEmailLink']);
+                        $value = $this->createEmailLink(...);
                     }
 
                     $this->emailLinkCreator = $value;
@@ -150,9 +150,15 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'validTlds':
-                    $value = array_key_exists($key, $options) ? (array) $options[$key] : DomainStorage::getValidTlds();
+                    $value = array_key_exists($allowedOption, $options) ? (array) $options[$allowedOption] : DomainStorage::getValidTlds();
 
-                    $this->validTlds = $value;
+                    $validTlds = [];
+
+                    foreach ($value as $tld => $flag) {
+                        $validTlds[(string) $tld] = (bool) $flag;
+                    }
+
+                    $this->validTlds = $validTlds;
 
                     break;
             }

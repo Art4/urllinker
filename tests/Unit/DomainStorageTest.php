@@ -34,7 +34,6 @@ class DomainStorageTest extends TestCase
         // This is necessary because the static property may have been modified in previous tests
         // or runs, and we want to ensure that we are testing the initial state.
         $reflectionProperty = new \ReflectionProperty(DomainStorage::class, 'validTlds');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(null, null);
 
         $tlds = DomainStorage::getValidTlds();

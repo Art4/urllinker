@@ -64,7 +64,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     {
         $urlLinker = new UrlLinker([
             // wrong htmlLinkCreator
-            'htmlLinkCreator' => fn($url, $content) => null,
+            'htmlLinkCreator' => fn($url, $content): null => null,
         ]);
 
         $this->expectException(UnexpectedValueException::class);
@@ -126,7 +126,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     {
         $urlLinker = new UrlLinker([
             // wrong emailLinkCreator
-            'emailLinkCreator' => fn($email, $content) => null,
+            'emailLinkCreator' => fn($email, $content): null => null,
         ]);
 
         $this->expectException(UnexpectedValueException::class);
@@ -155,8 +155,8 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                '\'',
-                '\'',
+                "'",
+                "'",
             ],
             [
                 '"',

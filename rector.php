@@ -14,9 +14,8 @@ return \Rector\Config\RectorConfig::configure()
         codeQuality: true,
         codingStyle: true,
         typeDeclarations: true,
+        earlyReturn: true,
+        instanceOf: true,
+        naming: true,
     )
-    ->withSkip([
-        \Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector::class,
-        \Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector::class,
-    ])
 ;

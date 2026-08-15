@@ -40,7 +40,6 @@ class BuildRegexTest extends TestCase
         $urlLinker = new UrlLinker($options);
 
         $reflectionMethod = new \ReflectionMethod($urlLinker, 'buildRegex');
-        $reflectionMethod->setAccessible(true);
 
         $this->assertSame($expected, $reflectionMethod->invoke($urlLinker));
     }
