@@ -162,6 +162,41 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
             '&lt;http://example.com&gt;',
             '&lt;' . self::link('http://example.com', 'example.com') . '&gt;',
         ];
+        yield [
+            'http://example.com?a=b&amp;',
+            self::link('http://example.com?a=b&amp;', 'example.com'),
+            'A trailing character reference belongs to the URL and its terminator is not split off',
+        ];
+        yield [
+            'http://example.com?a=b&#38;',
+            self::link('http://example.com?a=b&amp;', 'example.com'),
+            'The trailing decimal character reference &#38; stands for the & in the URL',
+        ];
+        yield [
+            'http://example.com?a=b&#x26;',
+            self::link('http://example.com?a=b&amp;', 'example.com'),
+            'The trailing hexadecimal character reference &#x26; stands for the & in the URL',
+        ];
+        yield [
+            '&lt;http://example.com?a=b&amp;&gt;',
+            '&lt;' . self::link('http://example.com?a=b&amp;', 'example.com') . '&gt;',
+            'A flanking reference stays in the HTML, not in the URL',
+        ];
+        yield [
+            'http://example.com?a=b&amp;</p>',
+            self::link('http://example.com?a=b&amp;', 'example.com') . '</p>',
+            'Markup after a URL is not touched',
+        ];
+        yield [
+            'http://example.com?a=b;',
+            self::link('http://example.com?a=b', 'example.com') . ';',
+            'A semicolon that does not terminate a reference stays trailing punctuation',
+        ];
+        yield [
+            'http://example.com/path;',
+            self::link('http://example.com/path', 'example.com/path') . ';',
+            'A semicolon after the path stays trailing punctuation',
+        ];
     }
 
     public function testLegacyCutUrlsAtEntitiesOptionReproducesOldBehavior(): void
@@ -171,6 +206,7 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
         $cases = [
             'http://example.com?a=b&amp;c=d' => self::link('http://example.com?a=b', 'example.com') . '&amp;c=d',
             'http://example.com?a=b&#38;c=d' => self::link('http://example.com?a=b', 'example.com') . '&#38;c=d',
+            'http://example.com?a=b&amp;' => self::link('http://example.com?a=b', 'example.com') . '&amp;',
             '&lt;example.com&gt;' => '&lt;' . self::link('http://example.com', 'example.com') . '&gt;',
             'foo &amp; example.com' => 'foo &amp; ' . self::link('http://example.com', 'example.com'),
         ];

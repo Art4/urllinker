@@ -226,6 +226,16 @@ final class UrlLinker implements UrlLinkerInterface
 
             $urlLength = \strlen($url);
 
+            // A ';' that directly terminates a character reference (e.g. "&amp;",
+            // "&#38;") belongs to the reference, not to trailing punctuation.
+            if ($url !== ''
+                && ($text[$urlPosition + $urlLength] ?? '') === ';'
+                && \preg_match('{&(?:[a-zA-Z][a-zA-Z0-9]*|#[0-9]+|#[xX][0-9a-fA-F]+)$}', $url) === 1
+            ) {
+                $url .= ';';
+                $urlLength++;
+            }
+
             $scheme      = $match['scheme'][0] ?? '';
             $username    = $match['username'][0] ?? '';
             $password    = $match['password'][0] ?? '';
