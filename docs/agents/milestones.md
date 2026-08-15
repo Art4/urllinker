@@ -37,3 +37,5 @@ Milestones apply from now on. Closed/historical issues and PRs are **not** retro
 Releasing is human-initiated (see `docs/agents/releasing.md`). It is **the releaser's responsibility** to move all open issues and PRs of the released milestone into the next milestone.
 
 If an agent is asked to prepare a release and the milestone being released is not empty, the agent must **notify the human** that open issues/PRs still sit on that milestone and must not move them itself.
+
+When the released milestone is empty, the agent checks that the next **two** non-major slots are populated. For each missing slot it **offers the human to create** that milestone — it never creates one on its own. Currently `2.2.0` (next) and `2.3.0` (after next) exist; after `2.2.0` ships, `2.3.0` becomes the next slot, so the offer is to create `2.4.0`.
