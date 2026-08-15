@@ -21,4 +21,4 @@ PHP runs **only** inside the Docker dev container — never invoke `php`, `compo
 - `make phpunit` / `make phpstan` / `make codestyle` / `make rector` / `make coverage`
 - `make shell` — interactive shell inside the container
 
-The dev container runs the lowest supported PHP version whose dev tooling can run the full check (PHP 8.2); the cross-version matrix (8.1–8.6) runs in GitHub Actions. See `docs/dev-environment.md` for the full reference.
+The dev container runs the lowest supported PHP version (PHP 8.2); the cross-version matrix (8.2–8.6, with 8.6 still un-released and running as a CI-only canary) runs in GitHub Actions. See `docs/dev-environment.md` for the full reference.
