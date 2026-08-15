@@ -22,6 +22,8 @@ declare(strict_types=1);
 namespace Art4\UrlLinker\Tests\Unit;
 
 use ArrayIterator;
+use Art4\UrlLinker\UrlLinker;
+use Art4\UrlLinker\UrlLinkerInterface;
 use EmptyIterator;
 use Exception;
 use InvalidArgumentException;
@@ -29,8 +31,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Art4\UrlLinker\UrlLinker;
-use Art4\UrlLinker\UrlLinkerInterface;
 
 #[CoversClass(UrlLinker::class)]
 final class UrlLinkerTest extends TestCase

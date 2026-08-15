@@ -21,10 +21,10 @@ declare(strict_types=1);
 
 namespace Art4\UrlLinker\Tests\Integration;
 
+use Art4\UrlLinker\UrlLinker;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use UnexpectedValueException;
-use Art4\UrlLinker\UrlLinker;
 
 #[CoversClass(UrlLinker::class)]
 final class UrlLinkerTest extends \PHPUnit\Framework\TestCase

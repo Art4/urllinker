@@ -21,9 +21,9 @@ declare(strict_types=1);
 
 namespace Art4\UrlLinker\Tests\Unit;
 
+use Art4\UrlLinker\DomainStorage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Art4\UrlLinker\DomainStorage;
 
 #[CoversClass(DomainStorage::class)]
 final class DomainStorageTest extends TestCase

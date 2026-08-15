@@ -21,9 +21,9 @@ declare(strict_types=1);
 
 namespace Art4\UrlLinker\Tests\Integration;
 
+use Art4\UrlLinker\UrlLinker;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Art4\UrlLinker\UrlLinker;
 
 #[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
 final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase

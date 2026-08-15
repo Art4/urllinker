@@ -19,8 +19,13 @@ return (new PhpCsFixer\Config())
         '@PHP8x2Migration' => true,
         '@PHP8x2Migration:risky' => true,
         '@PHPUnit10x0Migration:risky' => true,
+        'class_attributes_separation' => true,
         'declare_strict_types' => true,
+        'final_internal_class' => true,
         'fully_qualified_strict_types' => true,
+        'no_superfluous_phpdoc_tags' => ['remove_inheritdoc' => true],
         'no_unused_imports' => true,
+        'ordered_imports' => true,
+        'void_return' => true,
     ])
 ;
