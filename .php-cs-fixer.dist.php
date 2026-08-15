@@ -23,9 +23,11 @@ return (new PhpCsFixer\Config())
         'declare_strict_types' => true,
         'final_internal_class' => true,
         'fully_qualified_strict_types' => true,
+        'native_function_invocation' => ['include' => ['@internal']],
         'no_superfluous_phpdoc_tags' => ['remove_inheritdoc' => true],
         'no_unused_imports' => true,
         'ordered_imports' => true,
+        'phpdoc_trim' => true,
         'void_return' => true,
     ])
 ;

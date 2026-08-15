@@ -40,6 +40,6 @@ final class DomainStorageTest extends TestCase
 
         $this->assertCount(1440, $tlds);
 
-        $this->assertSame(['.aaa' => true], array_slice($tlds, 0, 1));
+        $this->assertSame(['.aaa' => true], \array_slice($tlds, 0, 1));
     }
 }

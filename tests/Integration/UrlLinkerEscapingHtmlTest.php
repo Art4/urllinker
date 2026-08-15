@@ -117,15 +117,15 @@ final class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
         );
 
         $this->assertSame(
-            sprintf('foo %s bar', $expectedLinked),
-            $urlLinker->linkUrlsAndEscapeHtml(sprintf('foo %s bar', $text)),
+            \sprintf('foo %s bar', $expectedLinked),
+            $urlLinker->linkUrlsAndEscapeHtml(\sprintf('foo %s bar', $text)),
             'Text around: ' . $message
         );
 
         // html should get encoded
         $this->assertSame(
-            sprintf('&lt;div class=&quot;test&quot;&gt; %s &lt;/div&gt;', $expectedLinked),
-            $urlLinker->linkUrlsAndEscapeHtml(sprintf('<div class="test"> %s </div>', $text)),
+            \sprintf('&lt;div class=&quot;test&quot;&gt; %s &lt;/div&gt;', $expectedLinked),
+            $urlLinker->linkUrlsAndEscapeHtml(\sprintf('<div class="test"> %s </div>', $text)),
             'Html around: ' . $message
         );
     }

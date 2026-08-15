@@ -1487,14 +1487,14 @@ ZW';
      */
     public static function getValidTlds(): array
     {
-        if (is_null(self::$validTlds)) {
-            $validTlds = explode("\n", self::$rawValidTlds);
+        if (\is_null(self::$validTlds)) {
+            $validTlds = \explode("\n", self::$rawValidTlds);
 
-            $clean = (fn($value): string => '.' . trim(strtolower((string) $value)));
+            $clean = (fn($value): string => '.' . \trim(\strtolower((string) $value)));
 
-            $validTlds = array_map($clean, $validTlds);
+            $validTlds = \array_map($clean, $validTlds);
 
-            self::$validTlds = array_fill_keys($validTlds, true);
+            self::$validTlds = \array_fill_keys($validTlds, true);
         }
 
         return self::$validTlds;

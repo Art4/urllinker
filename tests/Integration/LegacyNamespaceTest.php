@@ -73,8 +73,8 @@ final class LegacyNamespaceTest extends TestCase
 
     public function testAllLegacyNamesAreRegistered(): void
     {
-        $this->assertTrue(class_exists(\Youthweb\UrlLinker\UrlLinker::class));
-        $this->assertTrue(interface_exists(\Youthweb\UrlLinker\UrlLinkerInterface::class));
-        $this->assertTrue(class_exists(\Youthweb\UrlLinker\DomainStorage::class));
+        $this->assertTrue(\class_exists(\Youthweb\UrlLinker\UrlLinker::class));
+        $this->assertTrue(\interface_exists(\Youthweb\UrlLinker\UrlLinkerInterface::class));
+        $this->assertTrue(\class_exists(\Youthweb\UrlLinker\DomainStorage::class));
     }
 }

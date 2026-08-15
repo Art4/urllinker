@@ -216,9 +216,9 @@ final class UrlLinkerTest extends TestCase
      */
     private static function getAllExcept(array ...$except): array
     {
-        $except = array_flip(array_merge(...$except));
+        $except = \array_flip(\array_merge(...$except));
 
-        return array_diff_key(self::getAll(), $except);
+        return \array_diff_key(self::getAll(), $except);
     }
 
     /**
