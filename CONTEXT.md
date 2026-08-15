@@ -20,6 +20,14 @@ _Avoid_: container PHP, dev version
 A PHP version running in the CI matrix before its stable release, installed as a nightly dev build. It exists only to catch breaking changes early and is not advertised as "supported" until the stable release is out and the matrix entry switches from the nightly build to the stable version.
 _Avoid_: preview support, 8.6 support, early support
 
+**Canonical namespace**:
+The `Art4\UrlLinker` namespace under which all public classes are defined. New code and documentation should use it; the legacy namespace is only kept for consumers who have not migrated yet.
+_Avoid_: Youthweb namespace, new namespace
+
+**Legacy namespace**:
+The `Youthweb\UrlLinker` namespace kept working via class aliases for backward compatibility after the canonical namespace moved to `Art4\UrlLinker`. It is deprecated and emits no runtime notice; code reports the canonical name via `get_class()`.
+_Avoid_: old namespace, backward-compat namespace
+
 ## Releasing
 
 **Release**:

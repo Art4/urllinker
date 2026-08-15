@@ -29,13 +29,16 @@
 		"rector/rector": "^2.1"
 	},
 	"autoload": {
+		"files": [
+			"src/compat.php"
+		],
 		"psr-4": {
-			"Youthweb\\UrlLinker\\": "src"
+			"Art4\\UrlLinker\\": "src"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Youthweb\\UrlLinker\\Tests\\": "tests"
+			"Art4\\UrlLinker\\Tests\\": "tests"
 		}
 	},
 	"config": {

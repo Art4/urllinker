@@ -20,10 +20,12 @@ $ composer require youthweb/urllinker
 
 > Note: On 2025-07-17 the repository was moved from https://github.com/youthweb/urllinker to https://github.com/Art4/urllinker, but the packagist name was kept for convenience.
 
+The canonical PHP namespace is `Art4\UrlLinker`. The legacy `Youthweb\UrlLinker` namespace is kept working as aliases for backward compatibility and is deprecated; new code should use the canonical namespace. `get_class()`/`serialize()` on instances constructed through the legacy names report the canonical `Art4\UrlLinker\...` class names.
+
 ## Usage
 
 ```php
-$urlLinker = new Youthweb\UrlLinker\UrlLinker();
+$urlLinker = new Art4\UrlLinker\UrlLinker();
 
 $linkedText = $urlLinker->linkUrlsAndEscapeHtml($text);
 
@@ -65,7 +67,7 @@ $config = [
     'validTlds' => ['.localhost' => true],
 ];
 
-$urlLinker = new Youthweb\UrlLinker\UrlLinker($config);
+$urlLinker = new Art4\UrlLinker\UrlLinker($config);
 ```
 
 ## Recognized addresses

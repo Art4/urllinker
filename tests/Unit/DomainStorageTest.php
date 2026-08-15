@@ -19,11 +19,11 @@ declare(strict_types=1);
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Youthweb\UrlLinker\Tests\Unit;
+namespace Art4\UrlLinker\Tests\Unit;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Youthweb\UrlLinker\DomainStorage;
+use Art4\UrlLinker\DomainStorage;
 
 #[CoversClass(DomainStorage::class)]
 final class DomainStorageTest extends TestCase

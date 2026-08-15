@@ -19,21 +19,14 @@ declare(strict_types=1);
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Art4\UrlLinker;
+/*
+ * Compatibility layer for the legacy namespace.
+ *
+ * The canonical namespace is Art4\UrlLinker. The old Youthweb\UrlLinker
+ * names are kept working as aliases so existing consumers do not break.
+ * See docs/adr/0002-namespace-from-youthweb-to-art4.md for the rationale.
+ */
 
-interface UrlLinkerInterface
-{
-    /**
-     * Transforms plain text into valid HTML, escaping special characters and
-     * turning URLs into links.
-     */
-    public function linkUrlsAndEscapeHtml(string $text): string;
-
-    /**
-     * Turns URLs into links in a piece of valid HTML/XHTML.
-     *
-     * Beware: Never render HTML from untrusted sources. Rendering HTML provided by
-     * a malicious user can lead to system compromise through cross-site scripting.
-     */
-    public function linkUrlsInTrustedHtml(string $html): string;
-}
+class_alias(Art4\UrlLinker\UrlLinker::class, Youthweb\UrlLinker\UrlLinker::class);
+class_alias(Art4\UrlLinker\UrlLinkerInterface::class, Youthweb\UrlLinker\UrlLinkerInterface::class);
+class_alias(Art4\UrlLinker\DomainStorage::class, Youthweb\UrlLinker\DomainStorage::class);

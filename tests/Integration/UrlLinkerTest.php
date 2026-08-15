@@ -19,12 +19,12 @@ declare(strict_types=1);
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Youthweb\UrlLinker\Tests\Integration;
+namespace Art4\UrlLinker\Tests\Integration;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use UnexpectedValueException;
-use Youthweb\UrlLinker\UrlLinker;
+use Art4\UrlLinker\UrlLinker;
 
 #[CoversClass(UrlLinker::class)]
 final class UrlLinkerTest extends \PHPUnit\Framework\TestCase
