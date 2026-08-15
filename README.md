@@ -70,6 +70,13 @@ $config = [
 
     // You can customize the recognizable Top Level Domains:
     'validTlds' => ['.localhost' => true],
+
+    // Bare addresses ending in an ambiguous Top Level Domain (e.g. a filename
+    // like "foobar.zip") will stay plain text, default false:
+    'skipAmbiguousTlds' => true,
+
+    // You can customize the built-in list of ambiguous Top Level Domains:
+    'ambiguousTlds' => ['.zip' => true],
 ];
 
 $urlLinker = new Art4\UrlLinker\UrlLinker($config);
@@ -101,6 +108,15 @@ $urlLinker = new Art4\UrlLinker\UrlLinker($config);
       `validTlds` e.g. `['.com' => true, '.net' => true]`.
     - If you need to support unqualified domain names, such as `localhost`,
       you can also set them with `['.localhost' => true]` in `validTlds`.
+    - Some valid top-level domains are also common file extensions (`.zip`,
+      `.mov`, `.java`, `.md`, …). To avoid linking bare filenames like
+      `foobar.zip`, set `skipAmbiguousTlds` to `true`. Only *bare* addresses
+      (no scheme, no username, no port, path, query or fragment) are affected;
+      `https://example.zip`, `dl.zip/file` and `user@example.zip` are still
+      linked.
+    - The list of ambiguous top-level domains ships with a built-in default
+      covering `.zip`, `.mov`, `.java`, `.ps`, `.md`, `.sh`, `.py`, `.rs` and
+      `.ai`, and can be overridden with `ambiguousTlds`.
 - Email addresses
   - Supports the full range of commonly used address formats, including "plus
     addresses" (as popularized by Gmail).

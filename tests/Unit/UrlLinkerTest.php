@@ -206,6 +206,29 @@ final class UrlLinkerTest extends TestCase
         ]);
     }
 
+    public function testProvidingSkipAmbiguousTldsNotAsBooleanThrowsInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "skipAmbiguousTlds" must be of type "boolean", "string" given.');
+
+        new UrlLinker([
+            'skipAmbiguousTlds' => 'true',
+        ]);
+    }
+
+    public function testSettingCustomAmbiguousTldsConfig(): void
+    {
+        $urlLinker = new UrlLinker([
+            'skipAmbiguousTlds' => true,
+            'ambiguousTlds' => ['.zip' => true],
+        ]);
+
+        $this->assertSame(
+            'Replace <a href="http://app.py">app.py</a> but not foobar.zip',
+            $urlLinker->linkUrlsAndEscapeHtml('Replace app.py but not foobar.zip')
+        );
+    }
+
     /**
      * @return array<string,mixed>
      */

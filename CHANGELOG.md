@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add PHP 8.6 to the CI matrix as a canary for breaking changes
 - Add the namespace `Art4\UrlLinker` for all public classes
 - Add the config option `cutUrlsAtEntities` to opt back into the legacy behavior of splitting URLs at character references in `linkUrlsInTrustedHtml()` (kept as a migration aid)
+- Add the option `skipAmbiguousTlds` to treat bare addresses ending in an ambiguous top-level domain (e.g. filenames like `foobar.zip`) as plain text; the ambiguous TLD list can be configured with `ambiguousTlds`
 
 ### Changed
 
