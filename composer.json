@@ -19,7 +19,7 @@
 		"php": "^8.2"
 	},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^3.84",
+		"friendsofphp/php-cs-fixer": "^3.95",
 		"phpstan/extension-installer": "^1.4",
 		"phpstan/phpstan": "^2.0",
 		"phpstan/phpstan-deprecation-rules": "^2.0",
@@ -48,7 +48,7 @@
 		}
 	},
 	"scripts": {
-		"codestyle": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
+		"codestyle": "vendor/bin/php-cs-fixer fix",
 		"coverage": "vendor/bin/phpunit --coverage-html=\"build/code-coverage\"",
 		"phpstan": "vendor/bin/phpstan analyze --configuration phpstan.neon",
 		"phpunit": "vendor/bin/phpunit",
