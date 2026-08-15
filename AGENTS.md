@@ -12,6 +12,10 @@ Default labels: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-huma
 
 Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
 
+### Releasing
+
+Releases are developer-initiated, never agent-launched. Prepare up to the PR and stop there. See `docs/agents/releasing.md`.
+
 ## Development environment
 
 PHP runs **only** inside the Docker dev container — never invoke `php`, `composer`, or `vendor/bin/*` on the host. Docker is required for `make qa`. Use the Makefile:
