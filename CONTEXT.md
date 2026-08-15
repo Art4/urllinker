@@ -19,3 +19,9 @@ _Avoid_: container PHP, dev version
 **Canary**:
 A PHP version running in the CI matrix before its stable release, installed as a nightly dev build. It exists only to catch breaking changes early and is not advertised as "supported" until the stable release is out and the matrix entry switches from the nightly build to the stable version.
 _Avoid_: preview support, 8.6 support, early support
+
+## Releasing
+
+**Release**:
+A version of the library published to its consumers: a git tag on `main` plus a GitHub Release, picked up by Packagist. The version number is derived from the `[Unreleased]` section of `CHANGELOG.md` — a breaking change makes it a major, new behavior a minor, fixes only a patch. The decision to release belongs to the developer, who chooses the moment; it is never initiated by an agent.
+_Avoid_: ship, cut a version, publish a version
