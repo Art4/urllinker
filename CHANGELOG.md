@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Tighten the PHP-CS-Fixer rules (pin PER-CS 3.0, fully-qualify native function calls, enforce strict declarations and stricter code style)
 - Rename the Composer script `test` to `qa`
 - Move the canonical namespace from `Youthweb\UrlLinker` to `Art4\UrlLinker` (the legacy namespace keeps working via aliases; `get_class()`/`serialize()` on legacy-constructed instances now report the canonical `Art4\UrlLinker\...` names)
 - Drop support for PHP 8.1
