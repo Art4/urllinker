@@ -102,13 +102,13 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     }
 
     #[DataProvider('provideTextsWithHtml')]
-    public function testHtmlInText(string $text, string $expectedLinked): void
+    public function testHtmlInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
         ]);
 
-        $this->runLinkUrlsInTrustedHtmlTests($urlLinker, $text, $expectedLinked);
+        $this->runLinkUrlsInTrustedHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
     /**

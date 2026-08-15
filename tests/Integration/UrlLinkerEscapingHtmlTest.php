@@ -131,13 +131,13 @@ final class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
     }
 
     #[DataProvider('provideTextsWithHtml')]
-    public function testHtmlInText(string $text, string $expectedLinked): void
+    public function testHtmlInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
         ]);
 
-        $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked);
+        $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
     /**
