@@ -34,7 +34,7 @@ abstract class UrlLinkerTestCase extends TestCase
             [''],
             ['Hello World!'],
             ['Looks like www.it.contains.an.url/somewhere but it really does not'],
-            ['This german date 20.07.1963 isn\'t a domain.'], // @see https://bitbucket.org/kwi/urllinker/issues/23/german-dates-get-turned-into-links
+            ["This german date 20.07.1963 isn't a domain."], // @see https://bitbucket.org/kwi/urllinker/issues/23/german-dates-get-turned-into-links
         ];
     }
 

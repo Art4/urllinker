@@ -27,7 +27,7 @@ use UnexpectedValueException;
 use Youthweb\UrlLinker\UrlLinker;
 
 #[CoversClass(UrlLinker::class)]
-class UrlLinkerTest extends \PHPUnit\Framework\TestCase
+final class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the default HtmlLinkCreator
@@ -64,7 +64,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     {
         $urlLinker = new UrlLinker([
             // wrong htmlLinkCreator
-            'htmlLinkCreator' => fn($url, $content) => null,
+            'htmlLinkCreator' => fn($url, $content): null => null,
         ]);
 
         $this->expectException(UnexpectedValueException::class);
@@ -126,7 +126,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     {
         $urlLinker = new UrlLinker([
             // wrong emailLinkCreator
-            'emailLinkCreator' => fn($email, $content) => null,
+            'emailLinkCreator' => fn($email, $content): null => null,
         ]);
 
         $this->expectException(UnexpectedValueException::class);
@@ -137,8 +137,6 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test html escaping
-     *
-     * @dataProvider providerEscapingHtml
      */
     #[DataProvider('providerEscapingHtml')]
     public function testEscapingHtml(string $text, string $expected): void
@@ -149,39 +147,37 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array<int,array<int,string>>
+     * @return \Iterator<int, array<int, string>>
      */
-    public static function providerEscapingHtml(): array
+    public static function providerEscapingHtml(): \Iterator
     {
-        return [
-            [
-                '\'',
-                '\'',
-            ],
-            [
-                '"',
-                '&quot;',
-            ],
-            [
-                '&quot;',
-                '&quot;',
-            ],
-            [
-                '<>',
-                '&lt;&gt;',
-            ],
-            [
-                '&lt;&gt;',
-                '&lt;&gt;',
-            ],
-            [
-                '&',
-                '&amp;',
-            ],
-            [
-                '&amp;',
-                '&amp;',
-            ],
+        yield [
+            "'",
+            "'",
+        ];
+        yield [
+            '"',
+            '&quot;',
+        ];
+        yield [
+            '&quot;',
+            '&quot;',
+        ];
+        yield [
+            '<>',
+            '&lt;&gt;',
+        ];
+        yield [
+            '&lt;&gt;',
+            '&lt;&gt;',
+        ];
+        yield [
+            '&',
+            '&amp;',
+        ];
+        yield [
+            '&amp;',
+            '&amp;',
         ];
     }
 }

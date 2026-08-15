@@ -26,11 +26,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Youthweb\UrlLinker\UrlLinker;
 
 #[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
-class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
+final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 {
-    /**
-     * @dataProvider provideTextsWithFtpLinksWithoutHtml
-     */
     #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]
     public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
@@ -41,9 +38,6 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
         $this->runLinkUrlsInTrustedHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
-    /**
-     * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
-     */
     #[DataProvider('provideTextsWithUppercaseLinksWithoutHtml')]
     public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
@@ -54,9 +48,6 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
         $this->runLinkUrlsInTrustedHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
-    /**
-     * @dataProvider provideTextsNotContainingAnyUrls
-     */
     #[DataProvider('provideTextsNotContainingAnyUrls')]
     public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
@@ -82,9 +73,6 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
         $this->assertSame($expected, (new UrlLinker())->linkUrlsInTrustedHtml($html));
     }
 
-    /**
-     * @dataProvider provideTextsWithLinksWithoutHtml
-     */
     #[DataProvider('provideTextsWithLinksWithoutHtml')]
     public function testUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
@@ -113,9 +101,6 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
         );
     }
 
-    /**
-     * @dataProvider provideTextsWithHtml
-     */
     #[DataProvider('provideTextsWithHtml')]
     public function testHtmlInText(string $text, string $expectedLinked): void
     {
@@ -129,35 +114,33 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     /**
      * provide html in text
      *
-     * @return array<int,array<int,string>>
+     * @return \Iterator<int, array<int, string>>
      */
-    public static function provideTextsWithHtml(): array
+    public static function provideTextsWithHtml(): \Iterator
     {
-        return [
-            [
-                '<a href="http://example.com?a=b&amp;c=d">example.com</a>',
-                '<a href="http://example.com?a=b&amp;c=d">example.com</a>',
-            ],
-            [
-                '<a href="http://example.com?a=b&amp%3Bc=d">example.com</a>',
-                '<a href="http://example.com?a=b&amp%3Bc=d">example.com</a>',
-            ],
-            [
-                '<a href="http://example.com?a=b%26amp%3Bc=d">example.com</a>',
-                '<a href="http://example.com?a=b%26amp%3Bc=d">example.com</a>',
-            ],
-            [
-                'http://example.com?a=b&c=d',
-                static::link('http://example.com?a=b&amp;c=d', 'example.com'),
-            ],
-            [
-                'http://example.com?a=b&amp%3bc=d',
-                static::link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
-            ],
-            [
-                'http://example.com?a=b&amp;c=d',
-                static::link('http://example.com?a=b', 'example.com') . '&amp;c=d',
-            ],
+        yield [
+            '<a href="http://example.com?a=b&amp;c=d">example.com</a>',
+            '<a href="http://example.com?a=b&amp;c=d">example.com</a>',
+        ];
+        yield [
+            '<a href="http://example.com?a=b&amp%3Bc=d">example.com</a>',
+            '<a href="http://example.com?a=b&amp%3Bc=d">example.com</a>',
+        ];
+        yield [
+            '<a href="http://example.com?a=b%26amp%3Bc=d">example.com</a>',
+            '<a href="http://example.com?a=b%26amp%3Bc=d">example.com</a>',
+        ];
+        yield [
+            'http://example.com?a=b&c=d',
+            self::link('http://example.com?a=b&amp;c=d', 'example.com'),
+        ];
+        yield [
+            'http://example.com?a=b&amp%3bc=d',
+            self::link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
+        ];
+        yield [
+            'http://example.com?a=b&amp;c=d',
+            self::link('http://example.com?a=b', 'example.com') . '&amp;c=d',
         ];
     }
 }

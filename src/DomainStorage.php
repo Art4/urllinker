@@ -1480,7 +1480,7 @@ ZW';
      *
      * @var array<string,bool>|null
      */
-    private static $validTlds;
+    private static ?array $validTlds = null;
 
     /**
      * @return array<string,bool>

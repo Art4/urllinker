@@ -27,11 +27,8 @@ use Youthweb\UrlLinker\UrlLinker;
 
 #[CoversMethod(UrlLinker::class, 'escapeHtml')]
 #[CoversMethod(UrlLinker::class, 'linkUrlsAndEscapeHtml')]
-class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
+final class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 {
-    /**
-     * @dataProvider provideTextsWithFtpLinksWithoutHtml
-     */
     #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]
     public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
@@ -42,9 +39,6 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
         $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
-    /**
-     * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
-     */
     #[DataProvider('provideTextsWithUppercaseLinksWithoutHtml')]
     public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
@@ -55,9 +49,6 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
         $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
-    /**
-     * @dataProvider provideTextsNotContainingAnyUrls
-     */
     #[DataProvider('provideTextsNotContainingAnyUrls')]
     public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
@@ -111,9 +102,6 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
         $this->assertSame($expected, (new UrlLinker())->linkUrlsAndEscapeHtml($text));
     }
 
-    /**
-     * @dataProvider provideTextsWithLinksWithoutHtml
-     */
     #[DataProvider('provideTextsWithLinksWithoutHtml')]
     public function testUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
@@ -142,9 +130,6 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
         );
     }
 
-    /**
-     * @dataProvider provideTextsWithHtml
-     */
     #[DataProvider('provideTextsWithHtml')]
     public function testHtmlInText(string $text, string $expectedLinked): void
     {
@@ -158,23 +143,21 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
     /**
      * provide html in text
      *
-     * @return array<int,array<int,string>>
+     * @return \Iterator<int, array<int, string>>
      */
-    public static function provideTextsWithHtml(): array
+    public static function provideTextsWithHtml(): \Iterator
     {
-        return [
-            [
-                'http://example.com?a=b&c=d',
-                static::link('http://example.com?a=b&amp;c=d', 'example.com'),
-            ],
-            [
-                'http://example.com?a=b&amp%3bc=d',
-                static::link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
-            ],
-            [
-                'http://example.com?a=b&amp;c=d',
-                static::link('http://example.com?a=b&amp;c=d', 'example.com'),
-            ],
+        yield [
+            'http://example.com?a=b&c=d',
+            self::link('http://example.com?a=b&amp;c=d', 'example.com'),
+        ];
+        yield [
+            'http://example.com?a=b&amp%3bc=d',
+            self::link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
+        ];
+        yield [
+            'http://example.com?a=b&amp;c=d',
+            self::link('http://example.com?a=b&amp;c=d', 'example.com'),
         ];
     }
 }
