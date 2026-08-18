@@ -51,3 +51,17 @@ _Avoid_: old namespace, backward-compat namespace
 **Release**:
 A version of the library published to its consumers: a git tag on `main` plus a GitHub Release, picked up by Packagist. The version number is derived from the `[Unreleased]` section of `CHANGELOG.md` — a breaking change makes it a major, new behavior a minor, fixes only a patch. The decision to release belongs to the developer, who chooses the moment; it is never initiated by an agent.
 _Avoid_: ship, cut a version, publish a version
+
+## Housekeeping
+
+**Housekeeping**:
+The recurring maintenance cycle of this repository, tracked in a single open GitHub issue labelled `housekeeping`. It covers dependency updates, CI maintenance, PHP release/EOL management, TLD list refreshes, tooling updates, and small collected tasks. A run is initiated by the developer; it never makes breaking changes.
+_Avoid_: chore, cleanup backlog, maintenance sprint
+
+**Housekeeping issue**:
+The always-open issue tracking the current housekeeping cycle — a checklist, a Collected tasks backlog, and a Reports record. The run creates the next issue as its final task and opens a closing PR; the PR's merge closes the issue. It rides the Later milestone, rolling forward each release.
+_Avoid_: cleanup issue, maintenance issue
+
+**Collected tasks**:
+Small housekeeping tasks found during development and appended to the housekeeping issue's Collected tasks section. Adding one requires explicit user approval; agents only suggest.
+_Avoid_: backlog items, cleanup list
