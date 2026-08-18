@@ -20,6 +20,24 @@ _Avoid_: container PHP, dev version
 A PHP version running in the CI matrix before its stable release, installed as a nightly dev build. It exists only to catch breaking changes early and is not advertised as "supported" until the stable release is out and the matrix entry switches from the nightly build to the stable version.
 _Avoid_: preview support, 8.6 support, early support
 
+## Library domain
+
+**URL**:
+An address the library recognizes in text — optionally with scheme, host, port, path, query and fragment. The "reference" behind RFC 3986.
+_Avoid_: web address, link address
+
+**HTML character reference**:
+A `&...;` sequence (named, `&#N;` decimal or `&#xH;` hexadecimal) that stands for one character in the source text. Where a reference appears *inside a URL*, the URL extends across it; where it flanks the start or end of a URL, it belongs to the HTML, not the URL.
+_Avoid_: entity, HTML entity, character entity
+
+**Link**:
+The markup produced for a recognized URL, by default `<a href="…">…</a>`, overridable via the link creators.
+_Avoid_: hyperlink
+
+**Trusted HTML**:
+HTML that is assumed to be both valid and safe. `linkUrlsInTrustedHtml()` passes tags and character references through unchanged and links only URLs found in text nodes.
+_Avoid_: safe HTML, pre-sanitized HTML
+
 **Canonical namespace**:
 The `Art4\UrlLinker` namespace under which all public classes are defined. New code and documentation should use it; the legacy namespace is only kept for consumers who have not migrated yet.
 _Avoid_: Youthweb namespace, new namespace

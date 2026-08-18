@@ -131,13 +131,13 @@ final class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
     }
 
     #[DataProvider('provideTextsWithHtml')]
-    public function testHtmlInText(string $text, string $expectedLinked): void
+    public function testHtmlInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
         ]);
 
-        $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked);
+        $this->runLinkUrlsAndEscapeHtmlTests($urlLinker, $text, $expectedLinked, $message);
     }
 
     /**
@@ -158,6 +158,21 @@ final class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
         yield [
             'http://example.com?a=b&amp;c=d',
             self::link('http://example.com?a=b&amp;c=d', 'example.com'),
+        ];
+        yield [
+            'http://example.com?a=b&amp;',
+            self::link('http://example.com?a=b&amp;', 'example.com'),
+            'A reference-like ampersand at the very end of a URL is not split in half',
+        ];
+        yield [
+            'http://example.com?a=b;',
+            self::link('http://example.com?a=b', 'example.com') . ';',
+            'A semicolon that does not terminate a reference stays trailing punctuation',
+        ];
+        yield [
+            'http://example.com/path;',
+            self::link('http://example.com/path', 'example.com/path') . ';',
+            'A semicolon after the path stays trailing punctuation',
         ];
     }
 }

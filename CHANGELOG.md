@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Document the development environment for agents in `AGENTS.md`
 - Add PHP 8.6 to the CI matrix as a canary for breaking changes
 - Add the namespace `Art4\UrlLinker` for all public classes
+- Add the config option `cutUrlsAtEntities` to opt back into the legacy behavior of splitting URLs at character references in `linkUrlsInTrustedHtml()` (kept as a migration aid)
 
 ### Changed
 
@@ -24,6 +25,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Deprecated
 
 - Using the legacy namespace `Youthweb\UrlLinker` is deprecated, use `Art4\UrlLinker` instead
+
+### Fixed
+
+- In `linkUrlsInTrustedHtml()`, character references to characters that may appear in a URL (e.g. `&amp;` for `&`) are now treated as part of the URL instead of splitting it, aligning with `linkUrlsAndEscapeHtml()`. Character references to characters that may not appear in a URL (e.g. `&lt;`, `&gt;`) still flank URLs as markup.
+- In `linkUrlsAndEscapeHtml()` and `linkUrlsInTrustedHtml()`, a character reference at the very end of a URL (e.g. `&amp;`) is no longer split in half by its terminating `;` being treated as trailing punctuation; the URL now extends across the whole reference.
 
 ## [2.1.0](https://github.com/Art4/urllinker/compare/2.0.0...2.1.0) - 2025-07-22
 
