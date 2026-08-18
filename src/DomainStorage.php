@@ -30,9 +30,9 @@ final class DomainStorage
      * from time to time.
      *
      * List source:  http://data.iana.org/TLD/tlds-alpha-by-domain.txt
-     * Last updated: 2022-12-06
+     * Last updated: 2026-08-18
      *
-     * # Version 2025072100, Last Updated Mon Jul 21 07:07:01 2025 UTC
+     * # Version 2026081800, Last Updated Tue Aug 18 07:07:02 2026 UTC
      */
     private static string $rawValidTlds = 'AAA
 AARP
@@ -379,7 +379,6 @@ DOWNLOAD
 DRIVE
 DTV
 DUBAI
-DUNLOP
 DUPONT
 DURBAN
 DVAG
@@ -522,7 +521,6 @@ GODADDY
 GOLD
 GOLDPOINT
 GOLF
-GOO
 GOODYEAR
 GOOG
 GOOGLE
@@ -778,6 +776,7 @@ MEME
 MEMORIAL
 MEN
 MENU
+MERCK
 MERCKMSD
 MG
 MH
@@ -980,7 +979,6 @@ REALTOR
 REALTY
 RECIPES
 RED
-REDSTONE
 REDUMBRELLA
 REHAB
 REISE
@@ -1270,6 +1268,7 @@ WATCH
 WATCHES
 WEATHER
 WEATHERCHANNEL
+WEB
 WEBCAM
 WEBER
 WEBSITE
@@ -1287,7 +1286,6 @@ WINDOWS
 WINE
 WINNERS
 WME
-WOLTERSKLUWER
 WOODSIDE
 WORK
 WORKS
