@@ -338,11 +338,15 @@ final class UrlLinker implements UrlLinkerInterface
                 $match = [];
 
                 if (\preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
+                    // Unreachable: $reMarkup ends in "|$", so the regex always matches
+                    // (the empty string at the end of $html). Kept only as a guard.
+                    // @codeCoverageIgnoreStart
                     $position = \strlen($html);
                     $markup = '';
                     $markupPosition = \strlen($html);
 
                     break;
+                    // @codeCoverageIgnoreEnd
                 }
 
                 [$markup, $markupPosition] = $match[0];

@@ -27,6 +27,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversMethod(UrlLinker::class, 'escapeHtml')]
 #[CoversMethod(UrlLinker::class, 'linkUrlsAndEscapeHtml')]
+#[CoversMethod(UrlLinker::class, 'linkUrlsInPlainText')]
 final class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 {
     #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]

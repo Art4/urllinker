@@ -136,6 +136,20 @@ final class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test that an implicit scheme with a password is not treated as a URL;
+     * parsing resumes right after the username.
+     */
+    public function testImplicitSchemeWithPasswordIsNotLinked(): void
+    {
+        $urlLinker = new UrlLinker();
+
+        $text = 'my email:foo@example.org';
+        $expected = 'my email:<a href="mailto:foo&#64;example.org">foo&#64;example.org</a>';
+
+        $this->assertSame($expected, $urlLinker->linkUrlsAndEscapeHtml($text));
+    }
+
+    /**
      * Test html escaping
      */
     #[DataProvider('providerEscapingHtml')]
