@@ -9,7 +9,7 @@ The set of PHP versions a release of the library declares compatibility with, ex
 _Avoid_: supported PHP, PHP versions
 
 **EOL drop**:
-Removing the oldest versions from the supported range once they reach their end-of-life date. Being EOL alone makes a version eligible; the drop is executed deliberately (e.g. in yearly housekeeping), not automatically on the EOL date.
+Removing the oldest versions from the supported range once they reach their end-of-life date. Being EOL alone makes a version eligible; the drop is executed deliberately (e.g. in the recurring housekeeping cycle, with human approval), not automatically on the EOL date.
 _Avoid_: version bump, cleanup
 
 **Dev container floor**:
@@ -51,3 +51,17 @@ _Avoid_: old namespace, backward-compat namespace
 **Release**:
 A version of the library published to its consumers: a git tag on `main` plus a GitHub Release, picked up by Packagist. The version number is derived from the `[Unreleased]` section of `CHANGELOG.md` — a breaking change makes it a major, new behavior a minor, fixes only a patch. The decision to release belongs to the developer, who chooses the moment; it is never initiated by an agent.
 _Avoid_: ship, cut a version, publish a version
+
+## Housekeeping
+
+**Housekeeping**:
+The recurring maintenance cycle of this repository, tracked in a single open GitHub issue labelled `housekeeping`. It covers dependency updates, CI maintenance, PHP release/EOL management, TLD list refreshes, tooling updates, and small collected tasks. A run is initiated by the developer.
+_Avoid_: chore, cleanup backlog, maintenance sprint
+
+**Housekeeping issue**:
+The always-open issue tracking the current housekeeping cycle — a task list, a Collected tasks backlog, and a Reports record. The run creates the next issue as its final task and opens a closing PR; the PR's merge closes the issue. It rides the Later milestone, rolling forward each release.
+_Avoid_: cleanup issue, maintenance issue
+
+**Collected tasks**:
+Small housekeeping tasks found during development and appended to the housekeeping issue's Collected tasks section. Adding one requires explicit user approval; agents only suggest.
+_Avoid_: backlog items, cleanup list

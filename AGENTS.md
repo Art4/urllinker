@@ -20,6 +20,10 @@ Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/do
 
 Releases are developer-initiated, never agent-launched. Prepare up to the PR and stop there. See `docs/agents/releasing.md`.
 
+### Housekeeping
+
+Recurring maintenance is tracked in the open `housekeeping`-labelled GitHub issue (milestone: Later). See `docs/agents/housekeeping.md`. During any work, when you notice something housekeeping-worthy (a small refactoring note, outdated dependency, stale doc, etc.), **suggest** to the user that it be added to that issue; never add or edit it on your own.
+
 ## Development environment
 
 PHP runs **only** inside the Docker dev container — never invoke `php`, `composer`, or `vendor/bin/*` on the host. Docker is required for `make qa`. Use the Makefile:
