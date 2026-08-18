@@ -1,6 +1,6 @@
 # Housekeeping
 
-Recurring maintenance is tracked as a single always-open GitHub issue labelled `housekeeping`. A housekeeping run — invoked with the `housekeeping` skill — works the issue's checklist and Collected tasks, records reports, creates the next issue as its final task, and opens one closing PR whose merge closes the current issue.
+Recurring maintenance is tracked as a single always-open GitHub issue labelled `housekeeping`. A housekeeping run — invoked with the `housekeeping` skill — works the issue's task list and Collected tasks, records reports, creates the next issue as its final task, and opens one closing PR whose merge closes the current issue.
 
 ## Cadence
 
@@ -9,7 +9,7 @@ Housekeeping runs **regularly**: quarterly plus before each release. The develop
 ## Issue conventions
 
 - **Label**: `housekeeping`. **Milestone**: the Later tier — currently `2.3.0` — rolling forward each release (see `docs/agents/milestones.md`).
-- One open issue at a time; the run creates the next one as its final checklist item, using `.github/ISSUE_TEMPLATE/housekeeping.md`.
+- One open issue at a time; the run creates the next one as its final task, using `.github/ISSUE_TEMPLATE/housekeeping.md`.
 - The current issue closes when the closing PR merges (the PR carries `Closes #<n>`).
 
 ## Collecting tasks
@@ -24,7 +24,7 @@ Housekeeping accepts only **small, bounded, non-urgent** tasks:
 
 ## Running a session
 
-Invoke the `housekeeping` skill and follow its process — it selects the issue (asking when none or several are open), works the checklist and Collected tasks, records the Reports section, creates the next issue, and opens the closing PR. The developer merges the PR; the merge closes the issue. The mechanics live in the skill; this file holds the conventions.
+Invoke the `housekeeping` skill and follow its process — it selects the issue (asking when none or several are open), works the task list and Collected tasks, records the Reports section, creates the next issue, and opens the closing PR. The developer merges the PR; the merge closes the issue. The mechanics live in the skill; this file holds the conventions.
 
 ## Reports
 

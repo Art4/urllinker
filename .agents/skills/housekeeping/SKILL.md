@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Housekeeping
 
-Recurring maintenance run against the open `housekeeping`-labelled GitHub issue, initiated by the developer — regularly, quarterly plus before each release. One issue at a time; it rides the Later milestone. The run works the issue's checklist and Collected tasks, records reports, creates the next issue as its final task, then opens one closing PR (`Closes #<n>`) whose merge closes the issue.
+Recurring maintenance run against the open `housekeeping`-labelled GitHub issue, initiated by the developer — regularly, quarterly plus before each release. One issue at a time; it rides the Later milestone. The run works the issue's task list and Collected tasks, records reports, creates the next issue as its final task, then opens one closing PR (`Closes #<n>`) whose merge closes the issue.
 
 Full conventions live in `docs/agents/housekeeping.md`.
 
@@ -29,7 +29,7 @@ _Done_: the run's target issue number is fixed.
 
 ### 2. Reconcile to the template
 
-Read the issue body (`gh issue view <n> --comments`). If its Checklist or Reports sections differ from the current template, rewrite the body to match the template — preserving already-ticked state and Collected tasks — and record the reconcile as an issue comment.
+Read the issue body (`gh issue view <n> --comments`). If its Tasks or Reports sections differ from the current template, rewrite the body to match the template — preserving already-ticked state and Collected tasks — and record the reconcile as an issue comment.
 
 _Done_: the issue body matches the template, with prior state preserved.
 
@@ -65,7 +65,7 @@ _Done_: tooling absorbed and the report recorded.
 
 ### 8. Work the Collected tasks
 
-Implement every `- [ ]` item in the issue's Collected tasks section. Invoking the skill authorizes implementing the checklist and Collected tasks; no per-task approval is needed. Tick each item and reference it (commit/PR number). A task that proves too big for housekeeping is re-filed as its own regular issue and removed from the backlog.
+Implement every `- [ ]` item in the issue's Collected tasks section. Invoking the skill authorizes implementing the task list and Collected tasks; no per-task approval is needed. Tick each item and reference it (commit/PR number). A task that proves too big for housekeeping is re-filed as its own regular issue and removed from the backlog.
 
 _Done_: every item is ticked or re-filed.
 
@@ -83,7 +83,7 @@ _Done_: the full check passes (phpunit, phpstan, codestyle).
 
 ### 11. Create the next issue
 
-Tick the final checklist item. Create the next issue from the template body (frontmatter stripped; `gh issue create --template` only works interactively):
+Tick the final task. Create the next issue from the template body (frontmatter stripped; `gh issue create --template` only works interactively):
 
 ```bash
 awk '/^---$/{c++; next} c>=2{print}' .github/ISSUE_TEMPLATE/housekeeping.md > /tmp/housekeeping-body.md
@@ -107,5 +107,5 @@ Adding a task to the open issue is **not** part of this skill — it needs expli
 ## Reference
 
 - **Reports** — the issue's Reports section, filled per the formats in `docs/agents/housekeeping.md`.
-- **Cascade** — the current issue closes via the closing PR's `Closes #<n>` keyword; the next issue is created as the final checklist item.
+- **Cascade** — the current issue closes via the closing PR's `Closes #<n>` keyword; the next issue is created as the final task.
 - **Milestone** — the Later tier, rolled forward each release (see `docs/agents/milestones.md` and `docs/agents/housekeeping.md`).

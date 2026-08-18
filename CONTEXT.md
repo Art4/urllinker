@@ -59,7 +59,7 @@ The recurring maintenance cycle of this repository, tracked in a single open Git
 _Avoid_: chore, cleanup backlog, maintenance sprint
 
 **Housekeeping issue**:
-The always-open issue tracking the current housekeeping cycle — a checklist, a Collected tasks backlog, and a Reports record. The run creates the next issue as its final task and opens a closing PR; the PR's merge closes the issue. It rides the Later milestone, rolling forward each release.
+The always-open issue tracking the current housekeeping cycle — a task list, a Collected tasks backlog, and a Reports record. The run creates the next issue as its final task and opens a closing PR; the PR's merge closes the issue. It rides the Later milestone, rolling forward each release.
 _Avoid_: cleanup issue, maintenance issue
 
 **Collected tasks**:
