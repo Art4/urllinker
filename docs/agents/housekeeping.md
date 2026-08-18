@@ -24,7 +24,7 @@ Housekeeping accepts only **small, bounded, non-urgent** tasks:
 
 ## Running a session
 
-Invoke the `housekeeping` skill. It selects the issue (asking when none or several are open), reconciles it to the template, works the checklist, records the Reports section, creates the next issue, and opens one closing PR. The developer merges the PR; the merge closes the issue.
+Invoke the `housekeeping` skill and follow its process — it selects the issue (asking when none or several are open), works the checklist and Collected tasks, records the Reports section, creates the next issue, and opens the closing PR. The developer merges the PR; the merge closes the issue. The mechanics live in the skill; this file holds the conventions.
 
 ## Reports
 

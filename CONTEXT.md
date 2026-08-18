@@ -9,7 +9,7 @@ The set of PHP versions a release of the library declares compatibility with, ex
 _Avoid_: supported PHP, PHP versions
 
 **EOL drop**:
-Removing the oldest versions from the supported range once they reach their end-of-life date. Being EOL alone makes a version eligible; the drop is executed deliberately (e.g. in yearly housekeeping), not automatically on the EOL date.
+Removing the oldest versions from the supported range once they reach their end-of-life date. Being EOL alone makes a version eligible; the drop is executed deliberately (e.g. in the recurring housekeeping cycle, with human approval), not automatically on the EOL date.
 _Avoid_: version bump, cleanup
 
 **Dev container floor**:
@@ -55,7 +55,7 @@ _Avoid_: ship, cut a version, publish a version
 ## Housekeeping
 
 **Housekeeping**:
-The recurring maintenance cycle of this repository, tracked in a single open GitHub issue labelled `housekeeping`. It covers dependency updates, CI maintenance, PHP release/EOL management, TLD list refreshes, tooling updates, and small collected tasks. A run is initiated by the developer; it never makes breaking changes.
+The recurring maintenance cycle of this repository, tracked in a single open GitHub issue labelled `housekeeping`. It covers dependency updates, CI maintenance, PHP release/EOL management, TLD list refreshes, tooling updates, and small collected tasks. A run is initiated by the developer.
 _Avoid_: chore, cleanup backlog, maintenance sprint
 
 **Housekeeping issue**:
