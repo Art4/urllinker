@@ -8,7 +8,7 @@ Housekeeping runs **regularly**: quarterly plus before each release. The develop
 
 ## Issue conventions
 
-- **Label**: `housekeeping`. **Milestone**: the Later tier — currently `2.3.0` — rolling forward each release (see `docs/agents/milestones.md`).
+- **Label**: `housekeeping`. **Milestone**: the Later tier, rolling forward each release (see `docs/agents/milestones.md`).
 - One open issue at a time; the run creates the next one as its final task, using `.github/ISSUE_TEMPLATE/housekeeping.md`.
 - The current issue closes when the closing PR merges (the PR carries `Closes #<n>`).
 
@@ -28,11 +28,4 @@ Invoke the `housekeeping` skill and follow its process — it selects the issue 
 
 ## Reports
 
-The issue's Reports section is filled by the run:
-
-- **Composer update** — from → to per package
-- **Composer audit** — advisories, or "no known vulnerabilities"
-- **PHP versions** — release/EOL status per matrix version; canaries promoted/added; EOL flags; approved supported-range changes
-- **CI actions** — used vs latest per action; GitHub deprecation warnings
-- **TLD list** — IANA version before → after
-- **Tooling** — rector / php-cs-fixer rule changes; tool versions
+The run fills the issue's Reports section per the formats in `.github/ISSUE_TEMPLATE/housekeeping.md`.

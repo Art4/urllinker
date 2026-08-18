@@ -90,7 +90,7 @@ awk '/^---$/{c++; next} c>=2{print}' .github/ISSUE_TEMPLATE/housekeeping.md > /t
 gh issue create --title "Housekeeping $(date +%Y-%m)" --body-file /tmp/housekeeping-body.md --label housekeeping --milestone "<Later milestone title>"
 ```
 
-Substitute `<Later milestone title>` with the current Later milestone (read from `docs/agents/housekeeping.md`). Copy any unfinished Collected tasks into the new issue's Collected tasks section.
+Substitute `<Later milestone title>` with the current Later milestone title (read from `docs/agents/milestones.md`). Copy any unfinished Collected tasks into the new issue's Collected tasks section.
 
 _Done_: the next issue exists, open, correctly labelled, on the Later milestone.
 
@@ -106,6 +106,6 @@ Adding a task to the open issue is **not** part of this skill — it needs expli
 
 ## Reference
 
-- **Reports** — the issue's Reports section, filled per the formats in `docs/agents/housekeeping.md`.
+- **Reports** — the issue's Reports section, filled per the formats in `.github/ISSUE_TEMPLATE/housekeeping.md`.
 - **Cascade** — the current issue closes via the closing PR's `Closes #<n>` keyword; the next issue is created as the final task.
-- **Milestone** — the Later tier, rolled forward each release (see `docs/agents/milestones.md` and `docs/agents/housekeeping.md`).
+- **Milestone** — the Later tier, rolled forward each release; the current Later milestone title is read from `docs/agents/milestones.md`.
