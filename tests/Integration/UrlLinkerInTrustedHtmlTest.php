@@ -26,6 +26,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
+#[CoversMethod(UrlLinker::class, 'decodesToNonUrlCharacter')]
 final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 {
     #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]
