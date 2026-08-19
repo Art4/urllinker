@@ -355,6 +355,61 @@ final class AddressScannerTest extends TestCase
         }
     }
 
+    #[DataProvider('provideTrailingCharacterReferences')]
+    public function testScanKeepsTrailingCharacterReferenceWhole(string $url): void
+    {
+        $this->assertTokenStream(
+            $this->createScanner()->scan($url),
+            [['address', false, $url, $url, 'example.com']]
+        );
+    }
+
+    /**
+     * @return \Iterator<string, array<int, string>>
+     */
+    public static function provideTrailingCharacterReferences(): \Iterator
+    {
+        yield 'named reference' => ['http://example.com?a=b&amp;'];
+        yield 'decimal reference' => ['http://example.com?a=b&#38;'];
+    }
+
+    /**
+     * @param ExpectedStream $expected
+     */
+    #[DataProvider('provideDecodedCharacterReferenceScans')]
+    public function testScanDecodesCharacterReferences(string $text, array $expected): void
+    {
+        $this->assertTokenStream($this->createScanner()->scan($text, true), $expected);
+    }
+
+    /**
+     * @return \Iterator<string, array{string, ExpectedStream}>
+     */
+    public static function provideDecodedCharacterReferenceScans(): \Iterator
+    {
+        yield 'named reference in query' => [
+            'http://example.com?a=b&amp;c=d',
+            [['address', false, 'http://example.com?a=b&c=d', 'http://example.com?a=b&c=d', 'example.com']],
+        ];
+        yield 'named reference in path' => [
+            'e.com/foo&amp;bar',
+            [['address', false, 'e.com/foo&bar', 'http://e.com/foo&bar', 'e.com/foo&bar']],
+        ];
+        yield 'decimal reference in query' => [
+            'http://example.com?a=b&#38;c=d',
+            [['address', false, 'http://example.com?a=b&c=d', 'http://example.com?a=b&c=d', 'example.com']],
+        ];
+    }
+
+    public function testDecodeCharacterReferences(): void
+    {
+        $scanner = $this->createScanner();
+
+        $this->assertSame('a&b', $scanner->decodeCharacterReferences('a&amp;b'));
+        $this->assertSame('a&b', $scanner->decodeCharacterReferences('a&#38;b'));
+        $this->assertSame('a<b', $scanner->decodeCharacterReferences('a&lt;b'));
+    }
+
     /**
      * @param array<string,bool> $validTlds
      * @param array<string,bool> $ambiguousTlds
