@@ -5,16 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/Art4/urllinker/compare/2.1.0...main)
+## [Unreleased](https://github.com/Art4/urllinker/compare/2.2.0...main)
+
+Nothing yet.
+
+## [2.2.0](https://github.com/Art4/urllinker/compare/2.1.0...2.2.0) - 2026-08-19
 
 ### Added
 
-- Run the development environment inside Docker (`make qa`, see `docs/dev-environment.md`)
-- Document the development environment for agents in `AGENTS.md`
-- Add PHP 8.6 to the CI matrix as a canary for breaking changes
 - Add the namespace `Art4\UrlLinker` for all public classes
 - Add the config option `cutUrlsAtEntities` to opt back into the legacy behavior of splitting URLs at character references in `linkUrlsInTrustedHtml()` (kept as a migration aid)
 - Add the option `skipAmbiguousTlds` to treat bare addresses ending in an ambiguous top-level domain (e.g. filenames like `foobar.zip`) as plain text; the ambiguous TLD list can be configured with `ambiguousTlds`
+- Run the development environment inside Docker (`make qa`, see `docs/dev-environment.md`)
+- Document the development environment for agents in `AGENTS.md`
+- Add PHP 8.6 to the CI matrix as a canary for breaking changes
 
 ### Changed
 
