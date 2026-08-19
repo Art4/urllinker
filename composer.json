@@ -50,6 +50,10 @@
 	"scripts": {
 		"codestyle": "vendor/bin/php-cs-fixer fix",
 		"coverage": "vendor/bin/phpunit --coverage-html=\"build/code-coverage\"",
+		"coverage-check": [
+			"mkdir -p build && vendor/bin/phpunit --coverage-clover=\"build/coverage.xml\"",
+			"php scripts/check-coverage.php"
+		],
 		"phpstan": "vendor/bin/phpstan analyze --configuration phpstan.neon",
 		"phpunit": "vendor/bin/phpunit",
 		"rector": "vendor/bin/rector process --dry-run",
@@ -60,7 +64,8 @@
 		"qa": [
 			"@phpunit",
 			"@phpstan",
-			"@codestyle --dry-run --diff"
+			"@codestyle --dry-run --diff",
+			"@coverage-check"
 		]
 	}
 }

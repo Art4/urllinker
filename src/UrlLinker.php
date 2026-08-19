@@ -60,6 +60,18 @@ final class UrlLinker implements UrlLinkerInterface
     private array $validTlds;
 
     /**
+     * Bare addresses ending in an ambiguous TLD will be skipped, default false
+     */
+    private bool $skipAmbiguousTlds = false;
+
+    /**
+     * @var array<string,bool>
+     */
+    private array $ambiguousTlds;
+
+    private AddressScanner $scanner;
+
+    /**
      * Set the configuration
      *
      * @param array<string,mixed> $options Configuation array
@@ -73,6 +85,8 @@ final class UrlLinker implements UrlLinkerInterface
             'htmlLinkCreator',
             'emailLinkCreator',
             'validTlds',
+            'skipAmbiguousTlds',
+            'ambiguousTlds',
         ];
 
         foreach ($allowedOptions as $allowedOption) {
@@ -189,8 +203,49 @@ final class UrlLinker implements UrlLinkerInterface
                     $this->validTlds = $validTlds;
 
                     break;
+
+                case 'skipAmbiguousTlds':
+                    if (\array_key_exists($allowedOption, $options)) {
+                        $value = $options[$allowedOption];
+
+                        if (! \is_bool($value)) {
+                            throw new InvalidArgumentException(\sprintf(
+                                'Option "%s" must be of type "%s", "%s" given.',
+                                $allowedOption,
+                                'boolean',
+                                \get_debug_type($value)
+                            ));
+                        }
+                    } else {
+                        $value = false;
+                    }
+
+                    $this->skipAmbiguousTlds = $value;
+
+                    break;
+
+                case 'ambiguousTlds':
+                    $value = \array_key_exists($allowedOption, $options) ? (array) $options[$allowedOption] : AddressScanner::getDefaultAmbiguousTlds();
+
+                    $ambiguousTlds = [];
+
+                    foreach ($value as $tld => $flag) {
+                        $ambiguousTlds[(string) $tld] = (bool) $flag;
+                    }
+
+                    $this->ambiguousTlds = $ambiguousTlds;
+
+                    break;
             }
         }
+
+        $this->scanner = new AddressScanner(
+            allowFtpAddresses: $this->allowFtpAddresses,
+            allowUpperCaseUrlSchemes: $this->allowUpperCaseUrlSchemes,
+            validTlds: $this->validTlds,
+            skipAmbiguousTlds: $this->skipAmbiguousTlds,
+            ambiguousTlds: $this->ambiguousTlds,
+        );
     }
 
     public function linkUrlsAndEscapeHtml(string $text): string
@@ -207,115 +262,34 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private function linkUrlsInPlainText(string $text, bool $decodeCharacterReferences): string
     {
-        // We can abort if there is no . in $text
-        if (!\str_contains($text, '.')) {
-            return $this->escapeHtml($text);
-        }
-
         $html = '';
 
-        $position = 0;
+        foreach ($this->scanner->scan($text, $decodeCharacterReferences) as $token) {
+            if ($token instanceof PlainToken) {
+                // Escape the whole plain token, including any leading periods.
+                $html .= $this->escapeHtml($token->text);
 
-        $match = [];
-
-        while (\preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position)) {
-            [$url, $urlPosition] = $match[0];
-
-            // Add the text leading up to the URL.
-            $html .= $this->escapeHtml(\substr($text, $position, \intval($urlPosition - $position)));
-
-            $urlLength = \strlen($url);
-
-            // A ';' that directly terminates a character reference (e.g. "&amp;",
-            // "&#38;") belongs to the reference, not to trailing punctuation.
-            if ($url !== ''
-                && ($text[$urlPosition + $urlLength] ?? '') === ';'
-                && \preg_match('{&(?:[a-zA-Z][a-zA-Z0-9]*|#[0-9]+|#[xX][0-9a-fA-F]+)$}', $url) === 1
-            ) {
-                $url .= ';';
-                $urlLength++;
+                continue;
             }
 
-            $scheme      = $match['scheme'][0] ?? '';
-            $username    = $match['username'][0] ?? '';
-            $password    = $match['password'][0] ?? '';
-            $domain      = $match['host'][0] ?? '';
-            $afterDomain = $match['hostsuffix'][0] ?? ''; // everything following the domain
-            $port        = $match['port'][0] ?? '';
-            $path        = $match['path'][0] ?? '';
-
-            if ($decodeCharacterReferences) {
-                // A character reference inside a URL stands for the character it names;
-                // the link creators receive the decoded URL.
-                $scheme   = $this->decodeCharacterReferences($scheme);
-                $username = $this->decodeCharacterReferences($username);
-                $password = $this->decodeCharacterReferences($password);
-                $domain   = $this->decodeCharacterReferences($domain);
-                $port     = $this->decodeCharacterReferences($port);
-                $path     = $this->decodeCharacterReferences($path);
-                $url      = $this->decodeCharacterReferences($url);
-            }
-
-            // Check that the TLD is valid or that $domain is an IP address.
-            $tld = \strtolower((string) \strrchr($domain, '.'));
-
-            if (\preg_match('{^\.\d{1,3}$}', $tld) === 1 || isset($this->validTlds[$tld])) {
-                // Do not permit implicit scheme if a password is specified, as
-                // this causes too many errors (e.g. "my email:foo@example.org").
-                if ($scheme === '' && $password !== '') {
-                    $html .= $this->escapeHtml($username);
-
-                    // Continue text parsing at the ':' following the "username".
-                    $position = $urlPosition + \strlen($match['username'][0] ?? '');
-
-                    continue;
-                }
-
-                $schemeIsEmpty = $scheme === '';
-                $passwordIsEmpty = $password === '';
-
-                if ($schemeIsEmpty && $username !== '' && $passwordIsEmpty && $afterDomain === '') {
-                    // Looks like an email address.
-                    $emailLink = $this->emailLinkCreator->__invoke($url, $url);
-
-                    if (! \is_string($emailLink)) {
-                        throw new UnexpectedValueException(\sprintf(
-                            'Return value of Closure for "%s" must return value of type "string", "%s" given.',
-                            'emailLinkCreator',
-                            \gettype($emailLink)
-                        ));
-                    }
-
-                    // Add the hyperlink.
-                    $html .= $emailLink;
-                } else {
-                    // Prepend http:// if no scheme is specified
-                    $completeUrl = $scheme !== '' ? $url : 'http://' . $url;
-                    $linkText = $domain . $port . $path;
-
-                    $htmlLink = $this->htmlLinkCreator->__invoke($completeUrl, $linkText);
-
-                    if (! \is_string($htmlLink)) {
-                        throw new UnexpectedValueException(\sprintf(
-                            'Return value of Closure for "%s" must return value of type "string", "%s" given.',
-                            'htmlLinkCreator',
-                            \gettype($htmlLink)
-                        ));
-                    }
-
-                    $html .= $htmlLink;
-                }
+            if ($token->isEmail) {
+                $link = $this->emailLinkCreator->__invoke($token->url, $token->linkText);
+                $creatorName = 'emailLinkCreator';
             } else {
-                // Not a valid URL.
-                $html .= $this->escapeHtml($url);
+                $link = $this->htmlLinkCreator->__invoke($token->completeUrl, $token->linkText);
+                $creatorName = 'htmlLinkCreator';
             }
 
-            // Continue text parsing from after the URL.
-            $position = $urlPosition + $urlLength;
-        }
+            if (! \is_string($link)) {
+                throw new UnexpectedValueException(\sprintf(
+                    'Return value of Closure for "%s" must return value of type "string", "%s" given.',
+                    $creatorName,
+                    \gettype($link)
+                ));
+            }
 
-        // Add the remainder of the text.
-        $html .= $this->escapeHtml(\substr($text, $position));
+            $html .= $link;
+        }
 
         return $html;
     }
@@ -392,55 +366,6 @@ final class UrlLinker implements UrlLinkerInterface
         return $result;
     }
 
-    private function buildRegex(): string
-    {
-        /**
-         * Regular expression bits used by linkUrlsAndEscapeHtml() to match URLs.
-         *
-         * - password: allow the same characters as in the username
-         * - trailpunct: valid URL characters which are not part of the URL if they appear at the very end
-         * - nonurl: characters that should never appear in a URL
-         */
-        $rexScheme = 'https?://';
-
-        if ($this->allowFtpAddresses) {
-            $rexScheme .= '|ftp://';
-        }
-
-        $rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
-        $rexNonUrl	 = "[^-_\#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
-
-        $pcre = <<<PCRE
-            #\\b
-                (?P<scheme>{$rexScheme})?
-                (?:
-                    (?P<username>[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})
-                    (?P<password>:[^]\\\\\\x00-\\x20\"(),:-<>[\\x7f-\\xff]{1,64})?
-                @)?
-                (?P<host>
-                    (?:[-a-zA-Z0-9\\x7f-\\xff]{1,63}\.)+[a-zA-Z\\x7f-\\xff][-a-zA-Z0-9\\x7f-\\xff]{1,62}|
-                    (?:[1-9]\d{0,2}\.|0\.){3}(?:[1-9]\d{0,2}|0)
-                )
-                (?P<hostsuffix>
-                    (?P<port>:[0-9]{1,5})?
-                    (?P<path>/[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]*?)?
-                    (?P<query>\?[!$-/0-9:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                    (?P<fragment>\#[!$-/0-9?:;=@_':;!a-zA-Z\\x7f-\\xff]+?)?
-                )
-                (?={$rexTrailPunct}*
-                    ({$rexNonUrl}|$)
-                )
-            #x
-            PCRE
-        ;
-
-        if ($this->allowUpperCaseUrlSchemes) {
-            $pcre .= 'i';
-        }
-
-        return $pcre;
-    }
-
     /**
      * Default method for creating a HTML link
      */
@@ -482,14 +407,9 @@ final class UrlLinker implements UrlLinkerInterface
         return $encoding !== false ? $encoding : null;
     }
 
-    private function decodeCharacterReferences(string $string): string
-    {
-        return \html_entity_decode($string, ENT_QUOTES | ENT_HTML401, $this->getEncoding());
-    }
-
     private function decodesToNonUrlCharacter(string $characterReference): bool
     {
-        $decoded = $this->decodeCharacterReferences($characterReference);
+        $decoded = $this->scanner->decodeCharacterReferences($characterReference);
 
         return $decoded !== '' && \preg_match('{^[\x00-\x20\p{Zs}"<>]+$}u', $decoded) === 1;
     }

@@ -14,9 +14,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add PHP 8.6 to the CI matrix as a canary for breaking changes
 - Add the namespace `Art4\UrlLinker` for all public classes
 - Add the config option `cutUrlsAtEntities` to opt back into the legacy behavior of splitting URLs at character references in `linkUrlsInTrustedHtml()` (kept as a migration aid)
+- Add the option `skipAmbiguousTlds` to treat bare addresses ending in an ambiguous top-level domain (e.g. filenames like `foobar.zip`) as plain text; the ambiguous TLD list can be configured with `ambiguousTlds`
 
 ### Changed
 
+- Enforce 100% code coverage: `make qa` and the CI `code-coverage` job now fail on any uncovered line (`composer coverage-check`); Codecov reports a `project` status check targeting 100%
 - Update the IANA TLD list (add `MERCK` and `WEB`; drop `DUNLOP`, `GOO`, `REDSTONE`, and `WOLTERSKLUWER`)
 - Update the GitHub Actions to their current majors (`actions/checkout` v7, `ramsey/composer-install` v4, `codecov/codecov-action` v7)
 - Tighten the PHP-CS-Fixer rules (pin PER-CS 3.0, fully-qualify native function calls, enforce strict declarations and stricter code style)
