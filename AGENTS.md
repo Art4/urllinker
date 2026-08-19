@@ -28,6 +28,8 @@ Recurring maintenance is tracked in the open `housekeeping`-labelled GitHub issu
 
 Never commit on `main`. Always create a new feature branch for the work and commit there; leave `main` untouched.
 
+PRs on GitHub must always be written in English (title and body).
+
 ## Development environment
 
 PHP runs **only** inside the Docker dev container — never invoke `php`, `composer`, or `vendor/bin/*` on the host. Docker is required for `make qa`. Use the Makefile:
