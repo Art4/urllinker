@@ -46,6 +46,8 @@ Draft a PR into `main` (e.g. `gh pr create --base main --head release-<X.Y.Z> --
 - Title: `Release <X.Y.Z>`.
 - Body: state that once this PR lands, version `<X.Y.Z>` will be released, and include a short summary of the relevant changes from `CHANGELOG.md` (one line per topic; do not reproduce the full changelog).
 
+Set the release PR into the milestone being released (e.g. `gh pr edit <n> --milestone "2.2.1"`).
+
 Once the developer approves and the PR is open, wait for CI.
 _Done_: every job in the 8.2–8.6 matrix is green — **including the canary**. Canary red is a blocker; a release does not ship over a red matrix.
 

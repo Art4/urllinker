@@ -34,6 +34,8 @@ Milestones apply from now on. Closed/historical issues and PRs are **not** retro
 
 ## During a release
 
+During a release, the release PR itself is set into the milestone being released (see `docs/agents/releasing.md`).
+
 Releasing is human-initiated (see `docs/agents/releasing.md`). It is **the releaser's responsibility** to move all open issues and PRs of the released milestone into the next milestone.
 
 If an agent is asked to prepare a release and the milestone being released is not empty, the agent must **notify the human** that open issues/PRs still sit on that milestone and must not move them itself.
