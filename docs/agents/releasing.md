@@ -36,11 +36,17 @@ _Done_: the changelog diff shows only the sections moved; no entry was dropped o
 Run `make qa` inside the Docker dev container.
 _Done_: the full check passes (phpunit, phpstan, codestyle).
 
-**5. Open the PR**
+**5. Open the PR** [agent proposes draft, developer approves]
 ```
 git push origin release-<X.Y.Z>
 ```
-Open a PR into `main` (e.g. `gh pr create --base main --head release-<X.Y.Z> --title "release-<X.Y.Z>"`) and wait for CI.
+Propose the PR to the developer **before opening it** — draft the title and body, and ask for permission to open. Never open a PR on your own.
+
+Draft a PR into `main` (e.g. `gh pr create --base main --head release-<X.Y.Z> --title "Release <X.Y.Z>"`):
+- Title: `Release <X.Y.Z>`.
+- Body: do not list what changed — that is visible in the diff. State instead that once this PR lands, version `<X.Y.Z>` will be released.
+
+Once the developer approves and the PR is open, wait for CI.
 _Done_: every job in the 8.2–8.6 matrix is green — **including the canary**. Canary red is a blocker; a release does not ship over a red matrix.
 
 **6. Merge** [developer-only]
