@@ -32,7 +32,7 @@ Never commit on `main`. Always create a new feature branch for the work and comm
 
 PHP runs **only** inside the Docker dev container — never invoke `php`, `composer`, or `vendor/bin/*` on the host. Docker is required for `make qa`. Use the Makefile:
 
-- `make qa` — full check (phpunit + phpstan + codestyle); installs dependencies on first run
+- `make qa` — full check (phpunit + phpstan + codestyle + 100% code coverage gate); installs dependencies on first run
 - `make install` / `make composer ARGS="install"` — install Composer dependencies
 - `make phpunit` / `make phpstan` / `make codestyle` / `make rector` / `make coverage`
 - `make shell` — interactive shell inside the container

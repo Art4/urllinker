@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
+- Enforce 100% code coverage: `make qa` and the CI `code-coverage` job now fail on any uncovered line (`composer coverage-check`); Codecov reports a `project` status check targeting 100%
 - Update the IANA TLD list (add `MERCK` and `WEB`; drop `DUNLOP`, `GOO`, `REDSTONE`, and `WOLTERSKLUWER`)
 - Update the GitHub Actions to their current majors (`actions/checkout` v7, `ramsey/composer-install` v4, `codecov/codecov-action` v7)
 - Tighten the PHP-CS-Fixer rules (pin PER-CS 3.0, fully-qualify native function calls, enforce strict declarations and stricter code style)

@@ -9,7 +9,7 @@ DOCKERFILE_DIR := scripts/docker/php
 WORKDIR := /app
 DOCKER_RUN_ARGS := run --rm --user "$(shell id -u):$(shell id -g)" --env "HOME=/tmp" --volume "$(CURDIR):$(WORKDIR)" --workdir "$(WORKDIR)"
 
-.PHONY: build check-docker clean codestyle composer coverage install phpunit phpstan qa rector shell
+.PHONY: build check-docker clean codestyle composer coverage coverage-check install phpunit phpstan qa rector shell
 
 .DEFAULT_GOAL := qa
 
@@ -43,8 +43,11 @@ rector: build
 coverage: build
 	$(DOCKER) $(DOCKER_RUN_ARGS) --env "XDEBUG_MODE=coverage" "$(TAG)" composer coverage
 
+coverage-check: build
+	$(DOCKER) $(DOCKER_RUN_ARGS) --env "XDEBUG_MODE=coverage" "$(TAG)" composer coverage-check
+
 qa: build
-	$(DOCKER) $(DOCKER_RUN_ARGS) "$(TAG)" sh -c "if [ ! -f vendor/autoload.php ]; then composer install; fi; composer qa"
+	$(DOCKER) $(DOCKER_RUN_ARGS) --env "XDEBUG_MODE=coverage" "$(TAG)" sh -c "if [ ! -f vendor/autoload.php ]; then composer install; fi; composer qa"
 
 clean:
 	rm -rf build vendor .php-cs-fixer.cache .phpunit.result.cache
