@@ -14,7 +14,6 @@ Nothing yet.
 ### Added
 
 - Extend `.gitattributes` to exclude dev-only files from the export archive, so the Composer package only contains the library code, `composer.json`, and the standard documentation (`LICENSE.md`, `README.md`, `CHANGELOG.md`)
-- Document in `AGENTS.md` that GitHub pull requests must be written in English
 
 ## [2.2.0](https://github.com/Art4/urllinker/compare/2.1.0...2.2.0) - 2026-08-19
 
