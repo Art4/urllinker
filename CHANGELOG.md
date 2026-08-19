@@ -5,9 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/Art4/urllinker/compare/2.2.0...main)
+## [Unreleased](https://github.com/Art4/urllinker/compare/2.2.1...main)
 
 Nothing yet.
+
+## [2.2.1](https://github.com/Art4/urllinker/compare/2.2.0...2.2.1) - 2026-08-19
+
+### Added
+
+- Extend `.gitattributes` to exclude dev-only files from the export archive, so the Composer package only contains the library code, `composer.json`, and the standard documentation (`LICENSE.md`, `README.md`, `CHANGELOG.md`)
+- Document in `AGENTS.md` that GitHub pull requests must be written in English
 
 ## [2.2.0](https://github.com/Art4/urllinker/compare/2.1.0...2.2.0) - 2026-08-19
 
