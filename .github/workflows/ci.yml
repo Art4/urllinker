@@ -92,3 +92,20 @@ jobs:
       - name: Check code-style
         if: ${{ matrix.tool == 'code-style' }}
         run: composer run codestyle -- --dry-run --diff
+
+
+  bc-check:
+    name: Backward compatibility (Roave)
+    runs-on: ubuntu-latest
+
+    steps:
+      # The tool compares against the newest release tag, so the tags must be fetched.
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check backward compatibility against the last release
+        uses: docker://nyholm/roave-bc-check-ga
+        with:
+          args: --format=github-actions
