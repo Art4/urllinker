@@ -43,3 +43,17 @@ Used by `/wayfinder`. The **map** is a single issue with **child** issues as tic
 - **Frontier query**: list the map's open children (`gh issue list --state open`, scoped to the map's sub-issues / task list), drop any with an open blocker (`issue_dependencies_summary.blocked_by > 0`, or an open issue in the `Blocked by` line) or an assignee; first in map order wins.
 - **Claim**: `gh issue edit <n> --add-assignee @me` — the session's first write.
 - **Resolve**: `gh issue comment <n> --body "<answer>"`, then `gh issue close <n>`, then append a context pointer (gist + link) to the map's Decisions-so-far.
+
+## Refactoring operations
+
+Used by `/continuous-refactoring`.
+
+- **Search**: `gh issue list --state all --search "<words>" --json number,title,state,labels,updatedAt` searches title and text, open and closed together; `--state open` narrows it to the open ones. Raise `--limit` when the default of 30 cuts the list.
+- **Done**: an issue closed as completed: `gh api repos/{owner}/{repo}/issues/<n> --jq .state_reason` gives `completed`. Mark one finished with `gh issue close <n> --reason completed`.
+- **Merge requests**: pull requests on this GitHub repository, via `gh pr`.
+- **Candidate**: the label `refactoring`. List the open ones with `gh issue list --state open --label refactoring --json number,title,state,labels,updatedAt`.
+- **Linked merge request**: the pull request's description carries `Closes #<issue>`. From the issue: `gh issue view <n> --json closedByPullRequestsReferences`.
+- **Claim**: `gh issue edit <n> --add-assignee @me`.
+- **Rejected**: an issue closed as not planned, the reason in its closing comment: `gh issue close <n> --reason "not planned" --comment "<reason>"`. Found again with **Search**, its query extended by `reason:"not planned"`.
+- **Blocked by**: a line `Blocked by: #<n>, #<n>` in the issue's description. The issue is unblocked when every issue on that line is done.
+- **BC promise**: the project's promise to code outside it is `docs/bc-promise.md`; read it before changing what it covers.

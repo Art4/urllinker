@@ -152,7 +152,7 @@ See [docs/dev-environment.md](docs/dev-environment.md) for the full development 
 
 ## Contributing
 
-Please feel free to submit bugs or to fork and sending Pull Requests. This project follows [Semantic Versioning 2](http://semver.org) and [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/).
+Please feel free to submit bugs or to fork and sending Pull Requests. This project follows [Semantic Versioning 2](http://semver.org) (see the [backward compatibility promise](docs/bc-promise.md)) and [PER Coding Style 3.0](https://www.php-fig.org/per/coding-style/).
 
 ## License
 
