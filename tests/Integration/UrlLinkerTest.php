@@ -48,7 +48,7 @@ final class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     public function testCustomHtmlLinkCreator(): void
     {
         // Simple htmlLinkCreator
-        $creator = (fn($url, $content): string => '<a href="' . $url . '" target="_blank">' . $content . '</a>');
+        $creator = (fn(string $url, string $content): string => '<a href="' . $url . '" target="_blank">' . $content . '</a>');
 
         $urlLinker = new UrlLinker([
             'htmlLinkCreator' => $creator,
@@ -92,7 +92,7 @@ final class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     public function testCustomEmailLinkCreator(): void
     {
         // Simple EmailLinkCreator
-        $creator = (fn($email, $content): string => '<a href="' . $email . '" class="email">' . $content . '</a>');
+        $creator = (fn(string $email, string $content): string => '<a href="' . $email . '" class="email">' . $content . '</a>');
 
         $urlLinker = new UrlLinker([
             'emailLinkCreator' => $creator,

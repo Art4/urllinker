@@ -157,7 +157,7 @@ final class UrlLinkerSkipAmbiguousTldsTest extends UrlLinkerTestCase
     {
         $urlLinker = new UrlLinker([
             'skipAmbiguousTlds' => true,
-            'htmlLinkCreator' => fn($url, $content): string => '<a href="' . $url . '" target="_blank">' . $content . '</a>',
+            'htmlLinkCreator' => fn(string $url, string $content): string => '<a href="' . $url . '" target="_blank">' . $content . '</a>',
         ]);
 
         $text = 'see example.com and foobar.zip';
