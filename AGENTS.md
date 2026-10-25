@@ -24,6 +24,10 @@ Releases are developer-initiated, never agent-launched. Prepare up to the PR and
 
 Recurring maintenance is tracked in the open `housekeeping`-labelled GitHub issue (milestone: Later). See `docs/agents/housekeeping.md`. During any work, when you notice something housekeeping-worthy (a small refactoring note, outdated dependency, stale doc, etc.), **suggest** to the user that it be added to that issue; never add or edit it on your own.
 
+### Backward compatibility
+
+The public API follows the BC promise in `docs/bc-promise.md`. Read it before changing anything it covers; a breaking change is deprecated in a minor release and removed in the next major only.
+
 ## Git workflow
 
 Never commit on `main`. Always create a new feature branch for the work and commit there; leave `main` untouched.
