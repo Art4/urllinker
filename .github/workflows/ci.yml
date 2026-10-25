@@ -105,7 +105,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      # The runner sets HOME=/github/home, which hides the image's own safe.directory
+      # setting; without it git refuses the workspace checked out by another user.
       - name: Check backward compatibility against the last release
         uses: docker://nyholm/roave-bc-check-ga
+        env:
+          GIT_CONFIG_COUNT: 1
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: /github/workspace
         with:
           args: --format=github-actions
