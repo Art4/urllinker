@@ -152,10 +152,8 @@ final class AddressScanner
                     continue;
                 }
 
-                $schemeIsEmpty = $scheme === '';
-                $passwordIsEmpty = $password === '';
-
-                if ($schemeIsEmpty && $username !== '' && $passwordIsEmpty && $afterDomain === '') {
+                // An empty scheme implies an empty password here, see above.
+                if ($scheme === '' && $username !== '' && $afterDomain === '') {
                     // Looks like an email address.
                     $tokens[] = new AddressToken(true, $url, $url, $url);
                 } else {
