@@ -26,12 +26,12 @@ namespace Art4\UrlLinker;
  *
  * @internal
  */
-final class AddressToken
+final readonly class AddressToken
 {
     public function __construct(
-        public readonly bool $isEmail,
-        public readonly string $url,
-        public readonly string $completeUrl,
-        public readonly string $linkText,
+        public bool $isEmail,
+        public string $url,
+        public string $completeUrl,
+        public string $linkText,
     ) {}
 }

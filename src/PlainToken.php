@@ -26,9 +26,9 @@ namespace Art4\UrlLinker;
  *
  * @internal
  */
-final class PlainToken
+final readonly class PlainToken
 {
     public function __construct(
-        public readonly string $text,
+        public string $text,
     ) {}
 }
