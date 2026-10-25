@@ -17,9 +17,14 @@
         <exclude name="BooleanArgumentFlag"/>
         <!-- Not yet: 9 findings. -->
         <exclude name="ElseExpression"/>
-        <!-- Not yet: 5 findings. -->
         <exclude name="MissingImport"/>
         <exclude name="StaticAccess"/>
+    </rule>
+    <!-- Global PHP classes are written fully qualified by the code style. -->
+    <rule ref="rulesets/cleancode.xml/MissingImport">
+        <properties>
+            <property name="ignore-global" value="true"/>
+        </properties>
     </rule>
     <!-- DomainStorage::getValidTlds() is static by the BC promise; AddressScanner follows that design. -->
     <rule ref="rulesets/cleancode.xml/StaticAccess">

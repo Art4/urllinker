@@ -26,6 +26,9 @@ use Art4\UrlLinker\UrlLinker;
 use Art4\UrlLinker\UrlLinkerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Youthweb\UrlLinker\DomainStorage as LegacyDomainStorage;
+use Youthweb\UrlLinker\UrlLinker as LegacyUrlLinker;
+use Youthweb\UrlLinker\UrlLinkerInterface as LegacyUrlLinkerInterface;
 
 /**
  * Locks the backward-compatibility contract of the legacy namespace.
@@ -39,7 +42,7 @@ final class LegacyNamespaceTest extends TestCase
 {
     public function testConstructingLegacyUrlLinkerWorks(): void
     {
-        $urlLinker = new \Youthweb\UrlLinker\UrlLinker();
+        $urlLinker = new LegacyUrlLinker();
 
         $this->assertInstanceOf(UrlLinker::class, $urlLinker);
         $this->assertSame(UrlLinker::class, $urlLinker::class);
@@ -47,22 +50,22 @@ final class LegacyNamespaceTest extends TestCase
 
     public function testLegacyInterfaceMatchesCanonical(): void
     {
-        $urlLinker = new \Youthweb\UrlLinker\UrlLinker();
+        $urlLinker = new LegacyUrlLinker();
 
         $this->assertInstanceOf(UrlLinkerInterface::class, $urlLinker);
-        $this->assertInstanceOf(\Youthweb\UrlLinker\UrlLinkerInterface::class, $urlLinker);
-        $this->assertInstanceOf(\Youthweb\UrlLinker\UrlLinkerInterface::class, new UrlLinker());
+        $this->assertInstanceOf(LegacyUrlLinkerInterface::class, $urlLinker);
+        $this->assertInstanceOf(LegacyUrlLinkerInterface::class, new UrlLinker());
     }
 
     public function testLegacyDomainStorageResolvesToCanonical(): void
     {
-        $this->assertSame(DomainStorage::class, (new \ReflectionClass(\Youthweb\UrlLinker\DomainStorage::class))->getName());
-        $this->assertSame(DomainStorage::getValidTlds(), \Youthweb\UrlLinker\DomainStorage::getValidTlds());
+        $this->assertSame(DomainStorage::class, (new \ReflectionClass(LegacyDomainStorage::class))->getName());
+        $this->assertSame(DomainStorage::getValidTlds(), LegacyDomainStorage::getValidTlds());
     }
 
     public function testLegacyUrlLinkerBehavesIdentically(): void
     {
-        $legacy = new \Youthweb\UrlLinker\UrlLinker();
+        $legacy = new LegacyUrlLinker();
         $canonical = new UrlLinker();
 
         $this->assertSame(
@@ -73,8 +76,8 @@ final class LegacyNamespaceTest extends TestCase
 
     public function testAllLegacyNamesAreRegistered(): void
     {
-        $this->assertTrue(\class_exists(\Youthweb\UrlLinker\UrlLinker::class));
-        $this->assertTrue(\interface_exists(\Youthweb\UrlLinker\UrlLinkerInterface::class));
-        $this->assertTrue(\class_exists(\Youthweb\UrlLinker\DomainStorage::class));
+        $this->assertTrue(\class_exists(LegacyUrlLinker::class));
+        $this->assertTrue(\interface_exists(LegacyUrlLinkerInterface::class));
+        $this->assertTrue(\class_exists(LegacyDomainStorage::class));
     }
 }
