@@ -69,7 +69,7 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private array $ambiguousTlds;
 
-    private AddressScanner $scanner;
+    private readonly AddressScanner $scanner;
 
     /**
      * Set the configuration

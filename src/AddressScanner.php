@@ -32,7 +32,7 @@ namespace Art4\UrlLinker;
  *
  * @internal
  */
-final class AddressScanner
+final readonly class AddressScanner
 {
     /**
      * Top-level domains that are also common file extensions. When the
@@ -49,11 +49,11 @@ final class AddressScanner
      * @param array<string,bool> $ambiguousTlds An array of ambiguous TLDs mapping each TLD to true.
      */
     public function __construct(
-        private readonly bool $allowFtpAddresses,
-        private readonly bool $allowUpperCaseUrlSchemes,
-        private readonly array $validTlds,
-        private readonly bool $skipAmbiguousTlds,
-        private readonly array $ambiguousTlds,
+        private bool $allowFtpAddresses,
+        private bool $allowUpperCaseUrlSchemes,
+        private array $validTlds,
+        private bool $skipAmbiguousTlds,
+        private array $ambiguousTlds,
     ) {}
 
     /**
