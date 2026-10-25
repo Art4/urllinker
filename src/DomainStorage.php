@@ -1488,7 +1488,7 @@ ZW';
         if (\is_null(self::$validTlds)) {
             $validTlds = \explode("\n", self::$rawValidTlds);
 
-            $clean = (fn($value): string => '.' . \trim(\strtolower((string) $value)));
+            $clean = (fn(string $value): string => '.' . \trim(\strtolower($value)));
 
             $validTlds = \array_map($clean, $validTlds);
 
