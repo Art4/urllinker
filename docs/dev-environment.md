@@ -27,9 +27,10 @@ make qa
 | --- | --- |
 | `make build` | Build the dev container image |
 | `make install` | Install Composer dependencies |
-| `make qa` | Run the full check: phpunit + phpstan + codestyle + 100% code coverage gate (docker required) |
+| `make qa` | Run the full check: phpunit + phpstan + phpmd + codestyle + 100% code coverage gate (docker required) |
 | `make phpunit` | Run the PHPUnit test suite |
 | `make phpstan` | Run PHPStan static analysis |
+| `make phpmd` | Run PHPMD (code size, complexity, naming, unused code) with `phpmd.xml` |
 | `make codestyle` | Fix code style |
 | `make rector` | Run Rector in dry-run mode |
 | `make coverage` | Run PHPUnit with HTML coverage report into `build/code-coverage/`; use it to find uncovered lines |

@@ -10,6 +10,7 @@
 /Makefile           export-ignore
 /codecov.yml        export-ignore
 /docs               export-ignore
+/phpmd.xml          export-ignore
 /phpstan.neon       export-ignore
 /phpunit.xml        export-ignore
 /rector.php         export-ignore

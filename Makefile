@@ -9,7 +9,7 @@ DOCKERFILE_DIR := scripts/docker/php
 WORKDIR := /app
 DOCKER_RUN_ARGS := run --rm --user "$(shell id -u):$(shell id -g)" --env "HOME=/tmp" --volume "$(CURDIR):$(WORKDIR)" --workdir "$(WORKDIR)"
 
-.PHONY: build check-docker clean codestyle composer coverage coverage-check install phpunit phpstan qa rector shell
+.PHONY: build check-docker clean codestyle composer coverage coverage-check install phpmd phpunit phpstan qa rector shell
 
 .DEFAULT_GOAL := qa
 
@@ -30,6 +30,9 @@ shell: build
 
 phpunit: build
 	$(DOCKER) $(DOCKER_RUN_ARGS) "$(TAG)" composer phpunit
+
+phpmd: build
+	$(DOCKER) $(DOCKER_RUN_ARGS) "$(TAG)" composer phpmd
 
 phpstan: build
 	$(DOCKER) $(DOCKER_RUN_ARGS) "$(TAG)" composer phpstan
