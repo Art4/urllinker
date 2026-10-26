@@ -28,46 +28,21 @@ use UnexpectedValueException;
 final class UrlLinker implements UrlLinkerInterface
 {
     /**
-     * Ftp addresses like "ftp://example.com" will be allowed, default false
-     */
-    private bool $allowFtpAddresses = false;
-
-    /**
-     * Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
-     */
-    private bool $allowUpperCaseUrlSchemes = false;
-
-    /**
      * Character references in trusted HTML cut URLs in the legacy way, default false.
      * With the default (false), character references that decode to a character that may
      * appear in a URL stay part of the URL; references to characters that may not are markup.
      */
-    private bool $cutUrlsAtEntities = false;
+    private readonly bool $cutUrlsAtEntities;
 
     /**
      * Closure to modify the way the urls will be linked
      */
-    private Closure $htmlLinkCreator;
+    private readonly Closure $htmlLinkCreator;
 
     /**
      * Closure to modify the way the emails will be linked
      */
-    private Closure $emailLinkCreator;
-
-    /**
-     * @var array<string,bool>
-     */
-    private array $validTlds;
-
-    /**
-     * Bare addresses ending in an ambiguous TLD will be skipped, default false
-     */
-    private bool $skipAmbiguousTlds = false;
-
-    /**
-     * @var array<string,bool>
-     */
-    private array $ambiguousTlds;
+    private readonly Closure $emailLinkCreator;
 
     private readonly AddressScanner $scanner;
 
@@ -78,174 +53,89 @@ final class UrlLinker implements UrlLinkerInterface
      */
     public function __construct(array $options = [])
     {
-        $allowedOptions = [
-            'allowFtpAddresses',
-            'allowUpperCaseUrlSchemes',
-            'cutUrlsAtEntities',
-            'htmlLinkCreator',
-            'emailLinkCreator',
-            'validTlds',
-            'skipAmbiguousTlds',
-            'ambiguousTlds',
-        ];
-
-        foreach ($allowedOptions as $allowedOption) {
-            switch ($allowedOption) {
-                case 'allowFtpAddresses':
-                    if (\array_key_exists($allowedOption, $options)) {
-                        $value = $options[$allowedOption];
-
-                        if (! \is_bool($value)) {
-                            throw new InvalidArgumentException(\sprintf(
-                                'Option "%s" must be of type "%s", "%s" given.',
-                                $allowedOption,
-                                'boolean',
-                                \get_debug_type($value)
-                            ));
-                        }
-                    } else {
-                        $value = false;
-                    }
-
-                    $this->allowFtpAddresses = $value;
-
-                    break;
-
-                case 'allowUpperCaseUrlSchemes':
-                    if (\array_key_exists($allowedOption, $options)) {
-                        $value = $options[$allowedOption];
-
-                        if (! \is_bool($value)) {
-                            throw new InvalidArgumentException(\sprintf(
-                                'Option "%s" must be of type "%s", "%s" given.',
-                                $allowedOption,
-                                'boolean',
-                                \get_debug_type($value)
-                            ));
-                        }
-                    } else {
-                        $value = false;
-                    }
-
-                    $this->allowUpperCaseUrlSchemes = $value;
-
-                    break;
-
-                case 'cutUrlsAtEntities':
-                    if (\array_key_exists($allowedOption, $options)) {
-                        $value = $options[$allowedOption];
-
-                        if (! \is_bool($value)) {
-                            throw new InvalidArgumentException(\sprintf(
-                                'Option "%s" must be of type "%s", "%s" given.',
-                                $allowedOption,
-                                'boolean',
-                                \get_debug_type($value)
-                            ));
-                        }
-                    } else {
-                        $value = false;
-                    }
-
-                    $this->cutUrlsAtEntities = $value;
-
-                    break;
-
-                case 'htmlLinkCreator':
-                    if (\array_key_exists($allowedOption, $options)) {
-                        $value = $options[$allowedOption];
-
-                        if (! \is_object($value) || ! $value instanceof Closure) {
-                            throw new InvalidArgumentException(\sprintf(
-                                'Option "%s" must be of type "%s", "%s" given.',
-                                $allowedOption,
-                                Closure::class,
-                                \get_debug_type($value)
-                            ));
-                        }
-                    } else {
-                        $value = $this->createHtmlLink(...);
-                    }
-
-                    $this->htmlLinkCreator = $value;
-
-                    break;
-
-                case 'emailLinkCreator':
-                    if (\array_key_exists($allowedOption, $options)) {
-                        $value = $options[$allowedOption];
-
-                        if (! \is_object($value) || ! $value instanceof Closure) {
-                            throw new InvalidArgumentException(\sprintf(
-                                'Option "%s" must be of type "%s", "%s" given.',
-                                $allowedOption,
-                                Closure::class,
-                                \get_debug_type($value)
-                            ));
-                        }
-                    } else {
-                        $value = $this->createEmailLink(...);
-                    }
-
-                    $this->emailLinkCreator = $value;
-
-                    break;
-
-                case 'validTlds':
-                    $value = \array_key_exists($allowedOption, $options) ? (array) $options[$allowedOption] : DomainStorage::getValidTlds();
-
-                    $validTlds = [];
-
-                    foreach ($value as $tld => $flag) {
-                        $validTlds[(string) $tld] = (bool) $flag;
-                    }
-
-                    $this->validTlds = $validTlds;
-
-                    break;
-
-                case 'skipAmbiguousTlds':
-                    if (\array_key_exists($allowedOption, $options)) {
-                        $value = $options[$allowedOption];
-
-                        if (! \is_bool($value)) {
-                            throw new InvalidArgumentException(\sprintf(
-                                'Option "%s" must be of type "%s", "%s" given.',
-                                $allowedOption,
-                                'boolean',
-                                \get_debug_type($value)
-                            ));
-                        }
-                    } else {
-                        $value = false;
-                    }
-
-                    $this->skipAmbiguousTlds = $value;
-
-                    break;
-
-                case 'ambiguousTlds':
-                    $value = \array_key_exists($allowedOption, $options) ? (array) $options[$allowedOption] : AddressScanner::getDefaultAmbiguousTlds();
-
-                    $ambiguousTlds = [];
-
-                    foreach ($value as $tld => $flag) {
-                        $ambiguousTlds[(string) $tld] = (bool) $flag;
-                    }
-
-                    $this->ambiguousTlds = $ambiguousTlds;
-
-                    break;
-            }
-        }
+        // The options are checked in this order, so with several invalid
+        // options the first one here throws.
+        $allowFtpAddresses = $this->boolOption($options, 'allowFtpAddresses');
+        $allowUpperCaseUrlSchemes = $this->boolOption($options, 'allowUpperCaseUrlSchemes');
+        $this->cutUrlsAtEntities = $this->boolOption($options, 'cutUrlsAtEntities');
+        $this->htmlLinkCreator = $this->closureOption($options, 'htmlLinkCreator') ?? $this->createHtmlLink(...);
+        $this->emailLinkCreator = $this->closureOption($options, 'emailLinkCreator') ?? $this->createEmailLink(...);
+        $validTlds = $this->tldListOption($options, 'validTlds', DomainStorage::getValidTlds(...));
+        $skipAmbiguousTlds = $this->boolOption($options, 'skipAmbiguousTlds');
+        $ambiguousTlds = $this->tldListOption($options, 'ambiguousTlds', AddressScanner::getDefaultAmbiguousTlds(...));
 
         $this->scanner = new AddressScanner(
-            allowFtpAddresses: $this->allowFtpAddresses,
-            allowUpperCaseUrlSchemes: $this->allowUpperCaseUrlSchemes,
-            validTlds: $this->validTlds,
-            skipAmbiguousTlds: $this->skipAmbiguousTlds,
-            ambiguousTlds: $this->ambiguousTlds,
+            allowFtpAddresses: $allowFtpAddresses,
+            allowUpperCaseUrlSchemes: $allowUpperCaseUrlSchemes,
+            validTlds: $validTlds,
+            skipAmbiguousTlds: $skipAmbiguousTlds,
+            ambiguousTlds: $ambiguousTlds,
         );
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     */
+    private function boolOption(array $options, string $name): bool
+    {
+        if (! \array_key_exists($name, $options)) {
+            return false;
+        }
+
+        $value = $options[$name];
+
+        if (! \is_bool($value)) {
+            throw new InvalidArgumentException(\sprintf(
+                'Option "%s" must be of type "%s", "%s" given.',
+                $name,
+                'boolean',
+                \get_debug_type($value)
+            ));
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     */
+    private function closureOption(array $options, string $name): ?Closure
+    {
+        if (! \array_key_exists($name, $options)) {
+            return null;
+        }
+
+        $value = $options[$name];
+
+        if (! $value instanceof Closure) {
+            throw new InvalidArgumentException(\sprintf(
+                'Option "%s" must be of type "%s", "%s" given.',
+                $name,
+                Closure::class,
+                \get_debug_type($value)
+            ));
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     * @param Closure(): array<string,bool> $default Called only when the option is missing
+     *
+     * @return array<string,bool>
+     */
+    private function tldListOption(array $options, string $name, Closure $default): array
+    {
+        $value = \array_key_exists($name, $options) ? (array) $options[$name] : $default();
+
+        $tlds = [];
+
+        foreach ($value as $tld => $flag) {
+            $tlds[(string) $tld] = (bool) $flag;
+        }
+
+        return $tlds;
     }
 
     public function linkUrlsAndEscapeHtml(string $text): string
