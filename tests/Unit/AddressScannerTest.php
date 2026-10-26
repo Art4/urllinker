@@ -43,13 +43,13 @@ final class AddressScannerTest extends TestCase
 {
     public function testScanReturnsEmptyStreamForEmptyText(): void
     {
-        $this->assertTokenStream($this->createScanner()->scan(''), []);
+        $this->assertTokenStream($this->createScanner()->scan('', decodeCharacterReferences: false), []);
     }
 
     #[DataProvider('provideTextsWithoutDots')]
     public function testScanReturnsSinglePlainTokenForTextWithoutDots(string $text): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text), [['plain', $text]]);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: false), [['plain', $text]]);
     }
 
     /**
@@ -68,7 +68,7 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('provideAddressScans')]
     public function testScanClassifiesAddressTokens(string $text, array $expected): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text), $expected);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: false), $expected);
     }
 
     /**
@@ -142,7 +142,7 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('provideTextsRejectedAsPlain')]
     public function testScanKeepsRejectedAddressesAsPlainText(string $text, array $expected): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text), $expected);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: false), $expected);
     }
 
     /**
@@ -185,7 +185,7 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('providePartialConsumptionScans')]
     public function testScanResumesAfterUsernameForImplicitSchemeWithPassword(string $text, array $expected): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text), $expected);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: false), $expected);
     }
 
     /**
@@ -210,7 +210,7 @@ final class AddressScannerTest extends TestCase
     {
         $scanner = $this->createScanner(true);
 
-        $this->assertTokenStream($scanner->scan('foobar.zip'), [['plain', 'foobar.zip']]);
+        $this->assertTokenStream($scanner->scan('foobar.zip', decodeCharacterReferences: false), [['plain', 'foobar.zip']]);
     }
 
     #[DataProvider('provideAmbiguousTldCases')]
@@ -218,7 +218,7 @@ final class AddressScannerTest extends TestCase
     {
         $scanner = $this->createScanner(true);
 
-        $this->assertTokenStream($scanner->scan($text), [['plain', $text]]);
+        $this->assertTokenStream($scanner->scan($text, decodeCharacterReferences: false), [['plain', $text]]);
     }
 
     /**
@@ -247,7 +247,7 @@ final class AddressScannerTest extends TestCase
     {
         $scanner = $this->createScanner(true);
 
-        $this->assertTokenStream($scanner->scan($text), $expected);
+        $this->assertTokenStream($scanner->scan($text, decodeCharacterReferences: false), $expected);
     }
 
     /**
@@ -288,7 +288,7 @@ final class AddressScannerTest extends TestCase
     public function testScanDoesNotSuppressBareAddressWhenGuardIsOff(): void
     {
         $this->assertTokenStream(
-            $this->createScanner(false)->scan('foobar.zip'),
+            $this->createScanner(false)->scan('foobar.zip', decodeCharacterReferences: false),
             [['address', false, 'foobar.zip', 'http://foobar.zip', 'foobar.zip']]
         );
     }
@@ -298,7 +298,7 @@ final class AddressScannerTest extends TestCase
         $scanner = $this->createScanner(allowFtpAddresses: true);
 
         $this->assertTokenStream(
-            $scanner->scan('ftp://example.com'),
+            $scanner->scan('ftp://example.com', decodeCharacterReferences: false),
             [['address', false, 'ftp://example.com', 'ftp://example.com', 'example.com']]
         );
     }
@@ -308,7 +308,7 @@ final class AddressScannerTest extends TestCase
         $scanner = $this->createScanner(allowUpperCaseUrlSchemes: true);
 
         $this->assertTokenStream(
-            $scanner->scan('HTTP://EXAMPLE.COM'),
+            $scanner->scan('HTTP://EXAMPLE.COM', decodeCharacterReferences: false),
             [['address', false, 'HTTP://EXAMPLE.COM', 'HTTP://EXAMPLE.COM', 'EXAMPLE.COM']]
         );
     }
@@ -317,16 +317,16 @@ final class AddressScannerTest extends TestCase
     {
         $scanner = $this->createScanner(true, ['.zip' => true]);
 
-        $this->assertTokenStream($scanner->scan('foobar.zip'), [['plain', 'foobar.zip']]);
+        $this->assertTokenStream($scanner->scan('foobar.zip', decodeCharacterReferences: false), [['plain', 'foobar.zip']]);
     }
 
     public function testScanSuppressesOnlyTldsFromOverriddenAmbiguousList(): void
     {
         $scanner = $this->createScanner(true, [], ['.zip' => true]);
 
-        $this->assertTokenStream($scanner->scan('foobar.zip'), [['plain', 'foobar.zip']]);
+        $this->assertTokenStream($scanner->scan('foobar.zip', decodeCharacterReferences: false), [['plain', 'foobar.zip']]);
         $this->assertTokenStream(
-            $scanner->scan('app.py'),
+            $scanner->scan('app.py', decodeCharacterReferences: false),
             [['address', false, 'app.py', 'http://app.py', 'app.py']]
         );
     }
@@ -359,7 +359,7 @@ final class AddressScannerTest extends TestCase
     public function testScanKeepsTrailingCharacterReferenceWhole(string $url): void
     {
         $this->assertTokenStream(
-            $this->createScanner()->scan($url),
+            $this->createScanner()->scan($url, decodeCharacterReferences: false),
             [['address', false, $url, $url, 'example.com']]
         );
     }
@@ -379,7 +379,7 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('provideDecodedCharacterReferenceScans')]
     public function testScanDecodesCharacterReferences(string $text, array $expected): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text, true), $expected);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: true), $expected);
     }
 
     /**
