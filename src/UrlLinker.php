@@ -28,16 +28,6 @@ use UnexpectedValueException;
 final class UrlLinker implements UrlLinkerInterface
 {
     /**
-     * Ftp addresses like "ftp://example.com" will be allowed, default false
-     */
-    private bool $allowFtpAddresses = false;
-
-    /**
-     * Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
-     */
-    private bool $allowUpperCaseUrlSchemes = false;
-
-    /**
      * Character references in trusted HTML cut URLs in the legacy way, default false.
      * With the default (false), character references that decode to a character that may
      * appear in a URL stay part of the URL; references to characters that may not are markup.
@@ -54,21 +44,6 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private Closure $emailLinkCreator;
 
-    /**
-     * @var array<string,bool>
-     */
-    private array $validTlds;
-
-    /**
-     * Bare addresses ending in an ambiguous TLD will be skipped, default false
-     */
-    private bool $skipAmbiguousTlds = false;
-
-    /**
-     * @var array<string,bool>
-     */
-    private array $ambiguousTlds;
-
     private readonly AddressScanner $scanner;
 
     /**
@@ -78,67 +53,23 @@ final class UrlLinker implements UrlLinkerInterface
      */
     public function __construct(array $options = [])
     {
-        $allowedOptions = [
-            'allowFtpAddresses',
-            'allowUpperCaseUrlSchemes',
-            'cutUrlsAtEntities',
-            'htmlLinkCreator',
-            'emailLinkCreator',
-            'validTlds',
-            'skipAmbiguousTlds',
-            'ambiguousTlds',
-        ];
-
-        foreach ($allowedOptions as $allowedOption) {
-            switch ($allowedOption) {
-                case 'allowFtpAddresses':
-                    $this->allowFtpAddresses = $this->boolOption($options, $allowedOption);
-
-                    break;
-
-                case 'allowUpperCaseUrlSchemes':
-                    $this->allowUpperCaseUrlSchemes = $this->boolOption($options, $allowedOption);
-
-                    break;
-
-                case 'cutUrlsAtEntities':
-                    $this->cutUrlsAtEntities = $this->boolOption($options, $allowedOption);
-
-                    break;
-
-                case 'htmlLinkCreator':
-                    $this->htmlLinkCreator = $this->closureOption($options, $allowedOption) ?? $this->createHtmlLink(...);
-
-                    break;
-
-                case 'emailLinkCreator':
-                    $this->emailLinkCreator = $this->closureOption($options, $allowedOption) ?? $this->createEmailLink(...);
-
-                    break;
-
-                case 'validTlds':
-                    $this->validTlds = $this->tldListOption($options, $allowedOption, DomainStorage::getValidTlds(...));
-
-                    break;
-
-                case 'skipAmbiguousTlds':
-                    $this->skipAmbiguousTlds = $this->boolOption($options, $allowedOption);
-
-                    break;
-
-                case 'ambiguousTlds':
-                    $this->ambiguousTlds = $this->tldListOption($options, $allowedOption, AddressScanner::getDefaultAmbiguousTlds(...));
-
-                    break;
-            }
-        }
+        // The options are checked in this order, so with several invalid
+        // options the first one here throws.
+        $allowFtpAddresses = $this->boolOption($options, 'allowFtpAddresses');
+        $allowUpperCaseUrlSchemes = $this->boolOption($options, 'allowUpperCaseUrlSchemes');
+        $this->cutUrlsAtEntities = $this->boolOption($options, 'cutUrlsAtEntities');
+        $this->htmlLinkCreator = $this->closureOption($options, 'htmlLinkCreator') ?? $this->createHtmlLink(...);
+        $this->emailLinkCreator = $this->closureOption($options, 'emailLinkCreator') ?? $this->createEmailLink(...);
+        $validTlds = $this->tldListOption($options, 'validTlds', DomainStorage::getValidTlds(...));
+        $skipAmbiguousTlds = $this->boolOption($options, 'skipAmbiguousTlds');
+        $ambiguousTlds = $this->tldListOption($options, 'ambiguousTlds', AddressScanner::getDefaultAmbiguousTlds(...));
 
         $this->scanner = new AddressScanner(
-            allowFtpAddresses: $this->allowFtpAddresses,
-            allowUpperCaseUrlSchemes: $this->allowUpperCaseUrlSchemes,
-            validTlds: $this->validTlds,
-            skipAmbiguousTlds: $this->skipAmbiguousTlds,
-            ambiguousTlds: $this->ambiguousTlds,
+            allowFtpAddresses: $allowFtpAddresses,
+            allowUpperCaseUrlSchemes: $allowUpperCaseUrlSchemes,
+            validTlds: $validTlds,
+            skipAmbiguousTlds: $skipAmbiguousTlds,
+            ambiguousTlds: $ambiguousTlds,
         );
     }
 
