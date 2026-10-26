@@ -20,6 +20,7 @@
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.95",
+		"phpmd/phpmd": "^3.0",
 		"phpstan/extension-installer": "^1.4",
 		"phpstan/phpstan": "^2.3.2",
 		"phpstan/phpstan-deprecation-rules": "^2.0",
@@ -54,6 +55,7 @@
 			"mkdir -p build && vendor/bin/phpunit --coverage-clover=\"build/coverage.xml\"",
 			"php scripts/check-coverage.php"
 		],
+		"phpmd": "vendor/bin/phpmd analyze src tests --ruleset phpmd.xml",
 		"phpstan": "vendor/bin/phpstan analyze --configuration phpstan.neon",
 		"phpunit": "vendor/bin/phpunit",
 		"rector": "vendor/bin/rector process --dry-run",
@@ -64,6 +66,7 @@
 		"qa": [
 			"@phpunit",
 			"@phpstan",
+			"@phpmd",
 			"@codestyle --dry-run --diff",
 			"@coverage-check"
 		]

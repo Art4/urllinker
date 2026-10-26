@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<ruleset name="UrlLinker"
+         xmlns="https://phpmd.org/xml/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://phpmd.org/xml/ruleset/1.0.0 https://phpmd.org/xml/ruleset_xml_schema_1.0.0.xsd">
+    <description>
+        PHPMD rules for UrlLinker. The limits of the metric rules are set to the
+        current peak and may only be lowered; a metric above its limit is fixed
+        in the code, never by raising the limit.
+    </description>
+
+    <!-- The IANA TLD list embedded as a string: its length follows IANA, not the code. -->
+    <exclude-pattern>src/DomainStorage.php</exclude-pattern>
+
+    <rule ref="rulesets/cleancode.xml">
+        <!-- Not yet: 4 findings. -->
+        <exclude name="BooleanArgumentFlag"/>
+        <!-- Not yet: 9 findings. -->
+        <exclude name="ElseExpression"/>
+        <exclude name="MissingImport"/>
+        <exclude name="StaticAccess"/>
+    </rule>
+    <!-- Global PHP classes are written fully qualified by the code style. -->
+    <rule ref="rulesets/cleancode.xml/MissingImport">
+        <properties>
+            <property name="ignore-global" value="true"/>
+        </properties>
+    </rule>
+    <!-- DomainStorage::getValidTlds() is static by the BC promise; AddressScanner follows that design. -->
+    <rule ref="rulesets/cleancode.xml/StaticAccess">
+        <properties>
+            <property name="exceptions" value="Art4\UrlLinker\AddressScanner,Art4\UrlLinker\DomainStorage,Youthweb\UrlLinker\DomainStorage"/>
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/codesize.xml">
+        <exclude name="CyclomaticComplexity"/>
+        <exclude name="NPathComplexity"/>
+        <exclude name="ExcessiveMethodLength"/>
+        <exclude name="ExcessiveClassComplexity"/>
+    </rule>
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
+        <properties>
+            <!-- recommended: 10. Current peak: 28 (Art4\UrlLinker\UrlLinker::__construct). -->
+            <property name="maximum" value="28"/>
+        </properties>
+    </rule>
+    <rule ref="rulesets/codesize.xml/NPathComplexity">
+        <properties>
+            <!-- recommended: 200. Current peak: 3270 (Art4\UrlLinker\AddressScanner::scan). -->
+            <property name="maximum" value="3270"/>
+        </properties>
+    </rule>
+    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
+        <properties>
+            <!-- recommended: 100. Current peak: 171 (Art4\UrlLinker\UrlLinker::__construct). -->
+            <property name="maximum" value="171"/>
+        </properties>
+    </rule>
+    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
+        <properties>
+            <!-- recommended: 50. Current peak: 54 (Art4\UrlLinker\UrlLinker). -->
+            <property name="maximum" value="54"/>
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/design.xml"/>
+
+    <rule ref="rulesets/naming.xml">
+        <exclude name="LongVariable"/>
+        <exclude name="LongMethodName"/>
+    </rule>
+    <rule ref="rulesets/naming.xml/LongVariable">
+        <properties>
+            <property name="maximum" value="25"/>
+        </properties>
+    </rule>
+    <rule ref="rulesets/naming.xml/LongMethodName">
+        <properties>
+            <property name="maximum" value="79"/>
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/unusedcode.xml">
+        <!-- Not yet: 5 findings. -->
+        <exclude name="UnusedFormalParameter"/>
+    </rule>
+</ruleset>

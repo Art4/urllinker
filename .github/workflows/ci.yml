@@ -51,6 +51,8 @@ jobs:
           - php: '8.4'
             tool: 'phpstan'
           - php: '8.4'
+            tool: 'phpmd'
+          - php: '8.4'
             tool: 'code-coverage'
           - php: '8.3'
             tool: 'code-style'
@@ -75,6 +77,10 @@ jobs:
       - name: Run static code analysis
         if: ${{ matrix.tool == 'phpstan' }}
         run: composer run phpstan -- --error-format=github
+
+      - name: Run PHPMD
+        if: ${{ matrix.tool == 'phpmd' }}
+        run: composer run phpmd -- --format=github
 
       - name: Run tests with coverage and enforce 100%
         if: ${{ matrix.tool == 'code-coverage' }}

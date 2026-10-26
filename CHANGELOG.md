@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Document the backward compatibility promise in `docs/bc-promise.md`
+- Check code size, complexity, naming and unused code with PHPMD in CI and in `make qa` (`make phpmd`); the limits of the metric rules are set to the current peak and may only be lowered
 
 ## [2.2.1](https://github.com/Art4/urllinker/compare/2.2.0...2.2.1) - 2026-08-19
 
