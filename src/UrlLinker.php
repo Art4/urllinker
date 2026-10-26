@@ -163,25 +163,34 @@ final class UrlLinker implements UrlLinkerInterface
             }
 
             if ($token->isEmail) {
-                $link = $this->emailLinkCreator->__invoke($token->url, $token->linkText);
-                $creatorName = 'emailLinkCreator';
-            } else {
-                $link = $this->htmlLinkCreator->__invoke($token->completeUrl, $token->linkText);
-                $creatorName = 'htmlLinkCreator';
+                $html .= $this->checkedLink(
+                    'emailLinkCreator',
+                    $this->emailLinkCreator->__invoke($token->url, $token->linkText)
+                );
+
+                continue;
             }
 
-            if (! \is_string($link)) {
-                throw new UnexpectedValueException(\sprintf(
-                    'Return value of Closure for "%s" must return value of type "string", "%s" given.',
-                    $creatorName,
-                    \gettype($link)
-                ));
-            }
-
-            $html .= $link;
+            $html .= $this->checkedLink(
+                'htmlLinkCreator',
+                $this->htmlLinkCreator->__invoke($token->completeUrl, $token->linkText)
+            );
         }
 
         return $html;
+    }
+
+    private function checkedLink(string $creatorName, mixed $link): string
+    {
+        if (! \is_string($link)) {
+            throw new UnexpectedValueException(\sprintf(
+                'Return value of Closure for "%s" must return value of type "string", "%s" given.',
+                $creatorName,
+                \gettype($link)
+            ));
+        }
+
+        return $link;
     }
 
     public function linkUrlsInTrustedHtml(string $html): string
