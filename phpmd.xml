@@ -79,8 +79,5 @@
         </properties>
     </rule>
 
-    <rule ref="rulesets/unusedcode.xml">
-        <!-- Not yet: 5 findings. -->
-        <exclude name="UnusedFormalParameter"/>
-    </rule>
+    <rule ref="rulesets/unusedcode.xml"/>
 </ruleset>
