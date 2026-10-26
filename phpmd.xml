@@ -31,19 +31,12 @@
 
     <rule ref="rulesets/codesize.xml">
         <exclude name="CyclomaticComplexity"/>
-        <exclude name="NPathComplexity"/>
         <exclude name="ExcessiveMethodLength"/>
     </rule>
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
         <properties>
-            <!-- recommended: 10. Current peak: 15 (Art4\UrlLinker\AddressScanner::scan). -->
-            <property name="maximum" value="15"/>
-        </properties>
-    </rule>
-    <rule ref="rulesets/codesize.xml/NPathComplexity">
-        <properties>
-            <!-- recommended: 200. Current peak: 1734 (Art4\UrlLinker\AddressScanner::scan). -->
-            <property name="maximum" value="1734"/>
+            <!-- recommended: 10. Current peak: 13 (Art4\UrlLinker\UrlLinker::linkUrlsInTrustedHtml). -->
+            <property name="maximum" value="13"/>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
