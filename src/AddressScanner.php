@@ -140,33 +140,27 @@ final readonly class AddressScanner
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = $this->lastHostLabel($domain);
 
-            if (\preg_match('{^\.\d{1,3}$}', $tld) === 1 || isset($this->validTlds[$tld])) {
-                // Do not permit implicit scheme if a password is specified, as
-                // this causes too many errors (e.g. "my email:foo@example.org").
-                if ($scheme === '' && $password !== '') {
-                    $tokens[] = new PlainToken($username);
-
-                    // Continue text parsing at the ':' following the "username".
-                    $position = $urlPosition + \strlen($match['username'][0] ?? '');
-
-                    continue;
-                }
-
-                // An empty scheme implies an empty password here, see above.
-                if ($scheme === '' && $username !== '' && $afterDomain === '') {
-                    // Looks like an email address.
-                    $tokens[] = new AddressToken(true, $url, $url, $url);
-                } else {
-                    // Prepend http:// if no scheme is specified
-                    $completeUrl = $scheme !== '' ? $url : 'http://' . $url;
-                    $linkText = $domain . $port . $path;
-
-                    $tokens[] = new AddressToken(false, $url, $completeUrl, $linkText);
-                }
-            } else {
+            if (\preg_match('{^\.\d{1,3}$}', $tld) !== 1 && ! isset($this->validTlds[$tld])) {
                 // Not a valid URL.
                 $tokens[] = new PlainToken($url);
+
+                $position = $urlPosition + $urlLength;
+
+                continue;
             }
+
+            // Do not permit implicit scheme if a password is specified, as
+            // this causes too many errors (e.g. "my email:foo@example.org").
+            if ($scheme === '' && $password !== '') {
+                $tokens[] = new PlainToken($username);
+
+                // Continue text parsing at the ':' following the "username".
+                $position = $urlPosition + \strlen($match['username'][0] ?? '');
+
+                continue;
+            }
+
+            $tokens[] = $this->createAddressToken($url, $scheme, $username, $afterDomain, $domain . $port . $path);
 
             // Continue text parsing from after the URL.
             $position = $urlPosition + $urlLength;
@@ -180,6 +174,27 @@ final readonly class AddressScanner
         }
 
         return $tokens;
+    }
+
+    /**
+     * An address with an empty scheme has an empty password here, see scan().
+     */
+    private function createAddressToken(
+        string $url,
+        string $scheme,
+        string $username,
+        string $afterDomain,
+        string $linkText
+    ): AddressToken {
+        if ($scheme === '' && $username !== '' && $afterDomain === '') {
+            // Looks like an email address.
+            return new AddressToken(true, $url, $url, $url);
+        }
+
+        // Prepend http:// if no scheme is specified
+        $completeUrl = $scheme !== '' ? $url : 'http://' . $url;
+
+        return new AddressToken(false, $url, $completeUrl, $linkText);
     }
 
     /**
