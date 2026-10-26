@@ -37,12 +37,11 @@
         <exclude name="CyclomaticComplexity"/>
         <exclude name="NPathComplexity"/>
         <exclude name="ExcessiveMethodLength"/>
-        <exclude name="ExcessiveClassComplexity"/>
     </rule>
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
         <properties>
-            <!-- recommended: 10. Current peak: 28 (Art4\UrlLinker\UrlLinker::__construct). -->
-            <property name="maximum" value="28"/>
+            <!-- recommended: 10. Current peak: 19 (Art4\UrlLinker\AddressScanner::scan). -->
+            <property name="maximum" value="19"/>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/NPathComplexity">
@@ -53,14 +52,8 @@
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <properties>
-            <!-- recommended: 100. Current peak: 171 (Art4\UrlLinker\UrlLinker::__construct). -->
-            <property name="maximum" value="171"/>
-        </properties>
-    </rule>
-    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
-        <properties>
-            <!-- recommended: 50. Current peak: 54 (Art4\UrlLinker\UrlLinker). -->
-            <property name="maximum" value="54"/>
+            <!-- recommended: 100. Current peak: 112 (Art4\UrlLinker\Tests\Integration\UrlLinkerTestCase::provideTextsWithLinksWithoutHtml). -->
+            <property name="maximum" value="112"/>
         </properties>
     </rule>
 
