@@ -13,8 +13,6 @@
     <exclude-pattern>src/DomainStorage.php</exclude-pattern>
 
     <rule ref="rulesets/cleancode.xml">
-        <!-- Not yet: 9 findings. -->
-        <exclude name="ElseExpression"/>
         <exclude name="MissingImport"/>
         <exclude name="StaticAccess"/>
     </rule>
