@@ -87,7 +87,7 @@ final readonly class AddressScanner
         $match = [];
 
         while (\preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position)) {
-            [$url, $urlPosition] = $match[0];
+            $urlPosition = $match[0][1];
 
             // Add the text leading up to the URL.
             $leading = \substr($text, $position, \intval($urlPosition - $position));
@@ -96,74 +96,9 @@ final readonly class AddressScanner
                 $tokens[] = new PlainToken($leading);
             }
 
-            $scheme      = $match['scheme'][0] ?? '';
-            $username    = $match['username'][0] ?? '';
-            $password    = $match['password'][0] ?? '';
-            $domain      = $match['host'][0] ?? '';
-            $afterDomain = $match['hostsuffix'][0] ?? ''; // everything following the domain
-            $port        = $match['port'][0] ?? '';
-            $path        = $match['path'][0] ?? '';
+            [$token, $position] = $this->classifyMatch($text, $match, $decodeCharacterReferences);
 
-            $urlLength = \strlen($url);
-
-            // A ';' that directly terminates a character reference (e.g. "&amp;",
-            // "&#38;") belongs to the reference, not to trailing punctuation.
-            if ($url !== ''
-                && ($text[$urlPosition + $urlLength] ?? '') === ';'
-                && \preg_match('{&(?:[a-zA-Z][a-zA-Z0-9]*|#[0-9]+|#[xX][0-9a-fA-F]+)$}', $url) === 1
-            ) {
-                $url .= ';';
-                $urlLength++;
-            }
-
-            if ($decodeCharacterReferences) {
-                // A character reference inside a URL stands for the character it names;
-                // the link creators receive the decoded URL.
-                $scheme   = $this->decodeCharacterReferences($scheme);
-                $username = $this->decodeCharacterReferences($username);
-                $password = $this->decodeCharacterReferences($password);
-                $domain   = $this->decodeCharacterReferences($domain);
-                $port     = $this->decodeCharacterReferences($port);
-                $path     = $this->decodeCharacterReferences($path);
-                $url      = $this->decodeCharacterReferences($url);
-            }
-
-            // A bare address ending in an ambiguous TLD stays plain text.
-            if ($this->isSuppressedBareAddress($scheme, $username, $afterDomain, $domain)) {
-                $tokens[] = new PlainToken($url);
-
-                $position = $urlPosition + $urlLength;
-
-                continue;
-            }
-
-            // Check that the TLD is valid or that $domain is an IP address.
-            $tld = $this->lastHostLabel($domain);
-
-            if (\preg_match('{^\.\d{1,3}$}', $tld) !== 1 && ! isset($this->validTlds[$tld])) {
-                // Not a valid URL.
-                $tokens[] = new PlainToken($url);
-
-                $position = $urlPosition + $urlLength;
-
-                continue;
-            }
-
-            // Do not permit implicit scheme if a password is specified, as
-            // this causes too many errors (e.g. "my email:foo@example.org").
-            if ($scheme === '' && $password !== '') {
-                $tokens[] = new PlainToken($username);
-
-                // Continue text parsing at the ':' following the "username".
-                $position = $urlPosition + \strlen($match['username'][0] ?? '');
-
-                continue;
-            }
-
-            $tokens[] = $this->createAddressToken($url, $scheme, $username, $afterDomain, $domain . $port . $path);
-
-            // Continue text parsing from after the URL.
-            $position = $urlPosition + $urlLength;
+            $tokens[] = $token;
         }
 
         // Add the remainder of the text.
@@ -177,7 +112,69 @@ final readonly class AddressScanner
     }
 
     /**
-     * An address with an empty scheme has an empty password here, see scan().
+     * Decide what one match of the regex becomes.
+     *
+     * @param array<array{string, int}> $match The match, captured with PREG_OFFSET_CAPTURE
+     *
+     * @return array{PlainToken|AddressToken, int} The token, and the offset where the scan goes on
+     */
+    private function classifyMatch(string $text, array $match, bool $decodeCharacterReferences): array
+    {
+        [$url, $urlPosition] = $match[0];
+
+        $scheme      = $match['scheme'][0] ?? '';
+        $username    = $match['username'][0] ?? '';
+        $password    = $match['password'][0] ?? '';
+        $domain      = $match['host'][0] ?? '';
+        $afterDomain = $match['hostsuffix'][0] ?? ''; // everything following the domain
+        $port        = $match['port'][0] ?? '';
+        $path        = $match['path'][0] ?? '';
+
+        $urlLength = \strlen($url);
+
+        // A ';' that directly terminates a character reference (e.g. "&amp;",
+        // "&#38;") belongs to the reference, not to trailing punctuation.
+        if ($url !== ''
+            && ($text[$urlPosition + $urlLength] ?? '') === ';'
+            && \preg_match('{&(?:[a-zA-Z][a-zA-Z0-9]*|#[0-9]+|#[xX][0-9a-fA-F]+)$}', $url) === 1
+        ) {
+            $url .= ';';
+            $urlLength++;
+        }
+
+        // Continue text parsing from after the URL.
+        $urlEnd = $urlPosition + $urlLength;
+
+        if ($decodeCharacterReferences) {
+            // A character reference inside a URL stands for the character it names;
+            // the link creators receive the decoded URL.
+            $scheme   = $this->decodeCharacterReferences($scheme);
+            $username = $this->decodeCharacterReferences($username);
+            $password = $this->decodeCharacterReferences($password);
+            $domain   = $this->decodeCharacterReferences($domain);
+            $port     = $this->decodeCharacterReferences($port);
+            $path     = $this->decodeCharacterReferences($path);
+            $url      = $this->decodeCharacterReferences($url);
+        }
+
+        // A bare address ending in an ambiguous TLD stays plain text, and so
+        // does an address whose host is not valid.
+        if ($this->isSuppressedBareAddress($scheme, $username, $afterDomain, $domain) || ! $this->hasValidHost($domain)) {
+            return [new PlainToken($url), $urlEnd];
+        }
+
+        // Do not permit implicit scheme if a password is specified, as
+        // this causes too many errors (e.g. "my email:foo@example.org").
+        if ($scheme === '' && $password !== '') {
+            // Continue text parsing at the ':' following the "username".
+            return [new PlainToken($username), $urlPosition + \strlen($match['username'][0] ?? '')];
+        }
+
+        return [$this->createAddressToken($url, $scheme, $username, $afterDomain, $domain . $port . $path), $urlEnd];
+    }
+
+    /**
+     * An address with an empty scheme has an empty password here, see classifyMatch().
      */
     private function createAddressToken(
         string $url,
@@ -213,6 +210,16 @@ final readonly class AddressScanner
         }
 
         return isset($this->ambiguousTlds[$this->lastHostLabel($domain)]);
+    }
+
+    /**
+     * The TLD is valid, or the host is an IP address.
+     */
+    private function hasValidHost(string $host): bool
+    {
+        $tld = $this->lastHostLabel($host);
+
+        return \preg_match('{^\.\d{1,3}$}', $tld) === 1 || isset($this->validTlds[$tld]);
     }
 
     private function lastHostLabel(string $host): string
