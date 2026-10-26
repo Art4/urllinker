@@ -137,10 +137,7 @@ final readonly class AddressScanner
                 continue;
             }
 
-            // Check that the TLD is valid or that $domain is an IP address.
-            $tld = $this->lastHostLabel($domain);
-
-            if (\preg_match('{^\.\d{1,3}$}', $tld) !== 1 && ! isset($this->validTlds[$tld])) {
+            if (! $this->hasValidHost($domain)) {
                 // Not a valid URL.
                 $tokens[] = new PlainToken($url);
 
@@ -213,6 +210,16 @@ final readonly class AddressScanner
         }
 
         return isset($this->ambiguousTlds[$this->lastHostLabel($domain)]);
+    }
+
+    /**
+     * The TLD is valid, or the host is an IP address.
+     */
+    private function hasValidHost(string $host): bool
+    {
+        $tld = $this->lastHostLabel($host);
+
+        return \preg_match('{^\.\d{1,3}$}', $tld) === 1 || isset($this->validTlds[$tld]);
     }
 
     private function lastHostLabel(string $host): string
