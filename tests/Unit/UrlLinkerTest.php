@@ -229,6 +229,42 @@ final class UrlLinkerTest extends TestCase
         );
     }
 
+    public function testFirstInvalidOptionInCheckOrderThrows(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "allowFtpAddresses" must be of type "boolean", "string" given.');
+
+        new UrlLinker([
+            'skipAmbiguousTlds' => 'true',
+            'allowFtpAddresses' => 'true',
+        ]);
+    }
+
+    public function testUnknownOptionIsIgnored(): void
+    {
+        $urlLinker = new UrlLinker([
+            'unknownOption' => 'any value',
+            'validTlds' => ['.com' => true],
+        ]);
+
+        $this->assertSame(
+            '<a href="http://example.com">example.com</a>',
+            $urlLinker->linkUrlsAndEscapeHtml('example.com')
+        );
+    }
+
+    public function testValidTldsAcceptsNonBooleanFlags(): void
+    {
+        $urlLinker = new UrlLinker([
+            'validTlds' => ['.com' => 1],
+        ]);
+
+        $this->assertSame(
+            '<a href="http://example.com">example.com</a>',
+            $urlLinker->linkUrlsAndEscapeHtml('example.com')
+        );
+    }
+
     /**
      * @return array<string,mixed>
      */
