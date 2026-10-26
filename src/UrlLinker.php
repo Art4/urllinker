@@ -32,17 +32,17 @@ final class UrlLinker implements UrlLinkerInterface
      * With the default (false), character references that decode to a character that may
      * appear in a URL stay part of the URL; references to characters that may not are markup.
      */
-    private bool $cutUrlsAtEntities = false;
+    private readonly bool $cutUrlsAtEntities;
 
     /**
      * Closure to modify the way the urls will be linked
      */
-    private Closure $htmlLinkCreator;
+    private readonly Closure $htmlLinkCreator;
 
     /**
      * Closure to modify the way the emails will be linked
      */
-    private Closure $emailLinkCreator;
+    private readonly Closure $emailLinkCreator;
 
     private readonly AddressScanner $scanner;
 
