@@ -73,7 +73,7 @@ final readonly class AddressScanner
      *
      * @return list<PlainToken|AddressToken>
      */
-    public function scan(string $text, bool $decodeCharacterReferences = false): array
+    public function scan(string $text, bool $decodeCharacterReferences): array
     {
         // We can abort if there is no . in $text
         if (!\str_contains($text, '.')) {

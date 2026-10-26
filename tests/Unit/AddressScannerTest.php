@@ -43,13 +43,13 @@ final class AddressScannerTest extends TestCase
 {
     public function testScanReturnsEmptyStreamForEmptyText(): void
     {
-        $this->assertTokenStream($this->createScanner()->scan(''), []);
+        $this->assertTokenStream($this->createScanner()->scan('', decodeCharacterReferences: false), []);
     }
 
     #[DataProvider('provideTextsWithoutDots')]
     public function testScanReturnsSinglePlainTokenForTextWithoutDots(string $text): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text), [['plain', $text]]);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: false), [['plain', $text]]);
     }
 
     /**
@@ -68,7 +68,7 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('provideAddressScans')]
     public function testScanClassifiesAddressTokens(string $text, array $expected): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text), $expected);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: false), $expected);
     }
 
     /**
@@ -142,7 +142,7 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('provideTextsRejectedAsPlain')]
     public function testScanKeepsRejectedAddressesAsPlainText(string $text, array $expected): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text), $expected);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: false), $expected);
     }
 
     /**
@@ -185,7 +185,7 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('providePartialConsumptionScans')]
     public function testScanResumesAfterUsernameForImplicitSchemeWithPassword(string $text, array $expected): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text), $expected);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: false), $expected);
     }
 
     /**
@@ -208,17 +208,17 @@ final class AddressScannerTest extends TestCase
 
     public function testScanSuppressesBareAddressWithAmbiguousTld(): void
     {
-        $scanner = $this->createScanner(true);
+        $scanner = $this->createScannerSkippingAmbiguousTlds();
 
-        $this->assertTokenStream($scanner->scan('foobar.zip'), [['plain', 'foobar.zip']]);
+        $this->assertTokenStream($scanner->scan('foobar.zip', decodeCharacterReferences: false), [['plain', 'foobar.zip']]);
     }
 
     #[DataProvider('provideAmbiguousTldCases')]
     public function testScanSuppressesBareAddressesWithAmbiguousTld(string $text): void
     {
-        $scanner = $this->createScanner(true);
+        $scanner = $this->createScannerSkippingAmbiguousTlds();
 
-        $this->assertTokenStream($scanner->scan($text), [['plain', $text]]);
+        $this->assertTokenStream($scanner->scan($text, decodeCharacterReferences: false), [['plain', $text]]);
     }
 
     /**
@@ -245,9 +245,9 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('provideAddressesNotSuppressedByGuard')]
     public function testScanDoesNotSuppressAddressesWithSchemePathOrEmail(string $text, array $expected): void
     {
-        $scanner = $this->createScanner(true);
+        $scanner = $this->createScannerSkippingAmbiguousTlds();
 
-        $this->assertTokenStream($scanner->scan($text), $expected);
+        $this->assertTokenStream($scanner->scan($text, decodeCharacterReferences: false), $expected);
     }
 
     /**
@@ -288,45 +288,45 @@ final class AddressScannerTest extends TestCase
     public function testScanDoesNotSuppressBareAddressWhenGuardIsOff(): void
     {
         $this->assertTokenStream(
-            $this->createScanner(false)->scan('foobar.zip'),
+            $this->createScanner()->scan('foobar.zip', decodeCharacterReferences: false),
             [['address', false, 'foobar.zip', 'http://foobar.zip', 'foobar.zip']]
         );
     }
 
     public function testScanClassifiesFtpAddressesWhenAllowed(): void
     {
-        $scanner = $this->createScanner(allowFtpAddresses: true);
+        $scanner = $this->createScannerAllowingFtpAddresses();
 
         $this->assertTokenStream(
-            $scanner->scan('ftp://example.com'),
+            $scanner->scan('ftp://example.com', decodeCharacterReferences: false),
             [['address', false, 'ftp://example.com', 'ftp://example.com', 'example.com']]
         );
     }
 
     public function testScanClassifiesUppercaseSchemesWhenAllowed(): void
     {
-        $scanner = $this->createScanner(allowUpperCaseUrlSchemes: true);
+        $scanner = $this->createScannerAllowingUpperCaseUrlSchemes();
 
         $this->assertTokenStream(
-            $scanner->scan('HTTP://EXAMPLE.COM'),
+            $scanner->scan('HTTP://EXAMPLE.COM', decodeCharacterReferences: false),
             [['address', false, 'HTTP://EXAMPLE.COM', 'HTTP://EXAMPLE.COM', 'EXAMPLE.COM']]
         );
     }
 
     public function testScanSuppressionWinsOverValidTldsWhitelist(): void
     {
-        $scanner = $this->createScanner(true, ['.zip' => true]);
+        $scanner = $this->createScannerSkippingAmbiguousTlds(['.zip' => true]);
 
-        $this->assertTokenStream($scanner->scan('foobar.zip'), [['plain', 'foobar.zip']]);
+        $this->assertTokenStream($scanner->scan('foobar.zip', decodeCharacterReferences: false), [['plain', 'foobar.zip']]);
     }
 
     public function testScanSuppressesOnlyTldsFromOverriddenAmbiguousList(): void
     {
-        $scanner = $this->createScanner(true, [], ['.zip' => true]);
+        $scanner = $this->createScannerSkippingAmbiguousTlds([], ['.zip' => true]);
 
-        $this->assertTokenStream($scanner->scan('foobar.zip'), [['plain', 'foobar.zip']]);
+        $this->assertTokenStream($scanner->scan('foobar.zip', decodeCharacterReferences: false), [['plain', 'foobar.zip']]);
         $this->assertTokenStream(
-            $scanner->scan('app.py'),
+            $scanner->scan('app.py', decodeCharacterReferences: false),
             [['address', false, 'app.py', 'http://app.py', 'app.py']]
         );
     }
@@ -359,7 +359,7 @@ final class AddressScannerTest extends TestCase
     public function testScanKeepsTrailingCharacterReferenceWhole(string $url): void
     {
         $this->assertTokenStream(
-            $this->createScanner()->scan($url),
+            $this->createScanner()->scan($url, decodeCharacterReferences: false),
             [['address', false, $url, $url, 'example.com']]
         );
     }
@@ -379,7 +379,7 @@ final class AddressScannerTest extends TestCase
     #[DataProvider('provideDecodedCharacterReferenceScans')]
     public function testScanDecodesCharacterReferences(string $text, array $expected): void
     {
-        $this->assertTokenStream($this->createScanner()->scan($text, true), $expected);
+        $this->assertTokenStream($this->createScanner()->scan($text, decodeCharacterReferences: true), $expected);
     }
 
     /**
@@ -410,11 +410,35 @@ final class AddressScannerTest extends TestCase
         $this->assertSame('a<b', $scanner->decodeCharacterReferences('a&lt;b'));
     }
 
+    private function createScanner(): AddressScanner
+    {
+        return $this->buildScanner(skipAmbiguousTlds: false, allowFtpAddresses: false, allowUpperCaseUrlSchemes: false, validTlds: [], ambiguousTlds: []);
+    }
+
     /**
      * @param array<string,bool> $validTlds
      * @param array<string,bool> $ambiguousTlds
      */
-    private function createScanner(bool $skipAmbiguousTlds = false, array $validTlds = [], array $ambiguousTlds = [], bool $allowFtpAddresses = false, bool $allowUpperCaseUrlSchemes = false): AddressScanner
+    private function createScannerSkippingAmbiguousTlds(array $validTlds = [], array $ambiguousTlds = []): AddressScanner
+    {
+        return $this->buildScanner(skipAmbiguousTlds: true, allowFtpAddresses: false, allowUpperCaseUrlSchemes: false, validTlds: $validTlds, ambiguousTlds: $ambiguousTlds);
+    }
+
+    private function createScannerAllowingFtpAddresses(): AddressScanner
+    {
+        return $this->buildScanner(skipAmbiguousTlds: false, allowFtpAddresses: true, allowUpperCaseUrlSchemes: false, validTlds: [], ambiguousTlds: []);
+    }
+
+    private function createScannerAllowingUpperCaseUrlSchemes(): AddressScanner
+    {
+        return $this->buildScanner(skipAmbiguousTlds: false, allowFtpAddresses: false, allowUpperCaseUrlSchemes: true, validTlds: [], ambiguousTlds: []);
+    }
+
+    /**
+     * @param array<string,bool> $validTlds An empty array uses the real TLD list.
+     * @param array<string,bool> $ambiguousTlds An empty array uses the default ambiguous TLDs.
+     */
+    private function buildScanner(bool $skipAmbiguousTlds, bool $allowFtpAddresses, bool $allowUpperCaseUrlSchemes, array $validTlds, array $ambiguousTlds): AddressScanner
     {
         return new AddressScanner(
             allowFtpAddresses: $allowFtpAddresses,
