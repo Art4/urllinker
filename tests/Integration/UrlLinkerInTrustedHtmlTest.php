@@ -26,6 +26,7 @@ use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Medium;
 
+#[CoversMethod(UrlLinker::class, 'findNextMarkup')]
 #[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
 #[CoversMethod(UrlLinker::class, 'decodesToNonUrlCharacter')]
 #[Medium]

@@ -195,48 +195,16 @@ final class UrlLinker implements UrlLinkerInterface
 
     public function linkUrlsInTrustedHtml(string $html): string
     {
-        $reMarkup = '{</?([a-z]+)([^"\'>]|"[^"]*"|\'[^\']*\')*>|&#?[a-zA-Z0-9]+;|$}';
-
         $insideAnchorTag = false;
         $position = 0;
         $result = '';
 
         // Iterate over every piece of markup in the HTML.
         while (true) {
-            $textStart = $position;
-
-            // Find the next markup that is not part of a URL: a tag, a character
-            // reference to a character that cannot appear in a URL, or the end.
-            while (true) {
-                $match = [];
-
-                if (\preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
-                    // Unreachable: $reMarkup ends in "|$", so the regex always matches
-                    // (the empty string at the end of $html). Kept only as a guard.
-                    // @codeCoverageIgnoreStart
-                    $position = \strlen($html);
-                    $markup = '';
-                    $markupPosition = \strlen($html);
-
-                    break;
-                    // @codeCoverageIgnoreEnd
-                }
-
-                [$markup, $markupPosition] = $match[0];
-
-                // A character reference to a character that may appear in a URL
-                // belongs to the text and never splits a URL.
-                if (! $this->cutUrlsAtEntities && $markup !== '' && $markup[0] === '&' && ! $this->decodesToNonUrlCharacter($markup)) {
-                    $position = $markupPosition + \strlen($markup);
-
-                    continue;
-                }
-
-                break;
-            }
+            [$markup, $markupPosition, $tagName] = $this->findNextMarkup($html, $position);
 
             // Process text leading up to the markup.
-            $text = \substr($html, $textStart, $markupPosition - $textStart);
+            $text = \substr($html, $position, $markupPosition - $position);
 
             // Link URLs unless we're inside an anchor tag.
             if (! $insideAnchorTag) {
@@ -251,7 +219,7 @@ final class UrlLinker implements UrlLinkerInterface
             }
 
             // Check if markup is an anchor tag ('<a>', '</a>').
-            if ($markup[0] !== '&' && isset($match[1]) && $match[1][0] === 'a') {
+            if ($tagName === 'a') {
                 $insideAnchorTag = ($markup[1] !== '/');
             }
 
@@ -263,6 +231,42 @@ final class UrlLinker implements UrlLinkerInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Find the next markup that is not part of a URL: a tag, a character
+     * reference to a character that cannot appear in a URL, or the end.
+     *
+     * @return array{string, int, string} The markup (empty at the end of the HTML), its
+     *                                    position and, for a tag, its name; otherwise ''
+     */
+    private function findNextMarkup(string $html, int $position): array
+    {
+        $reMarkup = '{</?([a-z]+)([^"\'>]|"[^"]*"|\'[^\']*\')*>|&#?[a-zA-Z0-9]+;|$}';
+
+        while (true) {
+            $match = [];
+
+            if (\preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
+                // Unreachable: $reMarkup ends in "|$", so the regex always matches
+                // (the empty string at the end of $html). Kept only as a guard.
+                // @codeCoverageIgnoreStart
+                return ['', \strlen($html), ''];
+                // @codeCoverageIgnoreEnd
+            }
+
+            [$markup, $markupPosition] = $match[0];
+
+            // A character reference to a character that may appear in a URL
+            // belongs to the text and never splits a URL.
+            if (! $this->cutUrlsAtEntities && $markup !== '' && $markup[0] === '&' && ! $this->decodesToNonUrlCharacter($markup)) {
+                $position = $markupPosition + \strlen($markup);
+
+                continue;
+            }
+
+            return [$markup, $markupPosition, isset($match[1]) ? $match[1][0] : ''];
+        }
     }
 
     /**

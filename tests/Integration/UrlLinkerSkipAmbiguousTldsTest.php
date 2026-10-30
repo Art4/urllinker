@@ -27,6 +27,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Medium;
 
 #[CoversMethod(UrlLinker::class, 'linkUrlsAndEscapeHtml')]
+#[CoversMethod(UrlLinker::class, 'findNextMarkup')]
 #[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
 #[Medium]
 final class UrlLinkerSkipAmbiguousTldsTest extends UrlLinkerTestCase
