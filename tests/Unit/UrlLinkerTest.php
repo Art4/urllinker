@@ -222,7 +222,7 @@ final class UrlLinkerTest extends TestCase
         });
 
         $this->assertSame(
-            ['The config option "cutUrlsAtEntities" is deprecated and will be removed in the next major version. Remove it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").'],
+            ['The config option "cutUrlsAtEntities" is deprecated since version 2.3.0 and will be removed in version 3.0, do not set it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").'],
             $notices
         );
     }

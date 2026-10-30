@@ -23,6 +23,8 @@ namespace Art4\UrlLinker;
 
 use Closure;
 use InvalidArgumentException;
+use PHPMD\Attribute\SuppressWarnings;
+use PHPMD\Rule\CleanCode\ErrorControlOperator;
 use UnexpectedValueException;
 
 final class UrlLinker implements UrlLinkerInterface
@@ -64,10 +66,7 @@ final class UrlLinker implements UrlLinkerInterface
         $this->cutUrlsAtEntities = $this->boolOption($options, 'cutUrlsAtEntities');
 
         if ($this->cutUrlsAtEntities) {
-            \trigger_error(
-                'The config option "cutUrlsAtEntities" is deprecated and will be removed in the next major version. Remove it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").',
-                E_USER_DEPRECATED
-            );
+            $this->triggerCutUrlsAtEntitiesDeprecation();
         }
 
         $this->htmlLinkCreator = $this->closureOption($options, 'htmlLinkCreator') ?? $this->createHtmlLink(...);
@@ -82,6 +81,19 @@ final class UrlLinker implements UrlLinkerInterface
             validTlds: $validTlds,
             skipAmbiguousTlds: $skipAmbiguousTlds,
             ambiguousTlds: $ambiguousTlds,
+        );
+    }
+
+    /**
+     * The notice is muted with "@" as the deprecations of the 1.x releases were: it only reaches
+     * code that installs its own error handler and does not show up in the output of other callers.
+     */
+    #[SuppressWarnings(ErrorControlOperator::class)]
+    private function triggerCutUrlsAtEntitiesDeprecation(): void
+    {
+        @\trigger_error(
+            'The config option "cutUrlsAtEntities" is deprecated since version 2.3.0 and will be removed in version 3.0, do not set it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").',
+            E_USER_DEPRECATED
         );
     }
 
