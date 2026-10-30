@@ -33,6 +33,7 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -213,6 +214,41 @@ final class UrlLinkerTest extends TestCase
         new UrlLinker([
             'cutUrlsAtEntities' => 'true',
         ]);
+    }
+
+    /**
+     * The notice is muted with "@"; phpunit.xml makes PHPUnit see it anyway.
+     */
+    #[IgnoreDeprecations]
+    public function testEnablingCutUrlsAtEntitiesTriggersDeprecationNotice(): void
+    {
+        $this->expectUserDeprecationMessage(
+            'The config option "cutUrlsAtEntities" is deprecated since version 2.3.0 and will be removed in version 3.0, do not set it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").'
+        );
+
+        new UrlLinker(['cutUrlsAtEntities' => true]);
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     */
+    #[DataProvider('provideOptionsWithoutEnabledCutUrlsAtEntities')]
+    public function testNotEnablingCutUrlsAtEntitiesTriggersNoDeprecationNotice(array $options): void
+    {
+        // phpunit.xml fails every test that triggers a deprecation it does not expect.
+        $this->expectNotToPerformAssertions();
+
+        new UrlLinker($options);
+    }
+
+    /**
+     * @return \Iterator<string, array{array<string,mixed>}>
+     */
+    public static function provideOptionsWithoutEnabledCutUrlsAtEntities(): \Iterator
+    {
+        yield 'no options' => [[]];
+        yield 'option missing' => [['allowFtpAddresses' => true]];
+        yield 'option false' => [['cutUrlsAtEntities' => false]];
     }
 
     public function testProvidingSkipAmbiguousTldsNotAsBooleanThrowsInvalidArgumentException(): void

@@ -23,6 +23,8 @@ namespace Art4\UrlLinker;
 
 use Closure;
 use InvalidArgumentException;
+use PHPMD\Attribute\SuppressWarnings;
+use PHPMD\Rule\CleanCode\ErrorControlOperator;
 use UnexpectedValueException;
 
 final class UrlLinker implements UrlLinkerInterface
@@ -49,6 +51,10 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * Set the configuration
      *
+     * The option `cutUrlsAtEntities` is deprecated since 2.3.0 and will be removed in the next
+     * major version. Do not set it: the default already links URLs across character references
+     * that stand for URL characters.
+     *
      * @param array<string,mixed> $options Configuation array
      */
     public function __construct(array $options = [])
@@ -58,6 +64,11 @@ final class UrlLinker implements UrlLinkerInterface
         $allowFtpAddresses = $this->boolOption($options, 'allowFtpAddresses');
         $allowUpperCaseUrlSchemes = $this->boolOption($options, 'allowUpperCaseUrlSchemes');
         $this->cutUrlsAtEntities = $this->boolOption($options, 'cutUrlsAtEntities');
+
+        if ($this->cutUrlsAtEntities) {
+            $this->triggerCutUrlsAtEntitiesDeprecation();
+        }
+
         $this->htmlLinkCreator = $this->closureOption($options, 'htmlLinkCreator') ?? $this->createHtmlLink(...);
         $this->emailLinkCreator = $this->closureOption($options, 'emailLinkCreator') ?? $this->createEmailLink(...);
         $validTlds = $this->tldListOption($options, 'validTlds', DomainStorage::getValidTlds(...));
@@ -70,6 +81,19 @@ final class UrlLinker implements UrlLinkerInterface
             validTlds: $validTlds,
             skipAmbiguousTlds: $skipAmbiguousTlds,
             ambiguousTlds: $ambiguousTlds,
+        );
+    }
+
+    /**
+     * The notice is muted with "@" as the deprecations of the 1.x releases were: it only reaches
+     * code that installs its own error handler and does not show up in the output of other callers.
+     */
+    #[SuppressWarnings(ErrorControlOperator::class)]
+    private function triggerCutUrlsAtEntitiesDeprecation(): void
+    {
+        @\trigger_error(
+            'The config option "cutUrlsAtEntities" is deprecated since version 2.3.0 and will be removed in version 3.0, do not set it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").',
+            E_USER_DEPRECATED
         );
     }
 
