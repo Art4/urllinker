@@ -24,9 +24,11 @@ namespace Art4\UrlLinker\Tests\Integration;
 use Art4\UrlLinker\UrlLinker;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use UnexpectedValueException;
 
 #[CoversClass(UrlLinker::class)]
+#[Medium]
 final class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 {
     /**
