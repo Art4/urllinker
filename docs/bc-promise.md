@@ -24,7 +24,7 @@ The public API is everything below, under the canonical namespace `Art4\UrlLinke
 
 ## How a breaking change happens
 
-1. A minor release deprecates the part: the CHANGELOG lists it under *Deprecated*, the code carries `@deprecated` with the replacement, and the replacement is available in the same release.
+1. A minor release deprecates the part: the CHANGELOG lists it under *Deprecated*, the code carries `@deprecated` with the replacement, and the replacement is available in the same release. How a deprecation looks in the code is described in [deprecations](deprecations.md).
 2. The next major release may remove it; the CHANGELOG lists the removal as **BREAKING**.
 
 A deprecation may be silent or trigger an `E_USER_DEPRECATED` notice; switching a silent deprecation to a notice happens in a minor release and is not a breaking change.
