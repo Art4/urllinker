@@ -35,8 +35,8 @@
     </rule>
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
         <properties>
-            <!-- recommended: 10. Current peak: 13 (Art4\UrlLinker\UrlLinker::linkUrlsInTrustedHtml). -->
-            <property name="maximum" value="13"/>
+            <!-- recommended: 10. Current peak: 9 (Art4\UrlLinker\AddressScanner::classifyMatch). -->
+            <property name="maximum" value="9"/>
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
