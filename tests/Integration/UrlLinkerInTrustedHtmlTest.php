@@ -24,6 +24,7 @@ namespace Art4\UrlLinker\Tests\Integration;
 use Art4\UrlLinker\UrlLinker;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\Attributes\Medium;
 
 #[CoversMethod(UrlLinker::class, 'findNextMarkup')]
@@ -203,6 +204,7 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
         ];
     }
 
+    #[IgnoreDeprecations]
     public function testLegacyCutUrlsAtEntitiesOptionReproducesOldBehavior(): void
     {
         $urlLinker = new UrlLinker(['cutUrlsAtEntities' => true]);

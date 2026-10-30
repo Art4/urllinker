@@ -33,6 +33,7 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -215,16 +216,17 @@ final class UrlLinkerTest extends TestCase
         ]);
     }
 
-    public function testEnablingCutUrlsAtEntitiesTriggersOneDeprecationNotice(): void
+    /**
+     * The notice is muted with "@"; phpunit.xml makes PHPUnit see it anyway.
+     */
+    #[IgnoreDeprecations]
+    public function testEnablingCutUrlsAtEntitiesTriggersDeprecationNotice(): void
     {
-        $notices = $this->collectDeprecationNotices(static function (): void {
-            new UrlLinker(['cutUrlsAtEntities' => true]);
-        });
-
-        $this->assertSame(
-            ['The config option "cutUrlsAtEntities" is deprecated since version 2.3.0 and will be removed in version 3.0, do not set it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").'],
-            $notices
+        $this->expectUserDeprecationMessage(
+            'The config option "cutUrlsAtEntities" is deprecated since version 2.3.0 and will be removed in version 3.0, do not set it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").'
         );
+
+        new UrlLinker(['cutUrlsAtEntities' => true]);
     }
 
     /**
@@ -233,11 +235,10 @@ final class UrlLinkerTest extends TestCase
     #[DataProvider('provideOptionsWithoutEnabledCutUrlsAtEntities')]
     public function testNotEnablingCutUrlsAtEntitiesTriggersNoDeprecationNotice(array $options): void
     {
-        $notices = $this->collectDeprecationNotices(static function () use ($options): void {
-            new UrlLinker($options);
-        });
+        // phpunit.xml fails every test that triggers a deprecation it does not expect.
+        $this->expectNotToPerformAssertions();
 
-        $this->assertSame([], $notices);
+        new UrlLinker($options);
     }
 
     /**
@@ -408,27 +409,5 @@ final class UrlLinkerTest extends TestCase
                 new EmptyIterator(),
             ],
         ];
-    }
-
-    /**
-     * @return list<string> The messages of the E_USER_DEPRECATED notices triggered by $callback
-     */
-    private function collectDeprecationNotices(callable $callback): array
-    {
-        $notices = [];
-
-        \set_error_handler(static function (int $errno, string $errstr) use (&$notices): bool {
-            $notices[] = $errstr;
-
-            return $errno === E_USER_DEPRECATED;
-        }, E_USER_DEPRECATED);
-
-        try {
-            $callback();
-        } finally {
-            \restore_error_handler();
-        }
-
-        return $notices;
     }
 }
