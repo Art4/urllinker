@@ -25,6 +25,7 @@ use Art4\UrlLinker\DomainStorage;
 use Art4\UrlLinker\UrlLinker;
 use Art4\UrlLinker\UrlLinkerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\TestCase;
 use Youthweb\UrlLinker\DomainStorage as LegacyDomainStorage;
 use Youthweb\UrlLinker\UrlLinker as LegacyUrlLinker;
@@ -38,6 +39,7 @@ use Youthweb\UrlLinker\UrlLinkerInterface as LegacyUrlLinkerInterface;
  * See docs/adr/0002-namespace-from-youthweb-to-art4.md.
  */
 #[CoversClass(UrlLinker::class)]
+#[Medium]
 final class LegacyNamespaceTest extends TestCase
 {
     public function testConstructingLegacyUrlLinkerWorks(): void

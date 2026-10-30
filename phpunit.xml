@@ -5,7 +5,7 @@
          cacheDirectory="build/.phpunit.cache"
          executionOrder="depends,defects"
          requireCoverageMetadata="true"
-         beStrictAboutCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="true"
          beStrictAboutOutputDuringTests="true"
          displayDetailsOnPhpunitDeprecations="true"
          failOnPhpunitDeprecation="true"

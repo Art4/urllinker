@@ -24,9 +24,11 @@ namespace Art4\UrlLinker\Tests\Integration;
 use Art4\UrlLinker\UrlLinker;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 
 #[CoversMethod(UrlLinker::class, 'linkUrlsAndEscapeHtml')]
 #[CoversMethod(UrlLinker::class, 'linkUrlsInTrustedHtml')]
+#[Medium]
 final class UrlLinkerSkipAmbiguousTldsTest extends UrlLinkerTestCase
 {
     #[DataProvider('providerSkipAmbiguousTlds')]

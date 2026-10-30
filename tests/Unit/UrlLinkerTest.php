@@ -22,6 +22,10 @@ declare(strict_types=1);
 namespace Art4\UrlLinker\Tests\Unit;
 
 use ArrayIterator;
+use Art4\UrlLinker\AddressScanner;
+use Art4\UrlLinker\AddressToken;
+use Art4\UrlLinker\DomainStorage;
+use Art4\UrlLinker\PlainToken;
 use Art4\UrlLinker\UrlLinker;
 use Art4\UrlLinker\UrlLinkerInterface;
 use EmptyIterator;
@@ -29,10 +33,15 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 #[CoversClass(UrlLinker::class)]
+#[UsesClass(AddressScanner::class)]
+#[UsesClass(AddressToken::class)]
+#[UsesClass(DomainStorage::class)]
+#[UsesClass(PlainToken::class)]
 final class UrlLinkerTest extends TestCase
 {
     public function testUrlLinkerImplementsUrlLinkerInterface(): void

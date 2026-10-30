@@ -24,10 +24,12 @@ namespace Art4\UrlLinker\Tests\Integration;
 use Art4\UrlLinker\UrlLinker;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 
 #[CoversMethod(UrlLinker::class, 'escapeHtml')]
 #[CoversMethod(UrlLinker::class, 'linkUrlsAndEscapeHtml')]
 #[CoversMethod(UrlLinker::class, 'linkUrlsInPlainText')]
+#[Medium]
 final class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 {
     #[DataProvider('provideTextsWithFtpLinksWithoutHtml')]
