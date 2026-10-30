@@ -205,7 +205,14 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 
     public function testLegacyCutUrlsAtEntitiesOptionReproducesOldBehavior(): void
     {
-        $urlLinker = new UrlLinker(['cutUrlsAtEntities' => true]);
+        // The notice is covered by the unit tests of UrlLinker; here only the behavior counts.
+        \set_error_handler(static fn(int $errno): bool => $errno === E_USER_DEPRECATED, E_USER_DEPRECATED);
+
+        try {
+            $urlLinker = new UrlLinker(['cutUrlsAtEntities' => true]);
+        } finally {
+            \restore_error_handler();
+        }
 
         $cases = [
             'http://example.com?a=b&amp;c=d' => self::link('http://example.com?a=b', 'example.com') . '&amp;c=d',

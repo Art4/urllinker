@@ -215,6 +215,41 @@ final class UrlLinkerTest extends TestCase
         ]);
     }
 
+    public function testEnablingCutUrlsAtEntitiesTriggersOneDeprecationNotice(): void
+    {
+        $notices = $this->collectDeprecationNotices(static function (): void {
+            new UrlLinker(['cutUrlsAtEntities' => true]);
+        });
+
+        $this->assertSame(
+            ['The config option "cutUrlsAtEntities" is deprecated and will be removed in the next major version. Remove it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").'],
+            $notices
+        );
+    }
+
+    /**
+     * @param array<string,mixed> $options
+     */
+    #[DataProvider('provideOptionsWithoutEnabledCutUrlsAtEntities')]
+    public function testNotEnablingCutUrlsAtEntitiesTriggersNoDeprecationNotice(array $options): void
+    {
+        $notices = $this->collectDeprecationNotices(static function () use ($options): void {
+            new UrlLinker($options);
+        });
+
+        $this->assertSame([], $notices);
+    }
+
+    /**
+     * @return \Iterator<string, array{array<string,mixed>}>
+     */
+    public static function provideOptionsWithoutEnabledCutUrlsAtEntities(): \Iterator
+    {
+        yield 'no options' => [[]];
+        yield 'option missing' => [['allowFtpAddresses' => true]];
+        yield 'option false' => [['cutUrlsAtEntities' => false]];
+    }
+
     public function testProvidingSkipAmbiguousTldsNotAsBooleanThrowsInvalidArgumentException(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -373,5 +408,27 @@ final class UrlLinkerTest extends TestCase
                 new EmptyIterator(),
             ],
         ];
+    }
+
+    /**
+     * @return list<string> The messages of the E_USER_DEPRECATED notices triggered by $callback
+     */
+    private function collectDeprecationNotices(callable $callback): array
+    {
+        $notices = [];
+
+        \set_error_handler(static function (int $errno, string $errstr) use (&$notices): bool {
+            $notices[] = $errstr;
+
+            return $errno === E_USER_DEPRECATED;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $callback();
+        } finally {
+            \restore_error_handler();
+        }
+
+        return $notices;
     }
 }

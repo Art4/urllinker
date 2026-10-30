@@ -49,6 +49,10 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * Set the configuration
      *
+     * The option `cutUrlsAtEntities` is deprecated since 2.3.0 and will be removed in the next
+     * major version. Do not set it: the default already links URLs across character references
+     * that stand for URL characters.
+     *
      * @param array<string,mixed> $options Configuation array
      */
     public function __construct(array $options = [])
@@ -58,6 +62,14 @@ final class UrlLinker implements UrlLinkerInterface
         $allowFtpAddresses = $this->boolOption($options, 'allowFtpAddresses');
         $allowUpperCaseUrlSchemes = $this->boolOption($options, 'allowUpperCaseUrlSchemes');
         $this->cutUrlsAtEntities = $this->boolOption($options, 'cutUrlsAtEntities');
+
+        if ($this->cutUrlsAtEntities) {
+            \trigger_error(
+                'The config option "cutUrlsAtEntities" is deprecated and will be removed in the next major version. Remove it: URLs are now linked across character references that stand for URL characters (e.g. "&amp;").',
+                E_USER_DEPRECATED
+            );
+        }
+
         $this->htmlLinkCreator = $this->closureOption($options, 'htmlLinkCreator') ?? $this->createHtmlLink(...);
         $this->emailLinkCreator = $this->closureOption($options, 'emailLinkCreator') ?? $this->createEmailLink(...);
         $validTlds = $this->tldListOption($options, 'validTlds', DomainStorage::getValidTlds(...));
