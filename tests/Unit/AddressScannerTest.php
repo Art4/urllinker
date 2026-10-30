@@ -27,6 +27,7 @@ use Art4\UrlLinker\DomainStorage;
 use Art4\UrlLinker\PlainToken;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,8 +38,9 @@ use PHPUnit\Framework\TestCase;
  * @phpstan-type ExpectedStream list<ExpectedToken>
  */
 #[CoversClass(AddressScanner::class)]
-#[CoversClass(AddressToken::class)]
-#[CoversClass(PlainToken::class)]
+#[UsesClass(AddressToken::class)]
+#[UsesClass(DomainStorage::class)]
+#[UsesClass(PlainToken::class)]
 final class AddressScannerTest extends TestCase
 {
     public function testScanReturnsEmptyStreamForEmptyText(): void
