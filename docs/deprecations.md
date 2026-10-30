@@ -31,7 +31,13 @@ A deprecation triggers a **muted** `E_USER_DEPRECATED` notice:
 
 ## Tests
 
-The notice is muted, so PHPUnit does not report it. A test collects it with its own handler, see `collectDeprecationNotices()` in `tests/Unit/UrlLinkerTest.php`. Each deprecation has a test that the deprecated use triggers exactly one notice with the message, and a test that the other uses trigger none.
+`phpunit.xml` makes PHPUnit see the muted notices (`ignoreSuppressionOfDeprecations`) and fail on every deprecation a test does not expect (`failOnDeprecation`). A deprecation is tested with PHPUnit's own means, see `tests/Unit/UrlLinkerTest.php`:
+
+- **The deprecated use** triggers the notice: the test has `#[IgnoreDeprecations]` and calls `expectUserDeprecationMessage()` with the message. It fails when the notice is missing or its text differs. Without the attribute PHPUnit still reports and fails on an expected deprecation.
+- **The other uses** do not trigger it: the test just does the call, with `expectNotToPerformAssertions()`. `failOnDeprecation` fails it when a notice comes.
+- **A test that runs the deprecated use for another purpose** has `#[IgnoreDeprecations]` only, like the test of the legacy behavior.
+
+PHPUnit does not check that the notice came exactly once.
 
 ## Removal
 
