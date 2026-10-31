@@ -21,6 +21,7 @@ A deprecation triggers a **muted** `E_USER_DEPRECATED` notice:
 
 - **A config option** is checked in the constructor, once per instance, right after the option is read and only when the deprecated value is used. Not setting the option, or setting it to the value that is already the default, stays silent.
 - **A method or class** triggers it when it is called or used.
+- **The legacy namespace** `Youthweb\UrlLinker` triggers it when a legacy name is loaded, once per name: `LegacyAliasLoader` is an autoload shim that triggers the notice and then creates the alias.
 
 ## In the code and the docs
 

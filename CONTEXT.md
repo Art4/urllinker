@@ -43,7 +43,7 @@ The `Art4\UrlLinker` namespace under which all public classes are defined. New c
 _Avoid_: Youthweb namespace, new namespace
 
 **Legacy namespace**:
-The `Youthweb\UrlLinker` namespace kept working via class aliases for backward compatibility after the canonical namespace moved to `Art4\UrlLinker`. It is deprecated and emits no runtime notice; code reports the canonical name via `get_class()`.
+The `Youthweb\UrlLinker` namespace kept working via class aliases for backward compatibility after the canonical namespace moved to `Art4\UrlLinker`. It is deprecated since 2.3.0: loading a legacy name triggers a muted `E_USER_DEPRECATED` notice, once per name. Code reports the canonical name via `get_class()`.
 _Avoid_: old namespace, backward-compat namespace
 
 ## Releasing
