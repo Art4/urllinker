@@ -60,8 +60,7 @@ final class UrlLinkerTest extends TestCase
             },
         ]);
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('it works');
+        $this->expectExceptionObject(new Exception('it works'));
 
         $urlLinker->linkUrlsAndEscapeHtml('http://example.com');
     }
@@ -70,7 +69,7 @@ final class UrlLinkerTest extends TestCase
     public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "');
+        $this->expectExceptionMessageMatches('/^Option "htmlLinkCreator" must be of type "Closure", "/');
 
         new UrlLinker([
             'htmlLinkCreator' => $wrongCreator,
@@ -85,8 +84,7 @@ final class UrlLinkerTest extends TestCase
             },
         ]);
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('it works');
+        $this->expectExceptionObject(new Exception('it works'));
 
         $urlLinker->linkUrlsAndEscapeHtml('mail@example.com');
     }
@@ -95,7 +93,7 @@ final class UrlLinkerTest extends TestCase
     public function testWrongEmailLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "emailLinkCreator" must be of type "Closure", "');
+        $this->expectExceptionMessageMatches('/^Option "emailLinkCreator" must be of type "Closure", "/');
 
         new UrlLinker([
             'emailLinkCreator' => $wrongCreator,
@@ -152,8 +150,7 @@ final class UrlLinkerTest extends TestCase
 
     public function testProvidingAllowingFtpAddressesNotAsBooleanThrowsInvalidArgumentException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "allowFtpAddresses" must be of type "boolean", "string" given.');
+        $this->expectExceptionObject(new InvalidArgumentException('Option "allowFtpAddresses" must be of type "boolean", "string" given.'));
 
         new UrlLinker([
             'allowFtpAddresses' => 'true',
@@ -198,8 +195,7 @@ final class UrlLinkerTest extends TestCase
 
     public function testProvidingAllowingUpperCaseSchemesNotAsBooleanThrowsInvalidArgumentException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "allowUpperCaseUrlSchemes" must be of type "boolean", "string" given.');
+        $this->expectExceptionObject(new InvalidArgumentException('Option "allowUpperCaseUrlSchemes" must be of type "boolean", "string" given.'));
 
         new UrlLinker([
             'allowUpperCaseUrlSchemes' => 'true',
@@ -208,8 +204,7 @@ final class UrlLinkerTest extends TestCase
 
     public function testProvidingCutUrlsAtEntitiesNotAsBooleanThrowsInvalidArgumentException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "cutUrlsAtEntities" must be of type "boolean", "string" given.');
+        $this->expectExceptionObject(new InvalidArgumentException('Option "cutUrlsAtEntities" must be of type "boolean", "string" given.'));
 
         new UrlLinker([
             'cutUrlsAtEntities' => 'true',
@@ -253,8 +248,7 @@ final class UrlLinkerTest extends TestCase
 
     public function testProvidingSkipAmbiguousTldsNotAsBooleanThrowsInvalidArgumentException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "skipAmbiguousTlds" must be of type "boolean", "string" given.');
+        $this->expectExceptionObject(new InvalidArgumentException('Option "skipAmbiguousTlds" must be of type "boolean", "string" given.'));
 
         new UrlLinker([
             'skipAmbiguousTlds' => 'true',
@@ -276,8 +270,7 @@ final class UrlLinkerTest extends TestCase
 
     public function testFirstInvalidOptionInCheckOrderThrows(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "allowFtpAddresses" must be of type "boolean", "string" given.');
+        $this->expectExceptionObject(new InvalidArgumentException('Option "allowFtpAddresses" must be of type "boolean", "string" given.'));
 
         new UrlLinker([
             'skipAmbiguousTlds' => 'true',
