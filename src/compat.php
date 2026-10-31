@@ -24,15 +24,15 @@ declare(strict_types=1);
  *
  * The canonical namespace is Art4\UrlLinker. The old Youthweb\UrlLinker
  * names are kept working as aliases so existing consumers do not break.
- * See docs/adr/0002-namespace-from-youthweb-to-art4.md for the rationale.
+ * The aliases are created when a legacy name is loaded, and loading it
+ * triggers a deprecation notice. See Art4\UrlLinker\LegacyAliasLoader and
+ * docs/adr/0002-namespace-from-youthweb-to-art4.md for the rationale.
  */
 
-// The aliases are created when this file is loaded by Composer's "files"
+// The loader is registered when this file is loaded by Composer's "files"
 // autoloader, i.e. during the bootstrap phase before any code coverage
-// collection is active. The legacy namespace itself is locked by
+// collection is active. LegacyAliasLoader::register() is covered by
 // tests/Integration/LegacyNamespaceTest.php.
 // @codeCoverageIgnoreStart
-\class_alias(Art4\UrlLinker\UrlLinker::class, Youthweb\UrlLinker\UrlLinker::class);
-\class_alias(Art4\UrlLinker\UrlLinkerInterface::class, Youthweb\UrlLinker\UrlLinkerInterface::class);
-\class_alias(Art4\UrlLinker\DomainStorage::class, Youthweb\UrlLinker\DomainStorage::class);
+(new Art4\UrlLinker\LegacyAliasLoader())->register();
 // @codeCoverageIgnoreEnd

@@ -20,7 +20,7 @@ $ composer require youthweb/urllinker
 
 > Note: On 2025-07-17 the repository was moved from https://github.com/youthweb/urllinker to https://github.com/Art4/urllinker, but the packagist name was kept for convenience.
 
-The canonical PHP namespace is `Art4\UrlLinker`. The legacy `Youthweb\UrlLinker` namespace is kept working as aliases for backward compatibility and is deprecated; new code should use the canonical namespace. `get_class()`/`serialize()` on instances constructed through the legacy names report the canonical `Art4\UrlLinker\...` class names.
+The canonical PHP namespace is `Art4\UrlLinker`. The legacy `Youthweb\UrlLinker` namespace is kept working as aliases for backward compatibility and is deprecated since 2.3.0 and will be removed in 3.0; loading a legacy name triggers a muted `E_USER_DEPRECATED` notice (once per name). New code should use the canonical namespace. `get_class()`/`serialize()` on instances constructed through the legacy names report the canonical `Art4\UrlLinker\...` class names.
 
 ## Usage
 
