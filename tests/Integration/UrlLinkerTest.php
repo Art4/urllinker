@@ -69,8 +69,7 @@ final class UrlLinkerTest extends \PHPUnit\Framework\TestCase
             'htmlLinkCreator' => fn(): null => null,
         ]);
 
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Return value of Closure for "htmlLinkCreator" must return value of type "string", "NULL" given.');
+        $this->expectExceptionObject(new UnexpectedValueException('Return value of Closure for "htmlLinkCreator" must return value of type "string", "NULL" given.'));
 
         $urlLinker->linkUrlsInTrustedHtml('example.com');
     }
@@ -131,8 +130,7 @@ final class UrlLinkerTest extends \PHPUnit\Framework\TestCase
             'emailLinkCreator' => fn(): null => null,
         ]);
 
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Return value of Closure for "emailLinkCreator" must return value of type "string", "NULL" given.');
+        $this->expectExceptionObject(new UnexpectedValueException('Return value of Closure for "emailLinkCreator" must return value of type "string", "NULL" given.'));
 
         $urlLinker->linkUrlsInTrustedHtml('user@example.com');
     }
