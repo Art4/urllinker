@@ -21,6 +21,7 @@ The tasks below are part of the current housekeeping pass. The issue can be reso
 - [ ] Complete the Collected tasks
 - [ ] Update docs and CHANGELOG
 - [ ] Run `make qa`
+- [ ] Update the copyright year in the file headers (`2016-<current year>`) when the year has changed since the previous Housekeeping ticket
 - [ ] Scan the Git history for committed secrets: the whole history the first time, afterwards the commits added since the previous Housekeeping ticket's scan; note the commit scanned up to
 - [ ] Re-check the project's quality tooling: is every tool set up so far (PHPUnit, PHPStan, PHPMD, php-cs-fixer, Rector, the Roave backward compatibility check) still in place and running, and is there a further one to set up? File a ticket for each gap
 - [ ] After the dependency update, re-run PHPStan and check for newly surfaced deprecation warnings; fix them where they are
