@@ -266,7 +266,8 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private function findNextMarkup(string $html, int $position): array
     {
-        $reMarkup = '{</?([a-z]+)([^"\'>]|"[^"]*"|\'[^\']*\')*>|&#?[a-zA-Z0-9]+;|$}';
+        // Atomic, so PCRE needs no backtracking stack entry per character of a long tag.
+        $reMarkup = '{</?([a-z]+)(?:[^"\'>]++|"[^"]*"|\'[^\']*\')*+>|&#?[a-zA-Z0-9]+;|$}';
 
         while (true) {
             $match = [];

@@ -221,4 +221,15 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
             $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
         }
     }
+
+    public function testVeryLongTagStaysUnchangedAndUrlsAfterItGetLinked(): void
+    {
+        $tag = '<a ' . \str_repeat('x', 100000) . '>';
+        $urlLinker = new UrlLinker();
+
+        $this->assertSame(
+            $tag . '</a> ' . self::link('http://example.com', 'example.com'),
+            $urlLinker->linkUrlsInTrustedHtml($tag . '</a> example.com')
+        );
+    }
 }
