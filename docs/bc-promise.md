@@ -9,7 +9,7 @@ The public API is everything below, under the canonical namespace `Art4\UrlLinke
 - `UrlLinker`: the constructor, every config option it accepts with the type and default documented in the README, and the methods `linkUrlsAndEscapeHtml()` and `linkUrlsInTrustedHtml()` with their signatures.
 - `UrlLinkerInterface`: its methods and signatures. Code outside may implement the interface, so adding a method to it is a breaking change.
 - `DomainStorage::getValidTlds()`: the method and its return type.
-- The legacy aliases `Youthweb\UrlLinker\UrlLinker`, `Youthweb\UrlLinker\UrlLinkerInterface` and `Youthweb\UrlLinker\DomainStorage` (see [ADR 0002](adr/0002-namespace-from-youthweb-to-art4.md)).
+- The legacy aliases `Youthweb\UrlLinker\UrlLinker`, `Youthweb\UrlLinker\UrlLinkerInterface` and `Youthweb\UrlLinker\DomainStorage` (see [ADR 0002](adr/0002-namespace-from-youthweb-to-art4.md)). They are deprecated since 2.3.0 and removed in 3.0.
 - The exception classes thrown: `InvalidArgumentException` for an invalid config option, `UnexpectedValueException` for a link creator that returns no string.
 - The Composer package name `youthweb/urllinker`.
 

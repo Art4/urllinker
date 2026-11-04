@@ -21,6 +21,7 @@ A deprecation triggers a **muted** `E_USER_DEPRECATED` notice:
 
 - **A config option** is checked in the constructor, once per instance, right after the option is read and only when the deprecated value is used. Not setting the option, or setting it to the value that is already the default, stays silent.
 - **A method or class** triggers it when it is called or used.
+- **The legacy namespace** `Youthweb\UrlLinker` is deprecated silently: its aliases cannot tell a legacy use from a canonical one without changing when they exist, see [ADR 0002](adr/0002-namespace-from-youthweb-to-art4.md). The CHANGELOG and [UPGRADE.md](../UPGRADE.md) announce it.
 
 ## In the code and the docs
 

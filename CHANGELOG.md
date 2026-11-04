@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Deprecated
 
+- The legacy namespace `Youthweb\UrlLinker` (`UrlLinker`, `UrlLinkerInterface` and `DomainStorage`) is deprecated and will be removed in the next major version. It stays silent: no notice is triggered. Use the namespace `Art4\UrlLinker` instead, see [UPGRADE.md](UPGRADE.md)
 - The config option `cutUrlsAtEntities` is deprecated and triggers an `E_USER_DEPRECATED` notice when set to `true`; it will be removed in the next major version. Do not set it, the default already links URLs across character references that stand for URL characters
 
 ## [2.2.1](https://github.com/Art4/urllinker/compare/2.2.0...2.2.1) - 2026-08-19
