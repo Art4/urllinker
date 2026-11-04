@@ -22,7 +22,9 @@ Releases are developer-initiated, never agent-launched. Prepare up to the PR and
 
 ### Housekeeping
 
-Recurring maintenance is tracked in the open `housekeeping`-labelled GitHub issue (milestone: Later). See `docs/agents/housekeeping.md`. During any work, when you notice something housekeeping-worthy (a small refactoring note, outdated dependency, stale doc, etc.), **suggest** to the user that it be added to that issue; never add or edit it on your own.
+Recurring maintenance is tracked in the open `housekeeping`-labelled GitHub issue (milestone: Later). See `docs/agents/housekeeping.md`. During any work, when you notice something housekeeping-worthy (an outdated dependency, stale doc, etc.), **suggest** to the user that it be added to that issue; never add or edit its text on your own.
+
+**Refactoring ideas.** When you notice a possible refactoring while doing other work, post it directly as a comment on the open Housekeeping ticket (`docs/agents/issue-tracker.md`, **Housekeeping**): where it is, what would change, and why. No permission is needed, but tell the human about every new comment, with its link. When two Housekeeping tickets are open, use the younger one.
 
 ### Backward compatibility
 
