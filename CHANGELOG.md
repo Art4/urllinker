@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Document the backward compatibility promise in `docs/bc-promise.md`
 - Check code size, complexity, naming and unused code with PHPMD in CI and in `make qa` (`make phpmd`); the limits of the metric rules are set to the current peak and may only be lowered
 
+### Changed
+
+- Update the IANA TLD list to version `2026110304` (drop `HELSINKI` and `JUNIPER`)
+
 ### Deprecated
 
 - The legacy namespace `Youthweb\UrlLinker` (`UrlLinker`, `UrlLinkerInterface` and `DomainStorage`) is deprecated and will be removed in the next major version. It stays silent: no notice is triggered. Use the namespace `Art4\UrlLinker` instead, see [UPGRADE.md](UPGRADE.md)

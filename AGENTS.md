@@ -22,7 +22,9 @@ Releases are developer-initiated, never agent-launched. Prepare up to the PR and
 
 ### Housekeeping
 
-Recurring maintenance is tracked in the open `housekeeping`-labelled GitHub issue (milestone: Later). See `docs/agents/housekeeping.md`. During any work, when you notice something housekeeping-worthy (a small refactoring note, outdated dependency, stale doc, etc.), **suggest** to the user that it be added to that issue; never add or edit it on your own.
+Recurring maintenance is tracked in the open `housekeeping`-labelled GitHub issue (milestone: Later). See `docs/agents/housekeeping.md`. During any work, when you notice something housekeeping-worthy (an outdated dependency, stale doc, etc.), **suggest** to the user that it be added to that issue; never add or edit its text on your own.
+
+**Refactoring ideas.** When you notice a possible refactoring while doing other work, post it directly as a comment on the open Housekeeping ticket (`docs/agents/issue-tracker.md`, **Housekeeping**): where it is, what would change, and why. No permission is needed, but tell the human about every new comment, with its link. When two Housekeeping tickets are open, use the younger one.
 
 ### Backward compatibility
 
@@ -38,9 +40,9 @@ PRs on GitHub must always be written in English (title and body).
 
 PHP runs **only** inside the Docker dev container — never invoke `php`, `composer`, or `vendor/bin/*` on the host. Docker is required for `make qa`. Use the Makefile:
 
-- `make qa` — full check (phpunit + phpstan + codestyle + 100% code coverage gate); installs dependencies on first run
+- `make qa` — full check (phpunit + phpstan + phpmd + codestyle + 100% code coverage gate); installs dependencies on first run
 - `make install` / `make composer ARGS="install"` — install Composer dependencies
-- `make phpunit` / `make phpstan` / `make codestyle` / `make rector` / `make coverage`
+- `make phpunit` / `make phpstan` / `make phpmd` / `make codestyle` / `make rector` / `make coverage`
 - `make shell` — interactive shell inside the container
 
 The dev container runs the lowest supported PHP version (PHP 8.2); the cross-version matrix (8.2–8.6, with 8.6 still un-released and running as a CI-only canary) runs in GitHub Actions. See `docs/dev-environment.md` for the full reference.

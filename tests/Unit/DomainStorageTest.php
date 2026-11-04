@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
- * Copyright (C) 2016-2025  Artur Weigandt  <https://wlabs.de/kontakt>
+ * Copyright (C) 2016-2026  Artur Weigandt  <https://wlabs.de/kontakt>
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ final class DomainStorageTest extends TestCase
 
         $tlds = DomainStorage::getValidTlds();
 
-        $this->assertCount(1438, $tlds);
+        $this->assertCount(1436, $tlds);
 
         $this->assertSame(['.aaa' => true], \array_slice($tlds, 0, 1));
     }

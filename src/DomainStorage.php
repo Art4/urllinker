@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
- * Copyright (C) 2016-2025  Artur Weigandt  <https://wlabs.de/kontakt>
+ * Copyright (C) 2016-2026  Artur Weigandt  <https://wlabs.de/kontakt>
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@ final class DomainStorage
      * from time to time.
      *
      * List source:  http://data.iana.org/TLD/tlds-alpha-by-domain.txt
-     * Last updated: 2026-08-18
+     * Last updated: 2026-11-04
      *
-     * # Version 2026081800, Last Updated Tue Aug 18 07:07:02 2026 UTC
+     * # Version 2026110304, Last Updated Wed Nov  4 07:07:01 2026 UTC
      */
     private static string $rawValidTlds = 'AAA
 AARP
@@ -557,7 +557,6 @@ HDFCBANK
 HEALTH
 HEALTHCARE
 HELP
-HELSINKI
 HERE
 HERMES
 HIPHOP
@@ -654,7 +653,6 @@ JP
 JPMORGAN
 JPRS
 JUEGOS
-JUNIPER
 KAUFEN
 KDDI
 KE
