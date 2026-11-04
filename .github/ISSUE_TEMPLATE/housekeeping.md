@@ -7,6 +7,8 @@ title: "Housekeeping <YYYY-MM>"
 
 ## Tasks
 
+Rhythm: monthly
+
 The tasks below are part of the current housekeeping pass. The issue can be resolved by running the `/housekeeping` skill.
 
 - [ ] Update Composer dependencies and record the result in Reports
@@ -19,7 +21,13 @@ The tasks below are part of the current housekeeping pass. The issue can be reso
 - [ ] Complete the Collected tasks
 - [ ] Update docs and CHANGELOG
 - [ ] Run `make qa`
-- [ ] Create the next housekeeping issue from the template (roll over unfinished tasks)
+- [ ] Scan the Git history for committed secrets: the whole history the first time, afterwards the commits added since the previous Housekeeping ticket's scan; note the commit scanned up to
+- [ ] Re-check the project's quality tooling: is every tool set up so far (PHPUnit, PHPStan, PHPMD, php-cs-fixer, Rector, the Roave backward compatibility check) still in place and running, and is there a further one to set up? File a ticket for each gap
+- [ ] After the dependency update, re-run PHPStan and check for newly surfaced deprecation warnings; fix them where they are
+- [ ] Measure PHPMD again: for each metric rule whose peak lies below its limit in `phpmd.xml`, lower the limit to the peak and update its comment (config only, never the code); after `composer update`, handle rules a new PHPMD version added: a new metric rule gets today's peak as its limit, any other new finding is fixed or suppressed with a reason
+- [ ] Look for a newer PER-CS version than the one `.php-cs-fixer.dist.php` pins (`vendor/bin/php-cs-fixer list-sets` after `composer update`); where there is one, switch to it and set each rule that now reports findings to `false` with `Not yet:` and its count (config only, never the code)
+- [ ] After a release, remove each `<ignored-regex>` entry of the Roave backward compatibility check that the release made obsolete, so the check compares against the new tag
+- [ ] Create the next Housekeeping ticket from this template, due one rhythm from today (roll over unfinished tasks)
 
 ## Collected tasks
 
