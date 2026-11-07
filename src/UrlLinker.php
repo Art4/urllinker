@@ -266,17 +266,16 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private function findNextMarkup(string $html, int $position): array
     {
-        $reMarkup = '{</?([a-z]+)([^"\'>]|"[^"]*"|\'[^\']*\')*>|&#?[a-zA-Z0-9]+;|$}';
+        // Atomic, so PCRE needs no backtracking stack entry per character of a long tag.
+        $reMarkup = '{</?([a-z]+)(?:[^"\'>]++|"[^"]*"|\'[^\']*\')*+>|&#?[a-zA-Z0-9]+;|$}';
 
         while (true) {
             $match = [];
 
             if (\preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position) !== 1) {
-                // Unreachable: $reMarkup ends in "|$", so the regex always matches
-                // (the empty string at the end of $html). Kept only as a guard.
-                // @codeCoverageIgnoreStart
-                return ['', \strlen($html), ''];
-                // @codeCoverageIgnoreEnd
+                // PCRE gave up (e.g. backtrack limit on a huge tag): the rest of the
+                // HTML cannot be parsed safely, so pass it through unchanged.
+                return [\substr($html, $position), $position, ''];
             }
 
             [$markup, $markupPosition] = $match[0];

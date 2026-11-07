@@ -221,4 +221,32 @@ final class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
             $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
         }
     }
+
+    public function testVeryLongTagStaysUnchangedAndUrlsAfterItGetLinked(): void
+    {
+        $tag = '<a ' . \str_repeat('x', 100000) . '>';
+        $urlLinker = new UrlLinker();
+
+        $this->assertSame(
+            $tag . '</a> ' . self::link('http://example.com', 'example.com'),
+            $urlLinker->linkUrlsInTrustedHtml($tag . '</a> example.com')
+        );
+    }
+
+    public function testHtmlThatPcreCannotParseStaysUnchanged(): void
+    {
+        $html = 'example.org <a ' . \str_repeat('b="c" ', 100) . '>example.com</a> example.net';
+        $urlLinker = new UrlLinker();
+        $backtrackLimit = (string) \ini_get('pcre.backtrack_limit');
+
+        \ini_set('pcre.backtrack_limit', '10');
+
+        try {
+            $result = $urlLinker->linkUrlsInTrustedHtml($html);
+        } finally {
+            \ini_set('pcre.backtrack_limit', $backtrackLimit);
+        }
+
+        $this->assertSame($html, $result);
+    }
 }
