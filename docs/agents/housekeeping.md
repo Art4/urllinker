@@ -4,7 +4,7 @@ Recurring maintenance is tracked as a single always-open GitHub issue labelled `
 
 ## Cadence
 
-Housekeeping runs **monthly** (the `Rhythm:` line of `.github/ISSUE_TEMPLATE/housekeeping.md`) plus before each release. Each ticket states `Due from: <date>` in its first lines, one rhythm after the previous ticket; a run that finds the open ticket not yet due has nothing to work unless the developer says "now". The developer initiates a run by invoking the `housekeeping` skill; nothing schedules itself.
+Housekeeping runs **monthly** (the `Rhythm:` line of `.github/ISSUE_TEMPLATE/housekeeping.md`) plus before each release. Each ticket states `Due from: YYYY-MM-DD` in its first lines (added when the run creates it, one rhythm after that day); a not yet due ticket is worked only when the developer says "now". The developer initiates a run by invoking the `housekeeping` skill; nothing schedules itself.
 
 ## Issue conventions
 

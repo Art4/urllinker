@@ -20,7 +20,7 @@ List open issues with the `housekeeping` label:
 gh issue list --state open --label housekeeping --json number,title,createdAt,body
 ```
 
-- **Exactly one**, not fully ticked → work it. The ticket states `Due from: <date>` in its first lines; when that date lies in the future, stop and report it, unless the user said to run now.
+- **Exactly one**, not fully ticked → work it. The ticket states `Due from: YYYY-MM-DD` in its first lines; when that date lies in the future, stop and report it, unless the user said to run now.
 - **Exactly one, fully ticked** → the previous run is complete and its closing PR awaits merge. Report that and stop.
 - **None** → ask the user for the issue number, or offer to create the first one from the template (`.github/ISSUE_TEMPLATE/housekeeping.md`).
 - **Two or more** → present each with title, created date, and open-checkbox count; ask which to work.
@@ -93,14 +93,18 @@ _Done_: the full check passes (phpunit, phpstan, phpmd, codestyle, coverage).
 
 ### 11. Create the next issue
 
-Tick the final task. Create the next issue from the template body (frontmatter stripped; `gh issue create --template` only works interactively):
+Create the next issue from the template body (frontmatter stripped; `gh issue create --template` only works interactively). The body starts with two header lines the template lacks, as in the current ticket: `Due from: YYYY-MM-DD` and `Template: \`.github/ISSUE_TEMPLATE/housekeeping.md\``. The due date lies one `Rhythm:` (monthly: one month) after today; the title carries the month of that date.
 
 ```bash
-awk '/^---$/{c++; next} c>=2{print}' .github/ISSUE_TEMPLATE/housekeeping.md > /tmp/housekeeping-body.md
-gh issue create --title "Housekeeping $(date +%Y-%m)" --body-file /tmp/housekeeping-body.md --label housekeeping --milestone "<Later milestone title>"
+DUE=$(date -d "+1 month" +%F)
+{
+  printf 'Due from: %s\n\nTemplate: `.github/ISSUE_TEMPLATE/housekeeping.md`\n\n' "$DUE"
+  awk '/^---$/{c++; next} c>=2{print}' .github/ISSUE_TEMPLATE/housekeeping.md
+} > /tmp/housekeeping-body.md
+gh issue create --title "Housekeeping ${DUE:0:7}" --body-file /tmp/housekeeping-body.md --label housekeeping --milestone "<Later milestone title>"
 ```
 
-Substitute `<Later milestone title>` with the current Later milestone title (read from `docs/agents/milestones.md`). Set the title's month and the `Due from: <date>` line (first lines of the body, as in the current ticket) one `Rhythm:` after today. Copy any unfinished tasks and Collected tasks into the new issue.
+Substitute `<Later milestone title>` with the current Later milestone title (read from `docs/agents/milestones.md`). Copy any unfinished tasks and Collected tasks into the new issue. Once the issue exists, tick the final task of the current one.
 
 _Done_: the next issue exists, open, correctly labelled, on the Later milestone.
 
