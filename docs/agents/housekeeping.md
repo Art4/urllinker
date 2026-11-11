@@ -4,12 +4,12 @@ Recurring maintenance is tracked as a single always-open GitHub issue labelled `
 
 ## Cadence
 
-Housekeeping runs **regularly**: quarterly plus before each release. The developer initiates a run by invoking the housekeeping skill; nothing schedules itself.
+Housekeeping runs **monthly** (the `Rhythm:` line of `.github/ISSUE_TEMPLATE/housekeeping.md`) plus before each release. Each ticket states `Due from: YYYY-MM-DD` in its first lines (added when the run creates it, one rhythm after that day); a not yet due ticket is worked only when the developer says "now". The developer initiates a run by invoking the `housekeeping` skill; nothing schedules itself.
 
 ## Issue conventions
 
 - **Label**: `housekeeping`. **Milestone**: the Later tier, rolling forward each release (see `docs/agents/milestones.md`).
-- One open issue at a time; the run creates the next one as its final task, using `.github/ISSUE_TEMPLATE/housekeeping.md`.
+- One open issue at a time, titled `Housekeeping <YYYY-MM>`; the run creates the next one as its final task, using `.github/ISSUE_TEMPLATE/housekeeping.md` and rolling unfinished tasks over.
 - The current issue closes when the closing PR merges (the PR carries `Closes #<n>`).
 
 ## Collecting tasks
