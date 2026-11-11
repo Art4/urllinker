@@ -20,7 +20,7 @@ List open issues with the `housekeeping` label:
 gh issue list --state open --label housekeeping --json number,title,createdAt,body
 ```
 
-- **Exactly one**, not fully ticked → work it.
+- **Exactly one**, not fully ticked → work it. The ticket states `Due from: <date>` in its first lines; when that date lies in the future, stop and report it, unless the user said to run now.
 - **Exactly one, fully ticked** → the previous run is complete and its closing PR awaits merge. Report that and stop.
 - **None** → ask the user for the issue number, or offer to create the first one from the template (`.github/ISSUE_TEMPLATE/housekeeping.md`).
 - **Two or more** → present each with title, created date, and open-checkbox count; ask which to work.
@@ -35,7 +35,7 @@ _Done_: the issue body matches the template, with prior state preserved.
 
 ### 3. Dependency pass
 
-Update Composer dependencies in the dev container (`make composer ARGS="update"`), then run `composer audit`. Record both in the issue's Reports section.
+Update Composer dependencies in the dev container (`make composer ARGS="update"`), then run `composer audit`. Record both in the issue's Reports section. Then re-run PHPStan (`make phpstan`) and fix newly surfaced deprecation warnings where they are.
 
 _Done_: dependencies updated and both reports recorded.
 
@@ -59,9 +59,16 @@ _Done_: the list is current and the report recorded.
 
 ### 7. Tooling pass
 
-Run `make rector` and `make codestyle` in the dev container to absorb new rules. Record rule and tooling changes in Reports.
+Run `make rector` and `make codestyle` in the dev container to absorb new rules. Then:
 
-_Done_: tooling absorbed and the report recorded.
+- **PHPMD**: for each metric rule whose peak lies below its limit in `phpmd.xml`, lower the limit to the peak and update its comment (config only, never the code). Rules a new PHPMD version added: a new metric rule gets today's peak as its limit; any other new finding is fixed or suppressed with a reason.
+- **PER-CS**: look for a newer set than the one `.php-cs-fixer.dist.php` pins (`vendor/bin/php-cs-fixer list-sets` after `composer update`). Where there is one, switch to it and set each rule that now reports findings to `false` with `Not yet:` and its count (config only, never the code).
+- **Roave BC check**: after a release, remove each `<ignored-regex>` entry the release made obsolete, so the check compares against the new tag.
+- **Tool inventory**: is every tool set up so far (PHPUnit, PHPStan, PHPMD, php-cs-fixer, Rector, the Roave check) still in place and running in `make qa` and CI, and is there a further one to set up? File a ticket for each gap.
+
+Record rule and tooling changes in Reports.
+
+_Done_: tooling absorbed, the inventory checked and the report recorded.
 
 ### 8. Work the Collected tasks
 
@@ -69,17 +76,20 @@ Implement every `- [ ]` item in the issue's Collected tasks section. Invoking th
 
 _Done_: every item is ticked or re-filed.
 
-### 9. Docs and changelog hygiene
+### 9. Docs, changelog and repository hygiene
 
-Update `AGENTS.md`, `CONTEXT.md`, `docs/*`, and `CHANGELOG.md` (under `[Unreleased]`) to reflect the changes made.
+Update `AGENTS.md`, `CONTEXT.md`, `docs/*`, and `CHANGELOG.md` (under `[Unreleased]`) to reflect the changes made. Then:
 
-_Done_: docs and changelog reflect the run.
+- **Copyright year**: when the year has changed since the previous Housekeeping ticket, update the file headers to `2016-<current year>`.
+- **Secrets scan**: scan the Git history for committed secrets — the whole history the first time, afterwards the commits added since the previous Housekeeping ticket's scan. Note the commit scanned up to in the ticket.
+
+_Done_: docs and changelog reflect the run; the copyright year and the secrets scan are done.
 
 ### 10. Verify
 
 Run `make qa` in the dev container.
 
-_Done_: the full check passes (phpunit, phpstan, codestyle).
+_Done_: the full check passes (phpunit, phpstan, phpmd, codestyle, coverage).
 
 ### 11. Create the next issue
 
@@ -90,7 +100,7 @@ awk '/^---$/{c++; next} c>=2{print}' .github/ISSUE_TEMPLATE/housekeeping.md > /t
 gh issue create --title "Housekeeping $(date +%Y-%m)" --body-file /tmp/housekeeping-body.md --label housekeeping --milestone "<Later milestone title>"
 ```
 
-Substitute `<Later milestone title>` with the current Later milestone title (read from `docs/agents/milestones.md`). Copy any unfinished Collected tasks into the new issue's Collected tasks section.
+Substitute `<Later milestone title>` with the current Later milestone title (read from `docs/agents/milestones.md`). Set the title's month and the `Due from: <date>` line (first lines of the body, as in the current ticket) one `Rhythm:` after today. Copy any unfinished tasks and Collected tasks into the new issue.
 
 _Done_: the next issue exists, open, correctly labelled, on the Later milestone.
 
