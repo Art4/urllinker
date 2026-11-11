@@ -56,6 +56,8 @@ jobs:
             tool: 'code-coverage'
           - php: '8.3'
             tool: 'code-style'
+          - php: '8.2'
+            tool: 'rector'
 
     steps:
       - name: Checkout code
@@ -98,6 +100,10 @@ jobs:
       - name: Check code-style
         if: ${{ matrix.tool == 'code-style' }}
         run: composer run codestyle -- --dry-run --diff
+
+      - name: Run Rector
+        if: ${{ matrix.tool == 'rector' }}
+        run: composer run rector
 
 
   bc-check:
