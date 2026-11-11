@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Housekeeping
 
-Recurring maintenance run against the open `housekeeping`-labelled GitHub issue, initiated by the developer — regularly, quarterly plus before each release. One issue at a time; it rides the Later milestone. The run works the issue's task list and Collected tasks, records reports, creates the next issue as its final task, then opens one closing PR (`Closes #<n>`) whose merge closes the issue.
+Recurring maintenance run against the open `housekeeping`-labelled GitHub issue, initiated by the developer — monthly plus before each release (the `Rhythm:` line of the template). One issue at a time; it rides the Later milestone. The run works the issue's task list and Collected tasks, records reports, creates the next issue as its final task, then opens one closing PR (`Closes #<n>`) whose merge closes the issue.
 
 Full conventions live in `docs/agents/housekeeping.md`.
 

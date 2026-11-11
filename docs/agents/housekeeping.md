@@ -1,10 +1,10 @@
 # Housekeeping
 
-Recurring maintenance is tracked as a single always-open GitHub issue labelled `housekeeping`. A housekeeping run — invoked with the `continuous-housekeeping` skill — works the issue's task list and Collected tasks, records reports, creates the next issue as its final task, and opens one closing PR whose merge closes the current issue.
+Recurring maintenance is tracked as a single always-open GitHub issue labelled `housekeeping`. A housekeeping run — invoked with the `housekeeping` skill — works the issue's task list and Collected tasks, records reports, creates the next issue as its final task, and opens one closing PR whose merge closes the current issue.
 
 ## Cadence
 
-Housekeeping runs **monthly** (the `Rhythm:` line of `.github/ISSUE_TEMPLATE/housekeeping.md`) plus before each release. Each ticket states `Due from: <date>` in its first lines, one rhythm after the previous ticket; a run that finds the open ticket not yet due has nothing to work unless the developer says "now". The developer initiates a run by invoking the `continuous-housekeeping` skill; nothing schedules itself.
+Housekeeping runs **monthly** (the `Rhythm:` line of `.github/ISSUE_TEMPLATE/housekeeping.md`) plus before each release. Each ticket states `Due from: <date>` in its first lines, one rhythm after the previous ticket; a run that finds the open ticket not yet due has nothing to work unless the developer says "now". The developer initiates a run by invoking the `housekeeping` skill; nothing schedules itself.
 
 ## Issue conventions
 
@@ -24,7 +24,7 @@ Housekeeping accepts only **small, bounded, non-urgent** tasks:
 
 ## Running a session
 
-Invoke the `continuous-housekeeping` skill and follow its process — it selects the issue (asking when none or several are open), works the task list and Collected tasks, records the Reports section, creates the next issue, and opens the closing PR. The developer merges the PR; the merge closes the issue. The mechanics live in the skill; this file holds the conventions.
+Invoke the `housekeeping` skill and follow its process — it selects the issue (asking when none or several are open), works the task list and Collected tasks, records the Reports section, creates the next issue, and opens the closing PR. The developer merges the PR; the merge closes the issue. The mechanics live in the skill; this file holds the conventions.
 
 ## Reports
 
