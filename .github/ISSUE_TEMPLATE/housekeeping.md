@@ -11,9 +11,9 @@ Rhythm: monthly
 
 The tasks below are part of the current housekeeping pass. The issue can be resolved by running the `/housekeeping` skill.
 
-- [ ] Update Composer dependencies and record the result in Reports
+- [ ] Update Composer dependencies, raise the exact pins of the dev tools to their latest releases, and record the result in Reports
 - [ ] Run `composer audit` and record the result in Reports
-- [ ] Update CI action versions and check GitHub deprecation warnings; record in Reports
+- [ ] Update CI action versions and the digest of the Roave image, and check GitHub deprecation warnings; record in Reports
 - [ ] Check the PHP release/EOL calendar; apply canary changes, propose version drops; record in Reports
 - [ ] Verify supported-range integrity: composer.json ↔ ci.yml ↔ dev container floor ↔ docs
 - [ ] Refresh the IANA TLD list
