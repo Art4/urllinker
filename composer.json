@@ -67,6 +67,7 @@
 			"@phpunit",
 			"@phpstan",
 			"@phpmd",
+			"@rector",
 			"@codestyle --dry-run --diff",
 			"@coverage-check"
 		]
