@@ -18,7 +18,7 @@ _Avoid_: container PHP, dev version
 
 **Canary**:
 A PHP version running in the CI matrix before its stable release, installed as a nightly dev build. It exists only to catch breaking changes early and is not advertised as "supported" until the stable release is out and the matrix entry switches from the nightly build to the stable version.
-_Avoid_: preview support, 8.6 support, early support
+_Avoid_: preview support, 8.7 support, early support
 
 ## Library domain
 

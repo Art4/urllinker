@@ -41,7 +41,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add the option `skipAmbiguousTlds` to treat bare addresses ending in an ambiguous top-level domain (e.g. filenames like `foobar.zip`) as plain text; the ambiguous TLD list can be configured with `ambiguousTlds`
 - Run the development environment inside Docker (`make qa`, see `docs/dev-environment.md`)
 - Document the development environment for agents in `AGENTS.md`
-- Add PHP 8.6 to the CI matrix as a canary for breaking changes
+- Test against PHP 8.6, now released
+- Add PHP 8.7 to the CI matrix as a canary for breaking changes
 
 ### Changed
 

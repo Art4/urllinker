@@ -49,7 +49,7 @@ Draft a PR into `main` (e.g. `gh pr create --base main --head release-<X.Y.Z> --
 Set the release PR into the milestone being released (e.g. `gh pr edit <n> --milestone "2.2.1"`).
 
 Once the developer approves and the PR is open, wait for CI.
-_Done_: every job in the 8.2–8.6 matrix is green — **including the canary**. Canary red is a blocker; a release does not ship over a red matrix.
+_Done_: every job in the 8.2–8.7 matrix is green — **including the canary**. Canary red is a blocker; a release does not ship over a red matrix.
 
 **6. Merge** [developer-only]
 The developer reviews the wording and the version, then merges once CI is green.

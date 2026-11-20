@@ -41,7 +41,7 @@ make qa
 
 ## PHP version
 
-The dev container runs PHP `8.2`, the lowest supported version. The cross-version matrix (`8.2`–`8.6`) is run by GitHub Actions in `ci.yml`; running other versions locally is not supported. PHP `8.6` is not yet released (stable due 2026-11-19); the matrix runs it as a canary using the nightly `8.6-dev` build to catch breaking changes early.
+The dev container runs PHP `8.2`, the lowest supported version. The cross-version matrix (`8.2`–`8.7`) is run by GitHub Actions in `ci.yml`; running other versions locally is not supported. PHP `8.6` was released on 2026-11-19 and is a stable matrix entry. PHP `8.7` is not yet released; the matrix runs it as a canary using the nightly build to catch breaking changes early.
 
 ## How it works
 
