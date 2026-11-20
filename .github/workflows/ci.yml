@@ -117,10 +117,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      # The image is pinned by digest: it publishes no version tags, only "latest".
       # The runner sets HOME=/github/home, which hides the image's own safe.directory
       # setting; without it git refuses the workspace checked out by another user.
       - name: Check backward compatibility against the last release
-        uses: docker://nyholm/roave-bc-check-ga
+        uses: docker://nyholm/roave-bc-check-ga@sha256:a9d3d932a4d3ba6a5a0563ef3788918a538198ee9c061a153f9b55caa8d3625f
         env:
           GIT_CONFIG_COUNT: 1
           GIT_CONFIG_KEY_0: safe.directory

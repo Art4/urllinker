@@ -19,15 +19,15 @@
 		"php": "^8.2"
 	},
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^3.95",
-		"phpmd/phpmd": "^3.0",
-		"phpstan/extension-installer": "^1.4",
-		"phpstan/phpstan": "^2.3.2",
-		"phpstan/phpstan-deprecation-rules": "^2.0",
-		"phpstan/phpstan-phpunit": "^2.0",
-		"phpstan/phpstan-strict-rules": "^2.0",
+		"friendsofphp/php-cs-fixer": "3.95.28",
+		"phpmd/phpmd": "3.0.0",
+		"phpstan/extension-installer": "1.4.3",
+		"phpstan/phpstan": "2.3.5",
+		"phpstan/phpstan-deprecation-rules": "2.0.5",
+		"phpstan/phpstan-phpunit": "2.1.1",
+		"phpstan/phpstan-strict-rules": "2.1.1",
 		"phpunit/phpunit": "^11.5 || ^12.5 || ^13.4",
-		"rector/rector": "^2.1"
+		"rector/rector": "2.8.4"
 	},
 	"autoload": {
 		"files": [

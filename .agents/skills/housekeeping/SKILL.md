@@ -35,13 +35,13 @@ _Done_: the issue body matches the template, with prior state preserved.
 
 ### 3. Dependency pass
 
-Update Composer dependencies in the dev container (`make composer ARGS="update"`), then run `composer audit`. Record both in the issue's Reports section. Then re-run PHPStan (`make phpstan`) and fix newly surfaced deprecation warnings where they are.
+Update Composer dependencies in the dev container (`make composer ARGS="update"`). The static analysis tools in `require-dev` are pinned to exact versions, which `composer update` does not move: list them with `composer outdated --direct` and raise each pin to its latest release (`composer require --dev <package>:<version>`). Then run `composer audit`. Record both in the issue's Reports section. Then re-run PHPStan (`make phpstan`) and fix newly surfaced deprecation warnings where they are.
 
-_Done_: dependencies updated and both reports recorded.
+_Done_: dependencies and pins current and both reports recorded.
 
 ### 4. CI pass
 
-Check every action version in `.github/workflows/ci.yml` (`actions/checkout`, `shivammathur/setup-php`, `ramsey/composer-install`, `codecov/codecov-action`) against the latest, and check for GitHub deprecation warnings. Bump where newer exists and record the changes in Reports.
+Check every action version in `.github/workflows/ci.yml` (`actions/checkout`, `shivammathur/setup-php`, `ramsey/composer-install`, `codecov/codecov-action`) against the latest, update the digest of the Roave image (`docker://nyholm/roave-bc-check-ga@sha256:…`, which has only a `latest` tag), and check for GitHub deprecation warnings. Bump where newer exists and record the changes in Reports.
 
 _Done_: actions current and the report recorded.
 
