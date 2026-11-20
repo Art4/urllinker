@@ -33,8 +33,13 @@ jobs:
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
+      # The canary ignores the PHP platform requirement: dev tools such as php-cs-fixer
+      # (via ergebnis/agent-detector) do not allow the unreleased PHP yet, and the canary
+      # tests the library, not the dev tools.
       - name: "Install Composer dependencies"
         uses: "ramsey/composer-install@v4"
+        with:
+          composer-options: ${{ matrix.php == '8.7' && '--ignore-platform-req=php+' || '' }}
 
       - name: Run unit tests
         run: vendor/bin/phpunit
