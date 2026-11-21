@@ -11,10 +11,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Document the backward compatibility promise in `docs/bc-promise.md`
 - Check code size, complexity, naming and unused code with PHPMD in CI and in `make qa` (`make phpmd`); the limits of the metric rules are set to the current peak and may only be lowered
+- Run Rector in CI and in `make qa` (dry-run)
+- Pin the static analysis tools in `require-dev` and the Roave backward compatibility check image to exact versions, so a new release of a dev tool cannot break unrelated pull requests; the monthly housekeeping raises them
+- Test against PHP 8.6, now released
+- Add PHP 8.7 to the CI matrix as a canary for breaking changes
 
 ### Changed
 
-- Update the IANA TLD list to version `2026110304` (drop `HELSINKI` and `JUNIPER`)
+- Update the IANA TLD list to version `2026112000` (drop `HELSINKI` and `JUNIPER`)
 
 ### Deprecated
 
@@ -41,8 +45,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add the option `skipAmbiguousTlds` to treat bare addresses ending in an ambiguous top-level domain (e.g. filenames like `foobar.zip`) as plain text; the ambiguous TLD list can be configured with `ambiguousTlds`
 - Run the development environment inside Docker (`make qa`, see `docs/dev-environment.md`)
 - Document the development environment for agents in `AGENTS.md`
-- Test against PHP 8.6, now released
-- Add PHP 8.7 to the CI matrix as a canary for breaking changes
+- Add PHP 8.6 to the CI matrix as a canary for breaking changes
 
 ### Changed
 
