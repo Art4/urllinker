@@ -30,9 +30,9 @@ final class DomainStorage
      * from time to time.
      *
      * List source:  http://data.iana.org/TLD/tlds-alpha-by-domain.txt
-     * Last updated: 2026-11-04
+     * Last updated: 2026-11-21
      *
-     * # Version 2026110304, Last Updated Wed Nov  4 07:07:01 2026 UTC
+     * # Version 2026112000, Last Updated Fri Nov 20 07:07:01 2026 UTC
      */
     private static string $rawValidTlds = 'AAA
 AARP
